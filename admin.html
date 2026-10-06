@@ -12,201 +12,236 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --gold-color: #dfb15b;
-            --bg-color: #0b0b0d;
-            --card-bg: #16161a;
-            --secondary-color: #121214;
-            --text-color: #f3f3f6;
-            --text-muted: #9e9ea6;
-            --border-color: rgba(223, 177, 91, 0.2);
-            --success: #22c55e;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --font-heading: 'Playfair Display', serif;
-            --font-body: 'Poppins', sans-serif;
+            --gold: #dfb15b;
+            --bg: #0b0b0d;
+            --card: #16161a;
+            --dark: #121214;
+            --text: #f3f3f6;
+            --muted: #9e9ea6;
+            --border: rgba(223, 177, 91, 0.2);
+            --ok: #22c55e;
+            --bad: #ef4444;
+            --warn: #f59e0b;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-body); }
-        body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; min-height: 100vh; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
 
-        #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 20px; background: radial-gradient(circle at 50% 0%, rgba(223, 177, 91, 0.08) 0%, transparent 60%); z-index: 1000; }
-        .login-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 40px 30px; width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6); text-align: center; }
-        .login-logo { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--gold-color); overflow: hidden; margin: 0 auto 20px; background: #000; box-shadow: 0 0 25px rgba(223, 177, 91, 0.4); }
+        /* LOGIN */
+        #login-screen { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; padding: 20px; background: radial-gradient(circle at 50% 0%, rgba(223,177,91,.08), transparent 60%); z-index: 1000; }
+        .login-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 40px 30px; width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,.6); }
+        .login-logo { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--gold); overflow: hidden; margin: 0 auto 20px; background: #000; box-shadow: 0 0 25px rgba(223,177,91,.4); }
         .login-logo img { width: 100%; height: 100%; object-fit: cover; }
-        .login-box h1 { font-family: var(--font-heading); color: var(--gold-color); font-size: 24px; margin-bottom: 5px; }
-        .login-box .subtitle { color: var(--text-muted); font-size: 13px; margin-bottom: 30px; }
+        .login-box h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 24px; text-align: center; margin-bottom: 5px; }
+        .login-box .sub { text-align: center; color: var(--muted); font-size: 13px; margin-bottom: 30px; }
+        .fgroup { margin-bottom: 18px; }
+        .fgroup label { display: block; font-size: 13px; font-weight: 600; color: var(--gold); margin-bottom: 8px; }
+        .fgroup input { width: 100%; padding: 13px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; color: var(--text); font-size: 14px; outline: none; font-family: inherit; }
+        .fgroup input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(223,177,91,.1); }
+        .login-btn { width: 100%; padding: 14px; background: var(--gold); color: #0b0b0d; border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .login-btn:hover { opacity: .9; }
+        .login-btn:disabled { opacity: .6; cursor: not-allowed; }
+        .err { background: rgba(239,68,68,.15); border: 1px solid var(--bad); color: #fca5a5; padding: 10px 15px; border-radius: 8px; font-size: 13px; margin-bottom: 15px; display: none; }
+        .err.show { display: block; }
 
-        .google-btn { width: 100%; padding: 15px; background: #fff; color: #1a1a1e; border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 10px; }
-        .google-btn:hover { opacity: 0.95; box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15); }
-        .google-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-        .google-btn img { width: 22px; height: 22px; }
-
-        .login-error { background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); color: #fca5a5; padding: 10px 15px; border-radius: 8px; font-size: 13px; margin-bottom: 15px; display: none; text-align: left; }
-        .login-error.show { display: block; }
-
-        .login-note { color: var(--text-muted); font-size: 12px; margin-top: 20px; line-height: 1.6; }
-
-        #admin-panel { display: none; min-height: 100vh; padding-bottom: 40px; }
-        #admin-panel.active { display: block; }
-        .admin-header { background: var(--secondary-color); border-bottom: 1px solid var(--border-color); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-        .admin-header-left { display: flex; align-items: center; gap: 12px; }
-        .admin-header-logo { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--gold-color); overflow: hidden; background: #000; }
-        .admin-header-logo img { width: 100%; height: 100%; object-fit: cover; }
-        .admin-header h1 { font-family: var(--font-heading); font-size: 16px; color: var(--gold-color); }
-        .admin-header-right { display: flex; align-items: center; gap: 10px; }
-        .user-badge { background: rgba(223, 177, 91, 0.1); border: 1px solid var(--border-color); color: var(--gold-color); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .logout-btn { background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 5px; }
-        .logout-btn:hover { background: var(--danger); color: #fff; }
-        .admin-container { max-width: 1100px; margin: 0 auto; padding: 20px 15px; }
-        .admin-tabs { display: flex; gap: 8px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 5px; }
-        .admin-tab { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; white-space: nowrap; display: flex; align-items: center; gap: 7px; }
-        .admin-tab:hover { border-color: var(--gold-color); }
-        .admin-tab.active { background: var(--gold-color); color: #0b0b0d; border-color: var(--gold-color); }
-        .admin-section { display: none; }
-        .admin-section.active { display: block; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 25px; }
-        .stat-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 18px; text-align: center; }
-        .stat-card i { font-size: 22px; color: var(--gold-color); margin-bottom: 8px; display: block; }
-        .stat-card .stat-value { font-size: 24px; font-weight: 800; color: var(--gold-color); line-height: 1; margin-bottom: 5px; font-family: var(--font-heading); }
-        .stat-card .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
-        .section-header h2 { font-family: var(--font-heading); color: var(--gold-color); font-size: 20px; display: flex; align-items: center; gap: 10px; }
-        .btn-primary { background: var(--gold-color); color: #0b0b0d; border: none; padding: 11px 20px; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 7px; }
-        .btn-primary:hover { opacity: 0.9; }
-        .btn-secondary { background: transparent; border: 1.5px solid var(--border-color); color: var(--text-color); padding: 10px 18px; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 7px; }
-        .btn-secondary:hover { border-color: var(--gold-color); color: var(--gold-color); }
-        .loading { text-align: center; padding: 60px 20px; color: var(--text-muted); }
-        .loading i { font-size: 40px; color: var(--gold-color); animation: spin 1s linear infinite; display: inline-block; margin-bottom: 15px; }
+        /* ADMIN */
+        #admin { display: none; min-height: 100vh; padding-bottom: 40px; }
+        #admin.active { display: block; }
+        .head { background: var(--dark); border-bottom: 1px solid var(--border); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .head-left { display: flex; align-items: center; gap: 12px; }
+        .head-logo { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--gold); overflow: hidden; background: #000; }
+        .head-logo img { width: 100%; height: 100%; object-fit: cover; }
+        .head h1 { font-family: 'Playfair Display', serif; font-size: 16px; color: var(--gold); }
+        .head-right { display: flex; align-items: center; gap: 10px; }
+        .badge { background: rgba(223,177,91,.1); border: 1px solid var(--border); color: var(--gold); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .logout { background: transparent; border: 1px solid var(--bad); color: var(--bad); padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 5px; }
+        .logout:hover { background: var(--bad); color: #fff; }
+        .wrap { max-width: 1100px; margin: 0 auto; padding: 20px 15px; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 5px; }
+        .tab { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 10px 18px; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; white-space: nowrap; display: flex; align-items: center; gap: 7px; }
+        .tab:hover { border-color: var(--gold); }
+        .tab.active { background: var(--gold); color: #0b0b0d; border-color: var(--gold); }
+        .section { display: none; }
+        .section.active { display: block; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 25px; }
+        .stat { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; text-align: center; }
+        .stat i { font-size: 22px; color: var(--gold); margin-bottom: 8px; display: block; }
+        .stat .val { font-size: 24px; font-weight: 800; color: var(--gold); line-height: 1; margin-bottom: 5px; font-family: 'Playfair Display', serif; }
+        .stat .lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; font-weight: 600; }
+        .shead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+        .shead h2 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 20px; display: flex; align-items: center; gap: 10px; }
+        .btn-p { background: var(--gold); color: #0b0b0d; border: none; padding: 11px 20px; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 7px; }
+        .btn-p:hover { opacity: .9; }
+        .btn-s { background: transparent; border: 1.5px solid var(--border); color: var(--text); padding: 10px 18px; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 7px; }
+        .btn-s:hover { border-color: var(--gold); color: var(--gold); }
+        .loading { text-align: center; padding: 60px 20px; color: var(--muted); }
+        .loading i { font-size: 40px; color: var(--gold); animation: spin 1s linear infinite; display: inline-block; margin-bottom: 15px; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
-        .empty-state i { font-size: 60px; color: var(--gold-color); opacity: 0.4; display: block; margin-bottom: 20px; }
-        .empty-state h3 { font-family: var(--font-heading); color: var(--text-color); font-size: 18px; margin-bottom: 8px; }
-        .message { padding: 12px 18px; border-radius: 10px; font-size: 13px; font-weight: 600; margin-bottom: 15px; display: none; }
-        .message.show { display: block; }
-        .message.success { background: rgba(34, 197, 94, 0.15); border: 1px solid var(--success); color: #86efac; }
-        .message.error { background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); color: #fca5a5; }
-        .message.info { background: rgba(223, 177, 91, 0.15); border: 1px solid var(--gold-color); color: var(--gold-color); }
-        .form-group { margin-bottom: 18px; }
-        .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--gold-color); margin-bottom: 8px; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 13px 15px; background: var(--bg-color); border: 1.5px solid var(--border-color); border-radius: 10px; color: var(--text-color); font-size: 14px; outline: none; font-family: inherit; }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold-color); box-shadow: 0 0 0 3px rgba(223, 177, 91, 0.1); }
-        .admin-product-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 15px; margin-bottom: 12px; display: flex; gap: 15px; align-items: flex-start; }
-        .admin-product-img { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; flex-shrink: 0; background: #000; border: 1px solid var(--border-color); }
-        .admin-product-info { flex: 1; min-width: 0; }
-        .admin-product-name { font-family: var(--font-heading); font-size: 15px; font-weight: 700; color: var(--text-color); margin-bottom: 4px; }
-        .admin-product-meta { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
-        .admin-product-price { font-size: 14px; color: var(--gold-color); font-weight: 700; margin-bottom: 10px; }
-        .admin-product-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-        .action-btn { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; border: none; display: inline-flex; align-items: center; gap: 5px; }
-        .action-btn.edit { background: rgba(223, 177, 91, 0.15); color: var(--gold-color); border: 1px solid var(--gold-color); }
-        .action-btn.edit:hover { background: var(--gold-color); color: #0b0b0d; }
-        .action-btn.delete { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid var(--danger); }
-        .action-btn.delete:hover { background: var(--danger); color: #fff; }
-        .color-row { display: grid; grid-template-columns: 1fr 2fr auto; gap: 8px; margin-bottom: 8px; align-items: center; }
-        .color-row input { padding: 10px 12px; background: var(--bg-color); border: 1.5px solid var(--border-color); border-radius: 8px; color: var(--text-color); font-size: 13px; outline: none; font-family: inherit; }
-        .color-row input:focus { border-color: var(--gold-color); }
-        .color-row .remove-color { background: transparent; border: 1px solid var(--danger); color: var(--danger); width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; }
-        .color-row .remove-color:hover { background: var(--danger); color: #fff; }
-        .admin-order-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 18px; margin-bottom: 12px; }
-        .admin-order-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
-        .admin-order-id { font-family: var(--font-heading); color: var(--gold-color); font-size: 15px; font-weight: 700; }
-        .order-status { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
-        .order-status.pending { background: rgba(245, 158, 11, 0.15); color: var(--warning); border: 1px solid var(--warning); }
-        .order-status.completed { background: rgba(34, 197, 94, 0.15); color: var(--success); border: 1px solid var(--success); }
-        .admin-order-body { font-size: 13px; color: var(--text-color); line-height: 1.8; }
-        .admin-order-body strong { color: var(--gold-color); }
-        .order-products-list { margin-top: 10px; padding-left: 20px; font-size: 12px; color: var(--text-muted); }
-        .order-total { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-color); font-size: 15px; font-weight: 700; color: var(--gold-color); display: flex; justify-content: space-between; }
+        .empty { text-align: center; padding: 60px 20px; color: var(--muted); }
+        .empty i { font-size: 60px; color: var(--gold); opacity: .4; display: block; margin-bottom: 20px; }
+        .empty h3 { font-family: 'Playfair Display', serif; color: var(--text); font-size: 18px; margin-bottom: 8px; }
+        .msg { padding: 12px 18px; border-radius: 10px; font-size: 13px; font-weight: 600; margin-bottom: 15px; display: none; }
+        .msg.show { display: block; }
+        .msg.ok { background: rgba(34,197,94,.15); border: 1px solid var(--ok); color: #86efac; }
+        .msg.bad { background: rgba(239,68,68,.15); border: 1px solid var(--bad); color: #fca5a5; }
+        .pcard { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 15px; margin-bottom: 12px; display: flex; gap: 15px; align-items: flex-start; }
+        .pimg { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; flex-shrink: 0; background: #000; border: 1px solid var(--border); }
+        .pinfo { flex: 1; min-width: 0; }
+        .pname { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+        .pmeta { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+        .pprice { font-size: 14px; color: var(--gold); font-weight: 700; margin-bottom: 10px; }
+        .pacts { display: flex; gap: 8px; flex-wrap: wrap; }
+        .abtn { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; border: none; display: inline-flex; align-items: center; gap: 5px; }
+        .abtn.edit { background: rgba(223,177,91,.15); color: var(--gold); border: 1px solid var(--gold); }
+        .abtn.edit:hover { background: var(--gold); color: #0b0b0d; }
+        .abtn.del { background: rgba(239,68,68,.15); color: var(--bad); border: 1px solid var(--bad); }
+        .abtn.del:hover { background: var(--bad); color: #fff; }
+        .crow { display: grid; grid-template-columns: 1fr 2fr auto; gap: 8px; margin-bottom: 8px; align-items: center; }
+        .crow input { padding: 10px 12px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; color: var(--text); font-size: 13px; outline: none; font-family: inherit; }
+        .crow input:focus { border-color: var(--gold); }
+        .crow .rm { background: transparent; border: 1px solid var(--bad); color: var(--bad); width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        .crow .rm:hover { background: var(--bad); color: #fff; }
+        .ocard { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 12px; }
+        .ohead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+        .oid { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 15px; font-weight: 700; }
+        .ostatus { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .ostatus.pending { background: rgba(245,158,11,.15); color: var(--warn); border: 1px solid var(--warn); }
+        .ostatus.completed { background: rgba(34,197,94,.15); color: var(--ok); border: 1px solid var(--ok); }
+        .obody { font-size: 13px; line-height: 1.8; }
+        .obody strong { color: var(--gold); }
+        .olist { margin-top: 10px; padding-left: 20px; font-size: 12px; color: var(--muted); }
+        .ototal { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 15px; font-weight: 700; color: var(--gold); display: flex; justify-content: space-between; }
         @media (max-width: 500px) {
-            .admin-header { padding: 12px 15px; }
-            .admin-header h1 { font-size: 14px; }
-            .user-badge { display: none; }
+            .head { padding: 12px 15px; }
+            .head h1 { font-size: 14px; }
+            .badge { display: none; }
             .login-box { padding: 30px 20px; }
-            .color-row { grid-template-columns: 1fr 1fr auto; }
+            .crow { grid-template-columns: 1fr 1fr auto; }
         }
     </style>
 </head>
 <body>
 
+    <!-- LOGIN -->
     <div id="login-screen">
         <div class="login-box">
             <div class="login-logo"><img src="https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png" alt="Logo"></div>
             <h1>Admin Panel</h1>
-            <p class="subtitle">Burqa Bazaar & Boutiques</p>
-            <div class="login-error" id="login-error"></div>
-            <button class="google-btn" id="google-login-btn" onclick="handleGoogleLogin()">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-                Sign in with Google
-            </button>
-            <p class="login-note">🔐 শুধু Admin-এর Google Account দিয়েই Login করা যাবে।</p>
+            <p class="sub">Burqa Bazaar & Boutiques</p>
+            <div class="err" id="err"></div>
+            <form id="login-form" onsubmit="doLogin(event)">
+                <div class="fgroup">
+                    <label>📧 Email</label>
+                    <input type="email" id="email" placeholder="admin@burqa.com" required autocomplete="email">
+                </div>
+                <div class="fgroup">
+                    <label>🔒 Password</label>
+                    <input type="password" id="password" placeholder="আপনার পাসওয়ার্ড" required autocomplete="current-password">
+                </div>
+                <button type="submit" class="login-btn" id="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </form>
         </div>
     </div>
 
-    <div id="admin-panel">
-        <header class="admin-header">
-            <div class="admin-header-left">
-                <div class="admin-header-logo"><img src="https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png" alt="Logo"></div>
+    <!-- ADMIN -->
+    <div id="admin">
+        <header class="head">
+            <div class="head-left">
+                <div class="head-logo"><img src="https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png" alt="Logo"></div>
                 <h1>Admin Panel</h1>
             </div>
-            <div class="admin-header-right">
-                <span class="user-badge" id="user-email-badge">admin</span>
-                <button class="logout-btn" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            <div class="head-right">
+                <span class="badge" id="user-badge">admin</span>
+                <button class="logout" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </div>
         </header>
-        <div class="admin-container">
-            <div class="admin-tabs">
-                <button class="admin-tab active" data-tab="dashboard" onclick="switchAdminTab('dashboard')"><i class="fas fa-chart-line"></i> Dashboard</button>
-                <button class="admin-tab" data-tab="products" onclick="switchAdminTab('products')"><i class="fas fa-box"></i> Products</button>
-                <button class="admin-tab" data-tab="add-product" onclick="switchAdminTab('add-product')"><i class="fas fa-plus-circle"></i> Add Product</button>
-                <button class="admin-tab" data-tab="orders" onclick="switchAdminTab('orders')"><i class="fas fa-shopping-bag"></i> Orders</button>
+        <div class="wrap">
+            <div class="tabs">
+                <button class="tab active" data-tab="dashboard" onclick="switchTab('dashboard')"><i class="fas fa-chart-line"></i> Dashboard</button>
+                <button class="tab" data-tab="products" onclick="switchTab('products')"><i class="fas fa-box"></i> Products</button>
+                <button class="tab" data-tab="add" onclick="switchTab('add')"><i class="fas fa-plus-circle"></i> Add Product</button>
+                <button class="tab" data-tab="orders" onclick="switchTab('orders')"><i class="fas fa-shopping-bag"></i> Orders</button>
             </div>
-            <div class="admin-section active" id="section-dashboard">
-                <div class="stats-grid">
-                    <div class="stat-card"><i class="fas fa-box"></i><div class="stat-value" id="stat-products">0</div><div class="stat-label">Products</div></div>
-                    <div class="stat-card"><i class="fas fa-shopping-bag"></i><div class="stat-value" id="stat-orders">0</div><div class="stat-label">Orders</div></div>
-                    <div class="stat-card"><i class="fas fa-clock"></i><div class="stat-value" id="stat-pending">0</div><div class="stat-label">Pending</div></div>
-                    <div class="stat-card"><i class="fas fa-check-circle"></i><div class="stat-value" id="stat-completed">0</div><div class="stat-label">Completed</div></div>
+
+            <!-- DASHBOARD -->
+            <div class="section active" id="sec-dashboard">
+                <div class="stats">
+                    <div class="stat"><i class="fas fa-box"></i><div class="val" id="st-products">0</div><div class="lbl">Products</div></div>
+                    <div class="stat"><i class="fas fa-shopping-bag"></i><div class="val" id="st-orders">0</div><div class="lbl">Orders</div></div>
+                    <div class="stat"><i class="fas fa-clock"></i><div class="val" id="st-pending">0</div><div class="lbl">Pending</div></div>
+                    <div class="stat"><i class="fas fa-check-circle"></i><div class="val" id="st-completed">0</div><div class="lbl">Completed</div></div>
                 </div>
-                <div class="section-header"><h2><i class="fas fa-info-circle"></i> Welcome</h2></div>
-                <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 25px;">
-                    <h3 style="color: var(--gold-color); margin-bottom: 12px; font-family: var(--font-heading);">স্বাগতম Admin Panel-এ! 🎉</h3>
-                    <p style="color: var(--text-muted); font-size: 14px; line-height: 1.8;">Google Account দিয়ে Login করেছেন। এখন সহজে প্রোডাক্ট যোগ, এডিট, ডিলিট করতে পারবেন।</p>
+                <div class="shead"><h2><i class="fas fa-info-circle"></i> Welcome</h2></div>
+                <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 25px;">
+                    <h3 style="color: var(--gold); margin-bottom: 12px; font-family: 'Playfair Display', serif;">স্বাগতম Admin Panel-এ! 🎉</h3>
+                    <p style="color: var(--muted); font-size: 14px; line-height: 1.8;">এই প্যানেল থেকে সহজে প্রোডাক্ট যোগ, এডিট, ডিলিট করতে পারবেন।</p>
                 </div>
             </div>
-            <div class="admin-section" id="section-products">
-                <div class="section-header">
+
+            <!-- PRODUCTS -->
+            <div class="section" id="sec-products">
+                <div class="shead">
                     <h2><i class="fas fa-box"></i> All Products</h2>
-                    <button class="btn-primary" onclick="switchAdminTab('add-product')"><i class="fas fa-plus"></i> Add New</button>
+                    <button class="btn-p" onclick="switchTab('add')"><i class="fas fa-plus"></i> Add New</button>
                 </div>
-                <div id="products-list-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading products...</p></div></div>
+                <div id="products-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
             </div>
-            <div class="admin-section" id="section-add-product">
-                <div class="section-header">
+
+            <!-- ADD/EDIT -->
+            <div class="section" id="sec-add">
+                <div class="shead">
                     <h2 id="form-title"><i class="fas fa-plus-circle"></i> Add New Product</h2>
-                    <button class="btn-secondary" onclick="switchAdminTab('products')"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn-s" onclick="switchTab('products')"><i class="fas fa-arrow-left"></i> Back</button>
                 </div>
-                <div id="form-message" class="message"></div>
-                <form id="product-form" onsubmit="handleProductSubmit(event)" style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 25px;">
-                    <input type="hidden" id="editing-id">
-                    <div class="form-group"><label>📝 Product Name *</label><input type="text" id="p-name" placeholder="যেমন: Premium Black Embroidered Burqa" required></div>
-                    <div class="form-group"><label>📁 Category *</label><select id="p-category" required><option value="">-- Select --</option><option value="Hijab Collection">Hijab Collection</option><option value="Burqa Collection">Burqa Collection</option><option value="Abaya Collection">Abaya Collection</option></select></div>
-                    <div class="form-group"><label>💰 Price (Taka) *</label><input type="text" id="p-price" placeholder="1000 অথবা Coming Soon" required></div>
-                    <div class="form-group"><label>🖼️ Main Image URL *</label><input type="text" id="p-image" placeholder="https://i.ibb.co/xxxxx/image.png" required><small style="color: var(--text-muted); font-size: 11px; display: block; margin-top: 5px;">ImgBB Link বা HTML কোড — দুটোই চলবে</small></div>
-                    <div class="form-group"><label>🏷️ Badge (ঐচ্ছিক)</label><select id="p-badge"><option value="">None</option><option value="new">NEW</option><option value="hot">HOT</option><option value="sale">SALE</option><option value="soldout">SOLD OUT</option></select></div>
-                    <div class="form-group"><label>📏 Sizes (কমা দিয়ে) *</label><input type="text" id="p-sizes" placeholder="50,52,54,56" value="50,52,54,56" required></div>
-                    <div class="form-group"><label>🎨 Colors *</label><div id="colors-container"></div><button type="button" class="btn-secondary" onclick="addColorRow()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add Color</button></div>
-                    <div class="form-group"><label>📄 Description *</label><textarea id="p-description" rows="8" placeholder="প্রোডাক্টের বিস্তারিত..." required></textarea></div>
+                <div id="form-msg" class="msg"></div>
+                <form id="p-form" onsubmit="submitProduct(event)" style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 25px;">
+                    <input type="hidden" id="edit-id">
+                    <div class="fgroup"><label>📝 Product Name *</label><input type="text" id="p-name" required></div>
+                    <div class="fgroup"><label>📁 Category *</label>
+                        <select id="p-cat" required style="width: 100%; padding: 13px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; color: var(--text); font-size: 14px; outline: none; font-family: inherit;">
+                            <option value="">-- Select --</option>
+                            <option value="Hijab Collection">Hijab Collection</option>
+                            <option value="Burqa Collection">Burqa Collection</option>
+                            <option value="Abaya Collection">Abaya Collection</option>
+                        </select>
+                    </div>
+                    <div class="fgroup"><label>💰 Price (Taka) *</label><input type="text" id="p-price" placeholder="1000 অথবা Coming Soon" required></div>
+                    <div class="fgroup"><label>🖼️ Main Image URL *</label><input type="text" id="p-image" placeholder="https://i.ibb.co/xxxxx/image.png" required>
+                        <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">ImgBB Link বা HTML কোড — দুটোই চলবে</small>
+                    </div>
+                    <div class="fgroup"><label>🏷️ Badge (ঐচ্ছিক)</label>
+                        <select id="p-badge" style="width: 100%; padding: 13px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; color: var(--text); font-size: 14px; outline: none; font-family: inherit;">
+                            <option value="">None</option>
+                            <option value="new">NEW</option>
+                            <option value="hot">HOT</option>
+                            <option value="sale">SALE</option>
+                            <option value="soldout">SOLD OUT</option>
+                        </select>
+                    </div>
+                    <div class="fgroup"><label>📏 Sizes (কমা দিয়ে) *</label><input type="text" id="p-sizes" value="50,52,54,56" required></div>
+                    <div class="fgroup">
+                        <label>🎨 Colors *</label>
+                        <div id="colors"></div>
+                        <button type="button" class="btn-s" onclick="addColor()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add Color</button>
+                    </div>
+                    <div class="fgroup"><label>📄 Description *</label>
+                        <textarea id="p-desc" rows="8" required style="width: 100%; padding: 13px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; color: var(--text); font-size: 14px; outline: none; font-family: inherit;"></textarea>
+                    </div>
                     <div style="display: flex; gap: 10px; margin-top: 25px; flex-wrap: wrap;">
-                        <button type="submit" class="btn-primary" id="submit-btn" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save Product</button>
-                        <button type="button" class="btn-secondary" onclick="resetForm()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-times"></i> Cancel</button>
+                        <button type="submit" class="btn-p" id="submit-btn" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save</button>
+                        <button type="button" class="btn-s" onclick="resetForm()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-times"></i> Cancel</button>
                     </div>
                 </form>
             </div>
-            <div class="admin-section" id="section-orders">
-                <div class="section-header">
+
+            <!-- ORDERS -->
+            <div class="section" id="sec-orders">
+                <div class="shead">
                     <h2><i class="fas fa-shopping-bag"></i> All Orders</h2>
-                    <button class="btn-secondary" onclick="loadOrders()"><i class="fas fa-sync-alt"></i> Refresh</button>
+                    <button class="btn-s" onclick="loadOrders()"><i class="fas fa-sync-alt"></i> Refresh</button>
                 </div>
-                <div id="orders-list-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading orders...</p></div></div>
+                <div id="orders-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
             </div>
         </div>
     </div>
@@ -214,409 +249,381 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyA-wdP34QNPMFLKxNqiJr-HM0Gng8JzbZE",
-            authDomain: "burqa-bazaar-and-boutiques.firebaseapp.com",
-            projectId: "burqa-bazaar-and-boutiques",
-            storageBucket: "burqa-bazaar-and-boutiques.firebasestorage.app",
-            messagingSenderId: "910259567903",
-            appId: "1:910259567903:web:a63ea744f94eebf6d80842"
+            apiKey: "AIzaSyBz6nILSzcvSofF9iyPt-h3ffseEXTwgnA",
+            authDomain: "burqa-bazaar-boutiques.firebaseapp.com",
+            projectId: "burqa-bazaar-boutiques",
+            storageBucket: "burqa-bazaar-boutiques.firebasestorage.app",
+            messagingSenderId: "504652889061",
+            appId: "1:504652889061:web:26696946c3bf33f6794d0c"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
 
-        // 🔐 এখানে আপনার Admin Google Email দিন
-        const ADMIN_EMAILS = [
-            "rayhanrayhan5656@gmail.com",
-            "burqabazaarandboutiques@gmail.com"
-        ];
+        let products = [];
+        let orders = [];
+        let editingId = null;
 
-        let productsData = [];
-        let ordersData = [];
-        let currentEditingId = null;
+        // LOGIN
+        window.doLogin = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('login-btn');
+            const errBox = document.getElementById('err');
 
-        // ============================================
-        // GOOGLE LOGIN
-        // ============================================
-        window.handleGoogleLogin = async function() {
-            const btn = document.getElementById('google-login-btn');
-            const errorBox = document.getElementById('login-error');
-            errorBox.classList.remove('show');
+            errBox.classList.remove('show');
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
 
             try {
-                const result = await signInWithPopup(auth, provider);
-                const userEmail = result.user.email;
-
-                // Check if this email is allowed
-                if (!ADMIN_EMAILS.includes(userEmail)) {
-                    await signOut(auth);
-                    errorBox.textContent = '❌ এই Google Account-টি Admin নয়। শুধু Admin-এর Account দিয়েই Login করা যাবে।';
-                    errorBox.classList.add('show');
-                    btn.disabled = false;
-                    btn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Sign in with Google';
-                    return;
-                }
-
-                // Success — onAuthStateChanged handles the rest
+                await signInWithEmailAndPassword(auth, email, password);
             } catch (err) {
                 console.error(err);
                 let msg = 'লগইন ব্যর্থ হয়েছে।';
-                if (err.code === 'auth/popup-closed-by-user') msg = '⚠️ Login window বন্ধ করে দিয়েছেন।';
-                else if (err.code === 'auth/popup-blocked') msg = '⚠️ Popup ব্লক হয়েছে। Browser-এর Popup Allow করুন।';
-                else if (err.code === 'auth/network-request-failed') msg = '🌐 ইন্টারনেট সংযোগ নেই।';
-                else if (err.code === 'auth/unauthorized-domain') msg = '❌ এই ডোমেইন Firebase-এ অনুমোদিত নয়।';
-                errorBox.textContent = msg;
-                errorBox.classList.add('show');
+                if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') msg = '❌ পাসওয়ার্ড ভুল।';
+                else if (err.code === 'auth/user-not-found') msg = '❌ এই ইমেইলে অ্যাকাউন্ট নেই।';
+                else if (err.code === 'auth/invalid-email') msg = '❌ ইমেইল সঠিক নয়।';
+                else if (err.code === 'auth/too-many-requests') msg = '⏳ অনেকবার চেষ্টা। পরে করুন।';
+                else if (err.code === 'auth/network-request-failed') msg = '🌐 ইন্টারনেট নেই।';
+                else if (err.code === 'auth/invalid-api-key') msg = '❌ API Key ভুল।';
+                else if (err.code === 'auth/operation-not-allowed') msg = '❌ Email/Password Login চালু নেই।';
+                errBox.textContent = msg;
+                errBox.classList.add('show');
                 btn.disabled = false;
-                btn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Sign in with Google';
+                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
             }
         };
 
-        // ============================================
         // LOGOUT
-        // ============================================
-        window.handleLogout = async function() {
+        window.doLogout = async () => {
             if (!confirm('লগআউট করতে চান?')) return;
             await signOut(auth);
         };
 
-        // ============================================
         // AUTH STATE
-        // ============================================
         onAuthStateChanged(auth, (user) => {
             const loginScreen = document.getElementById('login-screen');
-            const adminPanel = document.getElementById('admin-panel');
-            const btn = document.getElementById('google-login-btn');
+            const admin = document.getElementById('admin');
+            const btn = document.getElementById('login-btn');
 
             if (user) {
-                // Extra check
-                if (!ADMIN_EMAILS.includes(user.email)) {
-                    signOut(auth);
-                    return;
-                }
                 loginScreen.style.display = 'none';
-                adminPanel.classList.add('active');
-                document.getElementById('user-email-badge').textContent = user.email;
-                loadDashboardStats();
-                switchAdminTab('dashboard');
+                admin.classList.add('active');
+                document.getElementById('user-badge').textContent = user.email;
+                loadStats();
+                switchTab('dashboard');
             } else {
                 loginScreen.style.display = 'flex';
-                adminPanel.classList.remove('active');
+                admin.classList.remove('active');
                 btn.disabled = false;
-                btn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Sign in with Google';
+                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+                document.getElementById('password').value = '';
             }
         });
 
-        // ============================================
-        // TAB SWITCH
-        // ============================================
-        window.switchAdminTab = function(tabName) {
-            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
-            const tabBtn = document.querySelector('.admin-tab[data-tab="' + tabName + '"]');
-            const section = document.getElementById('section-' + tabName);
-            if (tabBtn) tabBtn.classList.add('active');
-            if (section) section.classList.add('active');
-            if (tabName === 'products') loadProducts();
-            else if (tabName === 'orders') loadOrders();
-            else if (tabName === 'add-product' && !currentEditingId) resetForm();
+        // TAB
+        window.switchTab = (name) => {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            const tab = document.querySelector(`.tab[data-tab="${name}"]`);
+            const sec = document.getElementById('sec-' + name);
+            if (tab) tab.classList.add('active');
+            if (sec) sec.classList.add('active');
+            if (name === 'products') loadProducts();
+            else if (name === 'orders') loadOrders();
+            else if (name === 'add' && !editingId) resetForm();
         };
 
-        // ============================================
-        // MESSAGE
-        // ============================================
-        window.showMessage = function(containerId, text, type) {
-            const el = document.getElementById(containerId);
+        // MSG
+        window.showMsg = (id, text, type) => {
+            const el = document.getElementById(id);
             if (!el) return;
             el.textContent = text;
-            el.className = 'message show ' + (type || 'info');
-            if (type === 'success') setTimeout(() => el.classList.remove('show'), 4000);
+            el.className = 'msg show ' + (type || 'ok');
+            if (type === 'ok') setTimeout(() => el.classList.remove('show'), 4000);
         };
 
-        // ============================================
         // STATS
-        // ============================================
-        window.loadDashboardStats = async function() {
+        window.loadStats = async () => {
             try {
-                const productsSnap = await getDocs(collection(db, 'products'));
-                document.getElementById('stat-products').textContent = productsSnap.size;
+                const pSnap = await getDocs(collection(db, 'products'));
+                document.getElementById('st-products').textContent = pSnap.size;
                 try {
-                    const ordersSnap = await getDocs(collection(db, 'orders'));
-                    let pending = 0, completed = 0;
-                    ordersSnap.forEach(d => {
+                    const oSnap = await getDocs(collection(db, 'orders'));
+                    let pend = 0, comp = 0;
+                    oSnap.forEach(d => {
                         const data = d.data();
-                        if (data.status === 'completed') completed++;
-                        else pending++;
+                        if (data.status === 'completed') comp++;
+                        else pend++;
                     });
-                    document.getElementById('stat-orders').textContent = ordersSnap.size;
-                    document.getElementById('stat-pending').textContent = pending;
-                    document.getElementById('stat-completed').textContent = completed;
+                    document.getElementById('st-orders').textContent = oSnap.size;
+                    document.getElementById('st-pending').textContent = pend;
+                    document.getElementById('st-completed').textContent = comp;
                 } catch (e) {
-                    document.getElementById('stat-orders').textContent = '0';
-                    document.getElementById('stat-pending').textContent = '0';
-                    document.getElementById('stat-completed').textContent = '0';
+                    document.getElementById('st-orders').textContent = '0';
+                    document.getElementById('st-pending').textContent = '0';
+                    document.getElementById('st-completed').textContent = '0';
                 }
-            } catch (err) { console.error('Stats error:', err); }
+            } catch (err) { console.error(err); }
         };
 
-        // ============================================
         // EXTRACT URL
-        // ============================================
-        function extractImageUrl(str) {
+        const extractUrl = (str) => {
             if (!str || typeof str !== 'string') return '';
-            const trimmed = str.trim();
-            const match = trimmed.match(/src=["']([^"']+)["']/);
-            if (match && match[1]) return match[1];
-            if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
-                return trimmed.split(/[\s<"']/)[0];
-            }
+            const t = str.trim();
+            const m = t.match(/src=["']([^"']+)["']/);
+            if (m && m[1]) return m[1];
+            if (t.startsWith('http')) return t.split(/[\s<"']/)[0];
             return '';
-        }
-        window.extractImageUrl = extractImageUrl;
+        };
+        window.extractUrl = extractUrl;
 
-        // ============================================
         // LOAD PRODUCTS
-        // ============================================
-        window.loadProducts = async function() {
-            const container = document.getElementById('products-list-container');
-            container.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading products...</p></div>';
+        window.loadProducts = async () => {
+            const c = document.getElementById('products-container');
+            c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div>';
             try {
                 const snap = await getDocs(collection(db, 'products'));
-                productsData = [];
-                snap.forEach(d => productsData.push({ docId: d.id, ...d.data() }));
-                productsData.sort((a, b) => (parseInt(a.id) || 0) - (parseInt(b.id) || 0));
-                renderProductsList();
+                products = [];
+                snap.forEach(d => products.push({ docId: d.id, ...d.data() }));
+                products.sort((a, b) => (parseInt(a.id) || 0) - (parseInt(b.id) || 0));
+                renderProducts();
             } catch (err) {
-                container.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h3>প্রোডাক্ট লোড করা যায়নি</h3><p>' + (err.message || '') + '</p><button class="btn-secondary" onclick="loadProducts()" style="margin-top: 15px;">আবার চেষ্টা করুন</button></div>';
+                c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3><p>' + (err.message || '') + '</p><button class="btn-s" onclick="loadProducts()" style="margin-top: 15px;">আবার চেষ্টা</button></div>';
             }
         };
 
-        // ============================================
         // RENDER PRODUCTS
-        // ============================================
-        window.renderProductsList = function() {
-            const container = document.getElementById('products-list-container');
-            if (productsData.length === 0) {
-                container.innerHTML = '<div class="empty-state"><i class="fas fa-box-open"></i><h3>এখনো কোনো প্রোডাক্ট নেই</h3><p style="font-size: 13px; margin-bottom: 20px;">প্রথম প্রোডাক্ট যোগ করুন</p><button class="btn-primary" onclick="switchAdminTab(\'add-product\')"><i class="fas fa-plus"></i> Add First Product</button></div>';
+        window.renderProducts = () => {
+            const c = document.getElementById('products-container');
+            if (products.length === 0) {
+                c.innerHTML = '<div class="empty"><i class="fas fa-box-open"></i><h3>এখনো কোনো প্রোডাক্ট নেই</h3><p style="margin-bottom: 20px;">প্রথম প্রোডাক্ট যোগ করুন</p><button class="btn-p" onclick="switchTab(\'add\')"><i class="fas fa-plus"></i> Add Product</button></div>';
                 return;
             }
             let html = '';
-            productsData.forEach(p => {
-                const priceDisplay = (typeof p.price === 'number') ? ('৳ ' + p.price) : (p.price || 'Coming Soon');
-                const imgUrl = extractImageUrl(p.image) || 'https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png';
-                const colorCount = Array.isArray(p.colors) ? p.colors.length : 0;
-                const sizeCount = Array.isArray(p.sizes) ? p.sizes.length : 0;
-                html += '<div class="admin-product-card"><img src="' + imgUrl + '" class="admin-product-img" onerror="this.src=\'https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png\'"><div class="admin-product-info"><div class="admin-product-name">' + (p.name || 'Unnamed') + '</div><div class="admin-product-meta">' + (p.category || '') + ' • ' + sizeCount + ' sizes • ' + colorCount + ' colors</div><div class="admin-product-price">' + priceDisplay + '</div><div class="admin-product-actions"><button class="action-btn edit" onclick="editProduct(\'' + p.docId + '\')"><i class="fas fa-edit"></i> Edit</button><button class="action-btn delete" onclick="deleteProduct(\'' + p.docId + '\', \'' + (p.name || '').replace(/\'/g, "\\\'") + '\')"><i class="fas fa-trash-alt"></i> Delete</button></div></div></div>';
+            products.forEach(p => {
+                const price = (typeof p.price === 'number') ? '৳ ' + p.price : (p.price || 'Coming Soon');
+                const img = extractUrl(p.image) || 'https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png';
+                const cc = Array.isArray(p.colors) ? p.colors.length : 0;
+                const sc = Array.isArray(p.sizes) ? p.sizes.length : 0;
+                html += `<div class="pcard">
+                    <img src="${img}" class="pimg" onerror="this.src='https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png'">
+                    <div class="pinfo">
+                        <div class="pname">${p.name || 'Unnamed'}</div>
+                        <div class="pmeta">${p.category || ''} • ${sc} sizes • ${cc} colors</div>
+                        <div class="pprice">${price}</div>
+                        <div class="pacts">
+                            <button class="abtn edit" onclick="editProduct('${p.docId}')"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="abtn del" onclick="deleteProduct('${p.docId}', '${(p.name || '').replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i> Delete</button>
+                        </div>
+                    </div>
+                </div>`;
             });
-            container.innerHTML = html;
+            c.innerHTML = html;
         };
 
-        // ============================================
         // ADD COLOR
-        // ============================================
-        window.addColorRow = function(colorName, colorImage) {
-            const container = document.getElementById('colors-container');
-            const rowId = 'color-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+        window.addColor = (name, img) => {
+            const c = document.getElementById('colors');
+            const id = 'c-' + Date.now() + '-' + Math.random();
             const row = document.createElement('div');
-            row.className = 'color-row';
-            row.id = rowId;
-            row.innerHTML = '<input type="text" placeholder="Color Name" value="' + (colorName || '') + '" class="color-name-input"><input type="text" placeholder="Image URL" value="' + (colorImage || '') + '" class="color-image-input"><button type="button" class="remove-color" onclick="document.getElementById(\'' + rowId + '\').remove()"><i class="fas fa-times"></i></button>';
-            container.appendChild(row);
+            row.className = 'crow';
+            row.id = id;
+            row.innerHTML = `<input type="text" placeholder="Color Name" value="${name || ''}" class="cname"><input type="text" placeholder="Image URL" value="${img || ''}" class="cimg"><button type="button" class="rm" onclick="document.getElementById('${id}').remove()"><i class="fas fa-times"></i></button>`;
+            c.appendChild(row);
         };
 
-        // ============================================
         // RESET FORM
-        // ============================================
-        window.resetForm = function() {
-            document.getElementById('product-form').reset();
-            document.getElementById('editing-id').value = '';
-            document.getElementById('colors-container').innerHTML = '';
-            currentEditingId = null;
+        window.resetForm = () => {
+            document.getElementById('p-form').reset();
+            document.getElementById('edit-id').value = '';
+            document.getElementById('colors').innerHTML = '';
+            editingId = null;
             document.getElementById('form-title').innerHTML = '<i class="fas fa-plus-circle"></i> Add New Product';
-            document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Save Product';
-            document.getElementById('form-message').classList.remove('show');
-            addColorRow();
+            document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Save';
+            document.getElementById('form-msg').classList.remove('show');
+            addColor();
         };
 
-        // ============================================
         // DELETE
-        // ============================================
-        window.deleteProduct = async function(docId, productName) {
-            if (!confirm('আপনি কি "' + productName + '" মুছে ফেলতে চান?')) return;
+        window.deleteProduct = async (docId, name) => {
+            if (!confirm('মুছে ফেলতে চান: "' + name + '"?')) return;
             try {
                 await deleteDoc(doc(db, 'products', docId));
-                alert('✅ প্রোডাক্ট মুছে ফেলা হয়েছে।');
+                alert('✅ মুছে ফেলা হয়েছে।');
                 loadProducts();
-                loadDashboardStats();
+                loadStats();
             } catch (err) {
-                alert('❌ সমস্যা: ' + (err.message || ''));
+                alert('❌ ' + (err.message || ''));
             }
         };
 
-        // ============================================
         // EDIT
-        // ============================================
-        window.editProduct = function(docId) {
-            const product = productsData.find(p => p.docId === docId);
-            if (!product) return alert('পাওয়া যায়নি');
-            currentEditingId = docId;
-            document.getElementById('editing-id').value = docId;
-            document.getElementById('p-name').value = product.name || '';
-            document.getElementById('p-category').value = product.category || '';
-            document.getElementById('p-price').value = product.price || '';
-            document.getElementById('p-image').value = product.image || '';
-            document.getElementById('p-badge').value = product.badge || '';
-            document.getElementById('p-sizes').value = Array.isArray(product.sizes) ? product.sizes.join(',') : '';
-            document.getElementById('p-description').value = product.fullDescription || '';
-            const colorsContainer = document.getElementById('colors-container');
-            colorsContainer.innerHTML = '';
-            if (Array.isArray(product.colors) && product.colors.length > 0) {
-                product.colors.forEach(c => addColorRow(c.name || '', c.image || ''));
+        window.editProduct = (docId) => {
+            const p = products.find(x => x.docId === docId);
+            if (!p) return alert('পাওয়া যায়নি');
+            editingId = docId;
+            document.getElementById('edit-id').value = docId;
+            document.getElementById('p-name').value = p.name || '';
+            document.getElementById('p-cat').value = p.category || '';
+            document.getElementById('p-price').value = p.price || '';
+            document.getElementById('p-image').value = p.image || '';
+            document.getElementById('p-badge').value = p.badge || '';
+            document.getElementById('p-sizes').value = Array.isArray(p.sizes) ? p.sizes.join(',') : '';
+            document.getElementById('p-desc').value = p.fullDescription || '';
+            const cc = document.getElementById('colors');
+            cc.innerHTML = '';
+            if (Array.isArray(p.colors) && p.colors.length > 0) {
+                p.colors.forEach(col => addColor(col.name || '', col.image || ''));
             } else {
-                addColorRow();
+                addColor();
             }
             document.getElementById('form-title').innerHTML = '<i class="fas fa-edit"></i> Edit Product';
-            document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Update Product';
-            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
-            document.querySelector('.admin-tab[data-tab="add-product"]').classList.add('active');
-            document.getElementById('section-add-product').classList.add('active');
+            document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Update';
+            switchTab('add');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        // ============================================
         // SUBMIT
-        // ============================================
-        window.handleProductSubmit = async function(event) {
-            event.preventDefault();
-            const submitBtn = document.getElementById('submit-btn');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        window.submitProduct = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            const orig = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
             try {
                 const name = document.getElementById('p-name').value.trim();
-                const category = document.getElementById('p-category').value;
+                const category = document.getElementById('p-cat').value;
                 const priceRaw = document.getElementById('p-price').value.trim();
                 const image = document.getElementById('p-image').value.trim();
                 const badge = document.getElementById('p-badge').value;
                 const sizesRaw = document.getElementById('p-sizes').value.trim();
-                const description = document.getElementById('p-description').value.trim();
-                const editingId = document.getElementById('editing-id').value;
+                const desc = document.getElementById('p-desc').value.trim();
+                const editId = document.getElementById('edit-id').value;
 
-                if (!name || !category || !priceRaw || !image || !sizesRaw || !description) {
-                    showMessage('form-message', '⚠️ সব ফিল্ড পূরণ করুন।', 'error');
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = originalText;
+                if (!name || !category || !priceRaw || !image || !sizesRaw || !desc) {
+                    showMsg('form-msg', '⚠️ সব ফিল্ড পূরণ করুন।', 'bad');
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
                     return;
                 }
 
                 let price;
                 if (priceRaw.toLowerCase().includes('coming')) price = 'Coming Soon';
                 else {
-                    const parsed = parseInt(priceRaw.replace(/[^0-9]/g, ''));
-                    price = isNaN(parsed) ? 'Coming Soon' : parsed;
+                    const p = parseInt(priceRaw.replace(/[^0-9]/g, ''));
+                    price = isNaN(p) ? 'Coming Soon' : p;
                 }
 
                 const sizes = sizesRaw.split(',').map(s => s.trim()).filter(s => s);
                 const colors = [];
-                document.querySelectorAll('#colors-container .color-row').forEach(row => {
-                    const cName = row.querySelector('.color-name-input').value.trim();
-                    const cImage = row.querySelector('.color-image-input').value.trim();
-                    if (cName && cImage) colors.push({ name: cName, image: extractImageUrl(cImage) || cImage });
+                document.querySelectorAll('#colors .crow').forEach(row => {
+                    const n = row.querySelector('.cname').value.trim();
+                    const i = row.querySelector('.cimg').value.trim();
+                    if (n && i) colors.push({ name: n, image: extractUrl(i) || i });
                 });
 
                 if (colors.length === 0) {
-                    showMessage('form-message', '⚠️ অন্তত একটি Color যোগ করুন।', 'error');
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = originalText;
+                    showMsg('form-msg', '⚠️ অন্তত একটি Color যোগ করুন।', 'bad');
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
                     return;
                 }
 
-                const cleanImage = extractImageUrl(image) || image;
-                const productData = {
+                const cleanImg = extractUrl(image) || image;
+                const data = {
                     name, category, price,
-                    image: cleanImage,
+                    image: cleanImg,
                     badge: badge || null,
                     badgeText: badge ? badge.toUpperCase() : null,
                     sizes, colors,
-                    images: [cleanImage],
-                    fullDescription: description,
+                    images: [cleanImg],
+                    fullDescription: desc,
                     updatedAt: new Date().toISOString()
                 };
 
-                if (editingId) {
-                    await updateDoc(doc(db, 'products', editingId), productData);
-                    showMessage('form-message', '✅ আপডেট হয়েছে!', 'success');
-                    setTimeout(() => { resetForm(); switchAdminTab('products'); loadDashboardStats(); }, 1200);
+                if (editId) {
+                    await updateDoc(doc(db, 'products', editId), data);
+                    showMsg('form-msg', '✅ আপডেট হয়েছে!', 'ok');
+                    setTimeout(() => { resetForm(); switchTab('products'); loadStats(); }, 1200);
                 } else {
                     const snap = await getDocs(collection(db, 'products'));
                     let maxId = 0;
                     snap.forEach(d => { const v = parseInt(d.data().id) || 0; if (v > maxId) maxId = v; });
-                    productData.id = maxId + 1;
-                    productData.createdAt = new Date().toISOString();
-                    await addDoc(collection(db, 'products'), productData);
-                    showMessage('form-message', '✅ নতুন প্রোডাক্ট যোগ হয়েছে!', 'success');
-                    setTimeout(() => { resetForm(); switchAdminTab('products'); loadDashboardStats(); }, 1200);
+                    data.id = maxId + 1;
+                    data.createdAt = new Date().toISOString();
+                    await addDoc(collection(db, 'products'), data);
+                    showMsg('form-msg', '✅ নতুন প্রোডাক্ট যোগ হয়েছে!', 'ok');
+                    setTimeout(() => { resetForm(); switchTab('products'); loadStats(); }, 1200);
                 }
             } catch (err) {
-                showMessage('form-message', '❌ সেভ করা যায়নি: ' + (err.message || ''), 'error');
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalText;
+                showMsg('form-msg', '❌ সেভ করা যায়নি: ' + (err.message || ''), 'bad');
+                btn.disabled = false;
+                btn.innerHTML = orig;
             }
         };
 
-        // ============================================
         // LOAD ORDERS
-        // ============================================
-        window.loadOrders = async function() {
-            const container = document.getElementById('orders-list-container');
-            container.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading orders...</p></div>';
+        window.loadOrders = async () => {
+            const c = document.getElementById('orders-container');
+            c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div>';
             try {
                 const snap = await getDocs(collection(db, 'orders'));
-                ordersData = [];
-                snap.forEach(d => ordersData.push({ docId: d.id, ...d.data() }));
-                ordersData.sort((a, b) => new Date(b.date || b.createdAt || 0) - new Date(a.date || a.createdAt || 0));
-                renderOrdersList();
+                orders = [];
+                snap.forEach(d => orders.push({ docId: d.id, ...d.data() }));
+                orders.sort((a, b) => new Date(b.date || b.createdAt || 0) - new Date(a.date || a.createdAt || 0));
+                renderOrders();
             } catch (err) {
-                container.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3><p>' + (err.message || '') + '</p></div>';
+                c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3><p>' + (err.message || '') + '</p></div>';
             }
         };
 
-        // ============================================
         // RENDER ORDERS
-        // ============================================
-        window.renderOrdersList = function() {
-            const container = document.getElementById('orders-list-container');
-            if (ordersData.length === 0) {
-                container.innerHTML = '<div class="empty-state"><i class="fas fa-shopping-bag"></i><h3>এখনো কোনো অর্ডার নেই</h3></div>';
+        window.renderOrders = () => {
+            const c = document.getElementById('orders-container');
+            if (orders.length === 0) {
+                c.innerHTML = '<div class="empty"><i class="fas fa-shopping-bag"></i><h3>এখনো কোনো অর্ডার নেই</h3></div>';
                 return;
             }
             let html = '';
-            ordersData.forEach(o => {
-                const status = (o.status === 'completed') ? 'completed' : 'pending';
-                const statusText = (status === 'completed') ? 'Completed' : 'Pending';
-                const dateStr = o.date || o.createdAt || '';
-                const niceDate = dateStr ? new Date(dateStr).toLocaleString('en-GB') : '—';
-                let productsHtml = '';
+            orders.forEach(o => {
+                const st = (o.status === 'completed') ? 'completed' : 'pending';
+                const stTxt = (st === 'completed') ? 'Completed' : 'Pending';
+                const dStr = o.date || o.createdAt || '';
+                const niceDate = dStr ? new Date(dStr).toLocaleString('en-GB') : '—';
+                let ph = '';
                 if (Array.isArray(o.products)) {
                     o.products.forEach(p => {
-                        const meta = [];
-                        if (p.size) meta.push('Size: ' + p.size);
-                        if (p.color) meta.push('Color: ' + p.color);
-                        const metaStr = meta.length ? ' (' + meta.join(', ') + ')' : '';
-                        productsHtml += '<li>' + (p.name || 'Product') + metaStr + ' × ' + (p.quantity || 1) + '</li>';
+                        const m = [];
+                        if (p.size) m.push('Size: ' + p.size);
+                        if (p.color) m.push('Color: ' + p.color);
+                        const ms = m.length ? ' (' + m.join(', ') + ')' : '';
+                        ph += `<li>${p.name || 'Product'}${ms} × ${p.quantity || 1}</li>`;
                     });
                 }
-                html += '<div class="admin-order-card"><div class="admin-order-header"><div class="admin-order-id">📦 ' + (o.orderId || 'N/A') + '</div><div class="order-status ' + status + '">' + statusText + '</div></div><div class="admin-order-body"><div><strong>👤 Name:</strong> ' + (o.name || '—') + '</div><div><strong>📞 Phone:</strong> ' + (o.phone || '—') + '</div><div><strong>📍 Address:</strong> ' + (o.address || '') + ', ' + (o.thana || '') + ', ' + (o.district || '') + '</div><div><strong>💳 Payment:</strong> ' + (o.paymentMethod || '—') + '</div><div><strong>🕐 Date:</strong> ' + niceDate + '</div>' + (productsHtml ? '<div style="margin-top: 10px;"><strong>🛍️ Products:</strong></div><ul class="order-products-list">' + productsHtml + '</ul>' : '') + '<div class="order-total"><span>💰 Total:</span><span>৳ ' + (o.totalAmount || 0) + '</span></div></div></div>';
+                html += `<div class="ocard">
+                    <div class="ohead">
+                        <div class="oid">📦 ${o.orderId || 'N/A'}</div>
+                        <div class="ostatus ${st}">${stTxt}</div>
+                    </div>
+                    <div class="obody">
+                        <div><strong>👤 Name:</strong> ${o.name || '—'}</div>
+                        <div><strong>📞 Phone:</strong> ${o.phone || '—'}</div>
+                        <div><strong>📍 Address:</strong> ${o.address || ''}, ${o.thana || ''}, ${o.district || ''}</div>
+                        <div><strong>💳 Payment:</strong> ${o.paymentMethod || '—'}</div>
+                        <div><strong>🕐 Date:</strong> ${niceDate}</div>
+                        ${ph ? '<div style="margin-top: 10px;"><strong>🛍️ Products:</strong></div><ul class="olist">' + ph + '</ul>' : ''}
+                        <div class="ototal"><span>💰 Total:</span><span>৳ ${o.totalAmount || 0}</span></div>
+                    </div>
+                </div>`;
             });
-            container.innerHTML = html;
+            c.innerHTML = html;
         };
     </script>
 </body>
