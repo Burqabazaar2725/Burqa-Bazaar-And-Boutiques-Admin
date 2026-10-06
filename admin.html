@@ -94,7 +94,6 @@
         .abtn.del { background: rgba(239,68,68,.15); color: var(--bad); border: 1px solid var(--bad); }
         .abtn.del:hover { background: var(--bad); color: #fff; }
 
-        /* ⚡ STOCK BADGE */
         .stock-badge {
             display: inline-flex; align-items: center; gap: 4px;
             padding: 3px 10px; border-radius: 20px;
@@ -119,7 +118,6 @@
         .select-all-btn:hover { opacity: .9; }
         .select-all-btn.deselect { background: linear-gradient(135deg, #666, #333); }
 
-        /* ORDER CARDS */
         .ocard { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 12px; }
         .ohead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
         .oid { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 15px; font-weight: 700; }
@@ -494,7 +492,6 @@
                 const sc = Array.isArray(p.sizes) ? p.sizes.length : 0;
                 const sizeText = sc > 0 ? sc + ' sizes' : 'no size';
 
-                // ⚡ STOCK BADGE
                 let stockBadge = '';
                 if (p.stock !== undefined && p.stock !== null) {
                     const stockNum = parseInt(p.stock) || 0;
