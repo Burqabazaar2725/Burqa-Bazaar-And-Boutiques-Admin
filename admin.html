@@ -99,12 +99,14 @@
         .crow .rm { background: transparent; border: 1px solid var(--bad); color: var(--bad); width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; }
         .crow .rm:hover { background: var(--bad); color: #fff; }
 
-        /* ⚡ SIZE CHECKBOX */
-        .size-box { display: flex; flex-wrap: wrap; gap: 10px; padding: 5px 0; }
+        /* ⚡ SIZE CHECKBOX + SELECT ALL */
+        .size-box { display: flex; flex-wrap: wrap; gap: 10px; padding: 5px 0; align-items: center; }
         .size-btn { background: var(--bg); border: 1.5px solid var(--border); color: var(--text); padding: 10px 20px; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; font-family: inherit; transition: all .2s ease; }
         .size-btn:hover { border-color: var(--gold); }
         .size-btn.selected { background: var(--gold); color: #0b0b0d; border-color: var(--gold); box-shadow: 0 0 15px rgba(223,177,91,.4); }
-        .no-size-note { color: var(--muted); font-size: 13px; font-style: italic; padding: 10px 0; }
+        .select-all-btn { background: linear-gradient(135deg, #ff007f, #7928ca); border: none; color: #fff; padding: 10px 18px; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 7px; margin-left: auto; }
+        .select-all-btn:hover { opacity: .9; }
+        .select-all-btn.deselect { background: linear-gradient(135deg, #666, #333); }
 
         .ocard { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 12px; }
         .ohead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
@@ -122,6 +124,7 @@
             .badge { display: none; }
             .login-box { padding: 30px 20px; }
             .crow { grid-template-columns: 1fr 1fr auto; }
+            .select-all-btn { margin-left: 0; width: 100%; justify-content: center; }
         }
     </style>
 </head>
@@ -225,10 +228,10 @@
                             <option value="soldout">SOLD OUT</option>
                         </select>
                     </div>
-                    <div class="fgroup" id="size-section">
+                    <div class="fgroup" id="size-section" style="display: none;">
                         <label>📏 Sizes</label>
                         <div class="size-box" id="size-box">
-                            <!-- Sizes আসবে dynamically -->
+                            <!-- Sizes dynamically আসবে -->
                         </div>
                     </div>
                     <div class="fgroup">
@@ -280,25 +283,18 @@
         let editingId = null;
         let selectedSizes = [];
 
-        // ============================================
-        // SIZE OPTIONS
-        // ============================================
+        // ⚡ SIZE OPTIONS
         const ALL_SIZES = ["50", "52", "54", "56"];
 
-        // ============================================
-        // CATEGORY CHANGE
-        // ============================================
+        // ⚡ CATEGORY CHANGE — Hijab হলে Size hide
         window.onCategoryChange = function() {
             const cat = document.getElementById('p-cat').value;
             const sizeSection = document.getElementById('size-section');
-            const sizeBox = document.getElementById('size-box');
 
             if (cat === 'Hijab Collection') {
-                // Hijab — কোনো সাইজ নেই
                 sizeSection.style.display = 'none';
                 selectedSizes = [];
             } else if (cat === 'Burqa Collection' || cat === 'Abaya Collection') {
-                // Burqa / Abaya — সাইজ আছে
                 sizeSection.style.display = 'block';
                 renderSizeButtons();
             } else {
@@ -307,35 +303,49 @@
             }
         };
 
-        // ============================================
-        // RENDER SIZE BUTTONS
-        // ============================================
+        // ⚡ RENDER SIZE BUTTONS + SELECT ALL
         function renderSizeButtons() {
             const box = document.getElementById('size-box');
+            const allSelected = ALL_SIZES.every(s => selectedSizes.includes(s));
             box.innerHTML = '';
+
             ALL_SIZES.forEach(size => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
                 btn.className = 'size-btn' + (selectedSizes.includes(size) ? ' selected' : '');
                 btn.textContent = size;
-                btn.onclick = function() {
-                    toggleSize(size);
-                };
+                btn.onclick = function() { toggleSize(size); };
                 box.appendChild(btn);
             });
+
+            // Select All / Deselect All বাটন
+            const allBtn = document.createElement('button');
+            allBtn.type = 'button';
+            allBtn.className = 'select-all-btn' + (allSelected ? ' deselect' : '');
+            allBtn.innerHTML = allSelected
+                ? '<i class="fas fa-times-circle"></i> Deselect All'
+                : '<i class="fas fa-check-double"></i> Select All';
+            allBtn.onclick = function() { toggleSelectAll(); };
+            box.appendChild(allBtn);
         }
 
-        // ============================================
-        // TOGGLE SIZE
-        // ============================================
+        // ⚡ TOGGLE SINGLE SIZE
         window.toggleSize = function(size) {
             const idx = selectedSizes.indexOf(size);
-            if (idx > -1) {
-                selectedSizes.splice(idx, 1);
-            } else {
-                selectedSizes.push(size);
-            }
+            if (idx > -1) selectedSizes.splice(idx, 1);
+            else selectedSizes.push(size);
             selectedSizes.sort((a, b) => parseInt(a) - parseInt(b));
+            renderSizeButtons();
+        };
+
+        // ⚡ TOGGLE SELECT ALL / DESELECT ALL
+        window.toggleSelectAll = function() {
+            const allSelected = ALL_SIZES.every(s => selectedSizes.includes(s));
+            if (allSelected) {
+                selectedSizes = [];
+            } else {
+                selectedSizes = ALL_SIZES.slice();
+            }
             renderSizeButtons();
         };
 
@@ -368,13 +378,11 @@
             }
         };
 
-        // LOGOUT
         window.doLogout = async () => {
             if (!confirm('লগআউট করতে চান?')) return;
             await signOut(auth);
         };
 
-        // AUTH STATE
         onAuthStateChanged(auth, (user) => {
             const loginScreen = document.getElementById('login-screen');
             const admin = document.getElementById('admin');
@@ -395,7 +403,6 @@
             }
         });
 
-        // TAB
         window.switchTab = (name) => {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -408,7 +415,6 @@
             else if (name === 'add' && !editingId) resetForm();
         };
 
-        // MSG
         window.showMsg = (id, text, type) => {
             const el = document.getElementById(id);
             if (!el) return;
@@ -417,7 +423,6 @@
             if (type === 'ok') setTimeout(() => el.classList.remove('show'), 4000);
         };
 
-        // STATS
         window.loadStats = async () => {
             try {
                 const pSnap = await getDocs(collection(db, 'products'));
@@ -441,7 +446,6 @@
             } catch (err) { console.error(err); }
         };
 
-        // EXTRACT URL
         const extractUrl = (str) => {
             if (!str || typeof str !== 'string') return '';
             const t = str.trim();
@@ -452,7 +456,6 @@
         };
         window.extractUrl = extractUrl;
 
-        // LOAD PRODUCTS
         window.loadProducts = async () => {
             const c = document.getElementById('products-container');
             c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div>';
@@ -467,7 +470,6 @@
             }
         };
 
-        // RENDER PRODUCTS
         window.renderProducts = () => {
             const c = document.getElementById('products-container');
             if (products.length === 0) {
@@ -497,7 +499,6 @@
             c.innerHTML = html;
         };
 
-        // ADD COLOR
         window.addColor = (name, img) => {
             const c = document.getElementById('colors');
             const id = 'c-' + Date.now() + '-' + Math.random();
@@ -508,7 +509,6 @@
             c.appendChild(row);
         };
 
-        // RESET FORM
         window.resetForm = () => {
             document.getElementById('p-form').reset();
             document.getElementById('edit-id').value = '';
@@ -523,7 +523,6 @@
             addColor();
         };
 
-        // DELETE
         window.deleteProduct = async (docId, name) => {
             if (!confirm('মুছে ফেলতে চান: "' + name + '"?')) return;
             try {
@@ -536,7 +535,6 @@
             }
         };
 
-        // EDIT
         window.editProduct = (docId) => {
             const p = products.find(x => x.docId === docId);
             if (!p) return alert('পাওয়া যায়নি');
@@ -549,11 +547,9 @@
             document.getElementById('p-badge').value = p.badge || '';
             document.getElementById('p-desc').value = p.fullDescription || '';
 
-            // Sizes
             selectedSizes = Array.isArray(p.sizes) ? p.sizes.slice() : [];
             onCategoryChange();
 
-            // Colors
             const cc = document.getElementById('colors');
             cc.innerHTML = '';
             if (Array.isArray(p.colors) && p.colors.length > 0) {
@@ -567,7 +563,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        // SUBMIT
         window.submitProduct = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
@@ -598,7 +593,6 @@
                     price = isNaN(p) ? 'Coming Soon' : p;
                 }
 
-                // Sizes — শুধু Burqa/Abaya হলে
                 let sizes = [];
                 if (category === 'Burqa Collection' || category === 'Abaya Collection') {
                     sizes = selectedSizes.slice();
@@ -609,9 +603,7 @@
                         return;
                     }
                 }
-                // Hijab হলে sizes খালি থাকবে
 
-                // Colors
                 const colors = [];
                 document.querySelectorAll('#colors .crow').forEach(row => {
                     const n = row.querySelector('.cname').value.trim();
@@ -660,7 +652,6 @@
             }
         };
 
-        // LOAD ORDERS
         window.loadOrders = async () => {
             const c = document.getElementById('orders-container');
             c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div>';
@@ -675,7 +666,6 @@
             }
         };
 
-        // RENDER ORDERS
         window.renderOrders = () => {
             const c = document.getElementById('orders-container');
             if (orders.length === 0) {
