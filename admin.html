@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
@@ -143,10 +143,36 @@
         .ofilter button { padding: 7px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; border: 1px solid var(--border); background: var(--card); color: var(--text); }
         .ofilter button.active { background: var(--gold); color: #0b0b0d; border-color: var(--gold); }
 
-        /* ⚡ NEWSLETTER STYLES */
-        .news-hero {
-            background: linear-gradient(135deg, rgba(223,177,91,.15) 0%, rgba(223,177,91,.03) 100%);
-            border: 1px solid var(--gold);
+        /* NEWSLETTER */
+        .news-hero { background: linear-gradient(135deg, rgba(223,177,91,.15) 0%, rgba(223,177,91,.03) 100%); border: 1px solid var(--gold); border-radius: 14px; padding: 22px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap; }
+        .news-hero-left { display: flex; align-items: center; gap: 15px; }
+        .news-hero-icon { width: 55px; height: 55px; border-radius: 50%; background: var(--gold); color: #0b0b0d; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; box-shadow: 0 0 20px rgba(223,177,91,.4); }
+        .news-hero-text h3 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 16px; margin-bottom: 4px; }
+        .news-hero-text p { color: var(--muted); font-size: 12px; }
+        .news-count-big { font-family: 'Playfair Display', serif; font-size: 42px; font-weight: 800; color: var(--gold); line-height: 1; }
+        .news-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; transition: all 0.2s; }
+        .news-card:hover { border-color: var(--gold); box-shadow: 0 4px 15px rgba(223,177,91,.1); }
+        .news-card-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+        .news-avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #dfb15b, #9c7526); color: #0b0b0d; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; flex-shrink: 0; }
+        .news-info { flex: 1; min-width: 0; }
+        .news-email { font-size: 14px; font-weight: 600; color: var(--text); word-break: break-all; margin-bottom: 3px; }
+        .news-meta { font-size: 11px; color: var(--muted); display: flex; gap: 10px; flex-wrap: wrap; }
+        .news-meta .badge-new { background: rgba(34,197,94,.15); color: var(--ok); border: 1px solid var(--ok); padding: 1px 8px; border-radius: 10px; font-weight: 700; }
+        .news-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+        .news-btn-copy { background: rgba(59,130,246,.15); color: var(--info); border: 1px solid var(--info); padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 5px; }
+        .news-btn-copy:hover { background: var(--info); color: #fff; }
+        .news-export-bar { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+        .news-export-btn { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 7px; }
+        .news-export-btn:hover { opacity: 0.9; }
+        .search-news-box { position: relative; margin-bottom: 15px; }
+        .search-news-box input { width: 100%; padding: 11px 15px 11px 42px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-size: 14px; outline: none; font-family: inherit; }
+        .search-news-box input:focus { border-color: var(--gold); }
+        .search-news-box i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gold); }
+
+        /* ⚡ COUPON STYLES */
+        .coupon-hero {
+            background: linear-gradient(135deg, rgba(255,0,127,.12) 0%, rgba(121,40,202,.08) 100%);
+            border: 1px solid rgba(255,0,127,.4);
             border-radius: 14px;
             padding: 22px;
             margin-bottom: 20px;
@@ -156,143 +182,179 @@
             gap: 15px;
             flex-wrap: wrap;
         }
-        .news-hero-left {
-            display: flex; align-items: center; gap: 15px;
-        }
-        .news-hero-icon {
-            width: 55px; height: 55px;
-            border-radius: 50%;
-            background: var(--gold);
-            color: #0b0b0d;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 24px;
-            flex-shrink: 0;
-            box-shadow: 0 0 20px rgba(223,177,91,.4);
-        }
-        .news-hero-text h3 {
-            font-family: 'Playfair Display', serif;
-            color: var(--gold);
-            font-size: 16px;
-            margin-bottom: 4px;
-        }
-        .news-hero-text p {
-            color: var(--muted);
-            font-size: 12px;
-        }
-        .news-count-big {
-            font-family: 'Playfair Display', serif;
-            font-size: 42px;
-            font-weight: 800;
-            color: var(--gold);
-            line-height: 1;
-        }
+        .coupon-hero-left { display: flex; align-items: center; gap: 15px; }
+        .coupon-hero-icon { width: 55px; height: 55px; border-radius: 50%; background: linear-gradient(135deg, #ff007f, #7928ca); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; box-shadow: 0 0 20px rgba(255,0,127,.4); }
+        .coupon-hero-text h3 { font-family: 'Playfair Display', serif; color: #ff6bb5; font-size: 16px; margin-bottom: 4px; }
+        .coupon-hero-text p { color: var(--muted); font-size: 12px; }
+        .coupon-count-big { font-family: 'Playfair Display', serif; font-size: 42px; font-weight: 800; background: linear-gradient(135deg, #ff007f, #7928ca); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
 
-        .news-card {
+        .coupon-card {
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 14px 16px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            flex-wrap: wrap;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
             transition: all 0.2s;
         }
-        .news-card:hover {
-            border-color: var(--gold);
-            box-shadow: 0 4px 15px rgba(223,177,91,.1);
+        .coupon-card:hover { border-color: var(--gold); box-shadow: 0 4px 20px rgba(223,177,91,.1); }
+        .coupon-card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 5px;
+            background: linear-gradient(180deg, #ff007f, #7928ca);
         }
-        .news-card-left {
-            display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0;
-        }
-        .news-avatar {
-            width: 42px; height: 42px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #dfb15b, #9c7526);
-            color: #0b0b0d;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 800;
-            font-size: 16px;
-            flex-shrink: 0;
-        }
-        .news-info { flex: 1; min-width: 0; }
-        .news-email {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text);
-            word-break: break-all;
-            margin-bottom: 3px;
-        }
-        .news-meta {
-            font-size: 11px;
-            color: var(--muted);
-            display: flex; gap: 10px; flex-wrap: wrap;
-        }
-        .news-meta .badge-new {
-            background: rgba(34,197,94,.15);
-            color: var(--ok);
-            border: 1px solid var(--ok);
-            padding: 1px 8px;
-            border-radius: 10px;
-            font-weight: 700;
-        }
-        .news-actions {
-            display: flex; gap: 6px; flex-wrap: wrap;
-        }
-        .news-btn-copy {
-            background: rgba(59,130,246,.15);
-            color: var(--info);
-            border: 1px solid var(--info);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: inherit;
-            display: inline-flex; align-items: center; gap: 5px;
-        }
-        .news-btn-copy:hover { background: var(--info); color: #fff; }
+        .coupon-card.inactive { opacity: 0.55; }
+        .coupon-card.inactive::before { background: #666; }
+        .coupon-card.expired::before { background: #ef4444; }
 
-        .news-export-bar {
-            display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap;
+        .coupon-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
         }
-        .news-export-btn {
+        .coupon-code-big {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--gold);
+            letter-spacing: 2px;
+            background: rgba(223,177,91,.1);
+            border: 1.5px dashed var(--gold);
+            padding: 6px 14px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+        .coupon-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        .coupon-status.active { background: rgba(34,197,94,.15); color: var(--ok); border: 1px solid var(--ok); }
+        .coupon-status.inactive { background: rgba(107,114,128,.15); color: #9ca3af; border: 1px solid #9ca3af; }
+        .coupon-status.expired { background: rgba(239,68,68,.15); color: var(--bad); border: 1px solid var(--bad); }
+
+        .coupon-discount-badge {
+            display: inline-block;
             background: linear-gradient(135deg, #22c55e, #16a34a);
             color: #fff;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 10px;
-            font-weight: 700;
+            padding: 4px 14px;
+            border-radius: 20px;
             font-size: 13px;
-            cursor: pointer;
-            font-family: inherit;
-            display: inline-flex; align-items: center; gap: 7px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
         }
-        .news-export-btn:hover { opacity: 0.9; }
 
-        .search-news-box {
-            position: relative;
-            margin-bottom: 15px;
-        }
-        .search-news-box input {
-            width: 100%;
-            padding: 11px 15px 11px 42px;
-            background: var(--card);
-            border: 1px solid var(--border);
+        .coupon-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 14px;
+            padding: 12px;
+            background: var(--bg);
             border-radius: 10px;
-            color: var(--text);
-            font-size: 14px;
-            outline: none;
-            font-family: inherit;
         }
-        .search-news-box input:focus { border-color: var(--gold); }
-        .search-news-box i {
-            position: absolute;
-            left: 15px; top: 50%;
-            transform: translateY(-50%);
+        .coupon-detail-item {
+            font-size: 12px;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .coupon-detail-item strong {
+            color: var(--text);
+            font-weight: 700;
+        }
+        .coupon-detail-item i {
             color: var(--gold);
+            width: 14px;
+        }
+
+        .coupon-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .coupon-form-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.85);
+            z-index: 500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .coupon-form-modal.active { display: flex; }
+        .coupon-form-box {
+            background: var(--card);
+            border: 1px solid var(--gold);
+            border-radius: 16px;
+            padding: 25px;
+            max-width: 520px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,.8);
+        }
+        .coupon-form-box h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--gold);
+            font-size: 18px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .coupon-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+            flex-shrink: 0;
+        }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #555;
+            transition: .3s;
+            border-radius: 26px;
+        }
+        .toggle-slider::before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+        .toggle-switch input:checked + .toggle-slider {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+        }
+        .toggle-switch input:checked + .toggle-slider::before {
+            transform: translateX(24px);
         }
 
         @media (max-width: 500px) {
@@ -303,6 +365,9 @@
             .crow { grid-template-columns: 1fr 1fr auto; }
             .select-all-btn { margin-left: 0; width: 100%; justify-content: center; }
             .news-count-big { font-size: 32px; }
+            .coupon-code-big { font-size: 18px; }
+            .coupon-count-big { font-size: 32px; }
+            .coupon-form-row { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -353,6 +418,7 @@
                 <button class="tab" data-tab="orders" onclick="switchTab('orders')"><i class="fas fa-shopping-bag"></i> Orders</button>
                 <button class="tab" data-tab="reviews" onclick="switchTab('reviews')"><i class="fas fa-star"></i> Reviews</button>
                 <button class="tab" data-tab="newsletter" onclick="switchTab('newsletter')"><i class="fas fa-envelope"></i> Newsletter</button>
+                <button class="tab" data-tab="coupons" onclick="switchTab('coupons')"><i class="fas fa-ticket-alt"></i> Coupons</button>
             </div>
 
             <!-- DASHBOARD -->
@@ -366,7 +432,7 @@
                 <div class="shead"><h2><i class="fas fa-info-circle"></i> Welcome</h2></div>
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 25px;">
                     <h3 style="color: var(--gold); margin-bottom: 12px; font-family: 'Playfair Display', serif;">স্বাগতম Admin Panel-এ! 🎉</h3>
-                    <p style="color: var(--muted); font-size: 14px; line-height: 1.8;">এই প্যানেল থেকে সহজে প্রোডাক্ট যোগ, এডিট, ডিলিট করতে পারবেন। Orders ট্যাব থেকে অর্ডারের স্ট্যাটাস পরিবর্তন, Reviews ট্যাব থেকে কাস্টমার রিভিউ দেখা ও ডিলিট করা, এবং Newsletter ট্যাব থেকে সব সাবস্ক্রাইবারের ইমেইল দেখা যাবে।</p>
+                    <p style="color: var(--muted); font-size: 14px; line-height: 1.8;">এই প্যানেল থেকে প্রোডাক্ট, অর্ডার, রিভিউ, নিউজলেটার এবং কুপন সবকিছু ম্যানেজ করতে পারবেন। Coupons ট্যাব থেকে কুপন কোড তৈরি করে কাস্টমারদের ছাড় দিতে পারবেন।</p>
                 </div>
             </div>
 
@@ -456,13 +522,12 @@
                 <div id="reviews-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
             </div>
 
-            <!-- ⚡ NEWSLETTER (NEW) -->
+            <!-- NEWSLETTER -->
             <div class="section" id="sec-newsletter">
                 <div class="shead">
                     <h2><i class="fas fa-envelope"></i> Newsletter Subscribers</h2>
                     <button class="btn-s" onclick="loadNewsletter()"><i class="fas fa-sync-alt"></i> Refresh</button>
                 </div>
-
                 <div class="news-hero">
                     <div class="news-hero-left">
                         <div class="news-hero-icon"><i class="fas fa-users"></i></div>
@@ -473,7 +538,6 @@
                     </div>
                     <div class="news-count-big" id="news-total-count">0</div>
                 </div>
-
                 <div class="news-export-bar">
                     <button class="news-export-btn" onclick="exportNewsletterCSV()">
                         <i class="fas fa-file-csv"></i> Export as CSV
@@ -482,18 +546,110 @@
                         <i class="fas fa-copy"></i> Copy All Emails
                     </button>
                 </div>
-
                 <div class="search-news-box">
                     <i class="fas fa-search"></i>
                     <input type="text" id="news-search" placeholder="Search email..." onkeyup="filterNewsletter()">
                 </div>
-
                 <div id="newsletter-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
+            </div>
+
+            <!-- ⚡ COUPONS (NEW) -->
+            <div class="section" id="sec-coupons">
+                <div class="shead">
+                    <h2><i class="fas fa-ticket-alt"></i> Discount Coupons</h2>
+                    <button class="btn-p" onclick="openCouponModal()"><i class="fas fa-plus"></i> Add Coupon</button>
+                </div>
+
+                <div class="coupon-hero">
+                    <div class="coupon-hero-left">
+                        <div class="coupon-hero-icon"><i class="fas fa-tags"></i></div>
+                        <div class="coupon-hero-text">
+                            <h3>Active Coupons</h3>
+                            <p>এই কুপনগুলো দিয়ে কাস্টমাররা ছাড় পাবে</p>
+                        </div>
+                    </div>
+                    <div class="coupon-count-big" id="coupon-total-count">0</div>
+                </div>
+
+                <div class="ofilter" id="coupon-filter">
+                    <button class="active" data-cfilter="all" onclick="filterCoupons('all')">📦 All</button>
+                    <button data-cfilter="active" onclick="filterCoupons('active')">✅ Active</button>
+                    <button data-cfilter="inactive" onclick="filterCoupons('inactive')">⏸️ Inactive</button>
+                    <button data-cfilter="expired" onclick="filterCoupons('expired')">❌ Expired</button>
+                </div>
+
+                <div id="coupons-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
             </div>
 
         </div>
     </div>
-    <script type="module">
+
+    <!-- COUPON FORM MODAL -->
+    <div class="coupon-form-modal" id="coupon-modal">
+        <div class="coupon-form-box">
+            <h3 id="coupon-modal-title"><i class="fas fa-ticket-alt"></i> Add New Coupon</h3>
+            <div id="coupon-form-msg" class="msg"></div>
+
+            <input type="hidden" id="c-edit-id">
+
+            <div class="fgroup">
+                <label>🎟️ Coupon Code *</label>
+                <input type="text" id="c-code" placeholder="যেমন: EID20, WINTER50" required style="text-transform: uppercase;">
+                <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">শুধু ইংরেজি অক্ষর ও সংখ্যা ব্যবহার করুন</small>
+            </div>
+
+            <div class="fgroup">
+                <label>📉 Discount Type *</label>
+                <select id="c-type" required onchange="onCouponTypeChange()">
+                    <option value="percentage">Percentage (%)</option>
+                    <option value="flat">Flat (৳)</option>
+                </select>
+            </div>
+
+            <div class="fgroup">
+                <label id="c-value-label">💯 Discount Value * <span style="color: var(--muted); font-size: 11px;">(%, 1-100)</span></label>
+                <input type="number" id="c-value" placeholder="20" required min="1" step="1">
+            </div>
+
+            <div class="fgroup">
+                <label>🛒 Minimum Order Amount (৳) *</label>
+                <input type="number" id="c-minorder" placeholder="500" required min="0" value="0">
+                <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">0 দিলে যেকোনো অর্ডারে কাজ করবে</small>
+            </div>
+
+            <div class="fgroup">
+                <label>📅 Expiry Date *</label>
+                <input type="date" id="c-expiry" required>
+                <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">এই তারিখের পর কুপন আর কাজ করবে না</small>
+            </div>
+
+            <div class="fgroup">
+                <label>📝 Description (ঐচ্ছিক)</label>
+                <input type="text" id="c-desc" placeholder="যেমন: ঈদ স্পেশাল ২০% ছাড়">
+            </div>
+
+            <div class="fgroup" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px;">
+                <div>
+                    <div style="font-size: 13px; font-weight: 600; color: var(--gold);">🟢 Active Status</div>
+                    <div style="font-size: 11px; color: var(--muted); margin-top: 2px;">চালু রাখলে কাস্টমাররা ব্যবহার করতে পারবে</div>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="c-active" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
+                <button type="button" class="btn-p" id="c-submit-btn" onclick="submitCoupon()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;">
+                    <i class="fas fa-save"></i> Save Coupon
+                </button>
+                <button type="button" class="btn-s" onclick="closeCouponModal()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+<script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
@@ -515,10 +671,13 @@
         let orders = [];
         let reviews = [];
         let newsletterList = [];
+        let coupons = [];
         let editingId = null;
+        let editingCouponId = null;
         let selectedSizes = [];
         let orderFilter = 'all';
         let newsSearchQuery = '';
+        let couponFilter = 'all';
 
         const ALL_SIZES = ["50", "52", "54", "56"];
 
@@ -643,6 +802,7 @@
             else if (name === 'orders') loadOrders();
             else if (name === 'reviews') loadReviews();
             else if (name === 'newsletter') loadNewsletter();
+            else if (name === 'coupons') loadCoupons();
             else if (name === 'add' && !editingId) resetForm();
         };
 
@@ -966,6 +1126,12 @@
                 const phoneClean = (o.phone || '').replace(/[^0-9]/g, '');
                 const waLink = phoneClean ? 'https://wa.me/88' + (phoneClean.startsWith('0') ? phoneClean.substring(1) : phoneClean) : '#';
 
+                // ⚡ COUPON LINE
+                let couponLine = '';
+                if (o.couponCode) {
+                    couponLine = '<div style="color: #22c55e; font-weight: 700;"><strong>🎟️ Coupon:</strong> ' + o.couponCode + ' (-৳' + (o.discountAmount || 0) + ')</div>';
+                }
+
                 html += `<div class="ocard">
                     <div class="ohead">
                         <div class="oid">📦 ${o.orderId || 'N/A'}</div>
@@ -978,11 +1144,12 @@
                         <div><strong>💳 Payment:</strong> ${o.paymentMethod || '—'}</div>
                         ${o.senderNumber ? '<div><strong>📱 Sender No:</strong> ' + o.senderNumber + '</div>' : ''}
                         ${o.trxId ? '<div><strong>🔑 TrxID:</strong> ' + o.trxId + '</div>' : ''}
+                        ${couponLine}
                         ${o.notes ? '<div><strong>📝 Notes:</strong> ' + o.notes + '</div>' : ''}
                         <div><strong>🕐 Date:</strong> ${niceDate}</div>
                         ${ph ? '<div style="margin-top: 10px;"><strong>🛍️ Products:</strong></div><ul class="olist">' + ph + '</ul>' : ''}
                         <div class="ototal">
-                            <span>Subtotal: ৳${o.subtotal || 0} | Delivery: ৳${o.deliveryCharge || 0}</span>
+                            <span>Subtotal: ৳${o.subtotal || 0}${o.discountAmount ? ' - ৳' + o.discountAmount : ''} | Delivery: ৳${o.deliveryCharge || 0}</span>
                             <span>💰 Total: ৳${o.totalAmount || 0}</span>
                         </div>
                     </div>
@@ -1138,7 +1305,7 @@
         };
 
         // ============================================
-        // ⚡ NEWSLETTER (NEW)
+        // NEWSLETTER
         // ============================================
         window.loadNewsletter = async () => {
             const c = document.getElementById('newsletter-container');
@@ -1189,8 +1356,6 @@
                 const initial = email.charAt(0).toUpperCase();
                 const dStr = n.date || n.createdAt || '';
                 const niceDate = dStr ? new Date(dStr).toLocaleString('en-GB') : '—';
-
-                // আজ সাবস্ক্রাইব করেছে কিনা
                 const isToday = dStr ? (new Date(dStr).toDateString() === new Date().toDateString()) : false;
 
                 html += `<div class="news-card">
@@ -1228,7 +1393,7 @@
             navigator.clipboard.writeText(email).then(() => {
                 alert('✅ ইমেইল কপি হয়েছে:\n' + email);
             }).catch(() => {
-                alert('❌ কপি করা যায়নি। ম্যানুয়ালি কপি করুন।');
+                alert('❌ কপি করা যায়নি।');
             });
         };
 
@@ -1269,7 +1434,7 @@
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
 
-            alert('✅ CSV ডাউনলোড শুরু হয়েছে (' + newsletterList.length + 'টি সাবস্ক্রাইবার)');
+            alert('✅ CSV ডাউনলোড শুরু হয়েছে (' + newsletterList.length + 'টি)');
         };
 
         window.deleteNewsletter = async (docId, email) => {
@@ -1282,6 +1447,316 @@
                 alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি'));
             }
         };
+
+        // ============================================
+        // ⚡ COUPONS (NEW)
+        // ============================================
+        window.loadCoupons = async () => {
+            const c = document.getElementById('coupons-container');
+            c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading Coupons...</p></div>';
+            try {
+                let snap;
+                try {
+                    const q = query(collection(db, 'coupons'), orderBy('createdAt', 'desc'));
+                    snap = await getDocs(q);
+                } catch (orderErr) {
+                    snap = await getDocs(collection(db, 'coupons'));
+                }
+                coupons = [];
+                snap.forEach(d => coupons.push({ docId: d.id, ...d.data() }));
+                coupons.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+                renderCoupons();
+            } catch (err) {
+                console.error(err);
+                c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3><p>' + (err.message || '') + '</p></div>';
+            }
+        };
+
+        function getCouponStatus(c) {
+            if (!c.active) return 'inactive';
+            if (c.expiry) {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const exp = new Date(c.expiry);
+                if (exp < today) return 'expired';
+            }
+            return 'active';
+        }
+
+        function formatCouponExpiry(expiry) {
+            if (!expiry) return '—';
+            try {
+                const d = new Date(expiry);
+                const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+                return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+            } catch(e) { return expiry; }
+        }
+
+        window.renderCoupons = () => {
+            const c = document.getElementById('coupons-container');
+            const countEl = document.getElementById('coupon-total-count');
+
+            // Active count
+            let activeCount = 0;
+            coupons.forEach(co => { if (getCouponStatus(co) === 'active') activeCount++; });
+            if (countEl) countEl.textContent = activeCount;
+
+            let filtered = coupons;
+            if (couponFilter !== 'all') {
+                filtered = coupons.filter(co => getCouponStatus(co) === couponFilter);
+            }
+
+            if (filtered.length === 0) {
+                const emptyMsg = couponFilter === 'all' ? 'এখনো কোনো কুপন নেই' :
+                                couponFilter === 'active' ? 'কোনো Active কুপন নেই' :
+                                couponFilter === 'inactive' ? 'কোনো Inactive কুপন নেই' : 'কোনো Expired কুপন নেই';
+                c.innerHTML = '<div class="empty"><i class="fas fa-ticket-alt"></i><h3>' + emptyMsg + '</h3>' +
+                    (couponFilter === 'all' ? '<p style="margin-top: 8px; font-size: 13px;">"Add Coupon" বাটনে ক্লিক করে প্রথম কুপন তৈরি করুন।</p><button class="btn-p" onclick="openCouponModal()" style="margin-top: 15px;"><i class="fas fa-plus"></i> Add Coupon</button>' : '') +
+                    '</div>';
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(co => {
+                const st = getCouponStatus(co);
+                let stTxt = 'Active';
+                if (st === 'inactive') stTxt = 'Inactive';
+                else if (st === 'expired') stTxt = 'Expired';
+
+                // Discount badge
+                let discountBadge = '';
+                if (co.type === 'percentage') {
+                    discountBadge = co.value + '% OFF';
+                } else {
+                    discountBadge = '৳' + co.value + ' OFF';
+                }
+
+                const couponClass = st === 'inactive' ? 'inactive' : (st === 'expired' ? 'expired' : '');
+
+                html += `<div class="coupon-card ${couponClass}">
+                    <div class="coupon-top">
+                        <div class="coupon-code-big">${co.code || 'NOCODE'}</div>
+                        <div class="coupon-status ${st}">${stTxt}</div>
+                    </div>
+                    <div class="coupon-discount-badge">🎉 ${discountBadge}</div>
+                    ${co.description ? '<p style="font-size: 13px; color: var(--muted); margin-bottom: 12px;">' + co.description + '</p>' : ''}
+                    
+                    <div class="coupon-details-grid">
+                        <div class="coupon-detail-item">
+                            <i class="fas fa-shopping-cart"></i>
+                            Min Order: <strong>৳${co.minOrder || 0}</strong>
+                        </div>
+                        <div class="coupon-detail-item">
+                            <i class="fas fa-calendar-times"></i>
+                            Expires: <strong>${formatCouponExpiry(co.expiry)}</strong>
+                        </div>
+                        <div class="coupon-detail-item">
+                            <i class="fas fa-hashtag"></i>
+                            Used: <strong>${co.usedCount || 0} times</strong>
+                        </div>
+                    </div>
+
+                    <div class="coupon-actions">
+                        <button class="abtn edit" onclick="editCoupon('${co.docId}')"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="abtn edit" onclick="toggleCouponActive('${co.docId}')">
+                            <i class="fas fa-${co.active ? 'pause' : 'play'}"></i> ${co.active ? 'Deactivate' : 'Activate'}
+                        </button>
+                        <button class="abtn del" onclick="deleteCoupon('${co.docId}', '${(co.code || '').replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i> Delete</button>
+                    </div>
+                </div>`;
+            });
+
+            c.innerHTML = html;
+        };
+
+        window.filterCoupons = (filter) => {
+            couponFilter = filter;
+            document.querySelectorAll('#coupon-filter button').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-cfilter') === filter);
+            });
+            renderCoupons();
+        };
+
+        window.onCouponTypeChange = function() {
+            const type = document.getElementById('c-type').value;
+            const label = document.getElementById('c-value-label');
+            const input = document.getElementById('c-value');
+            if (type === 'percentage') {
+                label.innerHTML = '💯 Discount Value * <span style="color: var(--muted); font-size: 11px;">(%, 1-100)</span>';
+                input.placeholder = '20';
+                input.max = '100';
+            } else {
+                label.innerHTML = '💯 Discount Value * <span style="color: var(--muted); font-size: 11px;">(৳ টাকায়)</span>';
+                input.placeholder = '100';
+                input.max = '99999';
+            }
+        };
+
+        window.openCouponModal = () => {
+            editingCouponId = null;
+            document.getElementById('coupon-modal-title').innerHTML = '<i class="fas fa-ticket-alt"></i> Add New Coupon';
+            document.getElementById('c-edit-id').value = '';
+            document.getElementById('c-code').value = '';
+            document.getElementById('c-type').value = 'percentage';
+            document.getElementById('c-value').value = '';
+            document.getElementById('c-minorder').value = '0';
+            document.getElementById('c-expiry').value = '';
+            document.getElementById('c-desc').value = '';
+            document.getElementById('c-active').checked = true;
+            document.getElementById('c-submit-btn').innerHTML = '<i class="fas fa-save"></i> Save Coupon';
+            document.getElementById('coupon-form-msg').classList.remove('show');
+            onCouponTypeChange();
+
+            // Set default expiry = 30 days from now
+            const d = new Date();
+            d.setDate(d.getDate() + 30);
+            document.getElementById('c-expiry').value = d.toISOString().split('T')[0];
+
+            document.getElementById('coupon-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeCouponModal = () => {
+            document.getElementById('coupon-modal').classList.remove('active');
+            document.body.style.overflow = '';
+            editingCouponId = null;
+        };
+
+        window.editCoupon = (docId) => {
+            const co = coupons.find(x => x.docId === docId);
+            if (!co) return alert('পাওয়া যায়নি');
+            editingCouponId = docId;
+            document.getElementById('coupon-modal-title').innerHTML = '<i class="fas fa-edit"></i> Edit Coupon';
+            document.getElementById('c-edit-id').value = docId;
+            document.getElementById('c-code').value = co.code || '';
+            document.getElementById('c-type').value = co.type || 'percentage';
+            document.getElementById('c-value').value = co.value || '';
+            document.getElementById('c-minorder').value = co.minOrder || 0;
+            document.getElementById('c-expiry').value = co.expiry || '';
+            document.getElementById('c-desc').value = co.description || '';
+            document.getElementById('c-active').checked = co.active !== false;
+            document.getElementById('c-submit-btn').innerHTML = '<i class="fas fa-save"></i> Update Coupon';
+            document.getElementById('coupon-form-msg').classList.remove('show');
+            onCouponTypeChange();
+            document.getElementById('coupon-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.submitCoupon = async () => {
+            const btn = document.getElementById('c-submit-btn');
+            const orig = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+            try {
+                const code = document.getElementById('c-code').value.trim().toUpperCase();
+                const type = document.getElementById('c-type').value;
+                const value = parseInt(document.getElementById('c-value').value) || 0;
+                const minOrder = parseInt(document.getElementById('c-minorder').value) || 0;
+                const expiry = document.getElementById('c-expiry').value;
+                const description = document.getElementById('c-desc').value.trim();
+                const active = document.getElementById('c-active').checked;
+                const editId = document.getElementById('c-edit-id').value;
+
+                if (!code || !type || !value || !expiry) {
+                    showMsg('coupon-form-msg', '⚠️ সব প্রয়োজনীয় ফিল্ড পূরণ করুন।', 'bad');
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
+                    return;
+                }
+
+                if (!/^[A-Z0-9]+$/.test(code)) {
+                    showMsg('coupon-form-msg', '⚠️ কুপন কোডে শুধু ইংরেজি বড় হাতের অক্ষর ও সংখ্যা ব্যবহার করুন।', 'bad');
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
+                    return;
+                }
+
+                if (type === 'percentage' && (value < 1 || value > 100)) {
+                    showMsg('coupon-form-msg', '⚠️ Percentage 1-100 এর মধ্যে হতে হবে।', 'bad');
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
+                    return;
+                }
+
+                // ডুপ্লিকেট চেক
+                const dupCheck = coupons.find(x => 
+                    x.code === code && x.docId !== editId
+                );
+                if (dupCheck) {
+                    showMsg('coupon-form-msg', '⚠️ এই কোড দিয়ে ইতিমধ্যে একটি কুপন আছে।', 'bad');
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
+                    return;
+                }
+
+                const data = {
+                    code: code,
+                    type: type,
+                    value: value,
+                    minOrder: minOrder,
+                    expiry: expiry,
+                    description: description,
+                    active: active,
+                    updatedAt: new Date().toISOString()
+                };
+
+                if (editId) {
+                    await updateDoc(doc(db, 'coupons', editId), data);
+                    showMsg('coupon-form-msg', '✅ কুপন আপডেট হয়েছে!', 'ok');
+                    setTimeout(() => { closeCouponModal(); loadCoupons(); }, 1000);
+                } else {
+                    data.createdAt = new Date().toISOString();
+                    data.usedCount = 0;
+                    await addDoc(collection(db, 'coupons'), data);
+                    showMsg('coupon-form-msg', '✅ নতুন কুপন তৈরি হয়েছে!', 'ok');
+                    setTimeout(() => { closeCouponModal(); loadCoupons(); }, 1000);
+                }
+            } catch (err) {
+                showMsg('coupon-form-msg', '❌ সেভ করা যায়নি: ' + (err.message || ''), 'bad');
+                btn.disabled = false;
+                btn.innerHTML = orig;
+            }
+        };
+
+        window.toggleCouponActive = async (docId) => {
+            const co = coupons.find(x => x.docId === docId);
+            if (!co) return;
+            const newState = !co.active;
+            const label = newState ? 'চালু' : 'বন্ধ';
+            if (!confirm('কুপনটি ' + label + ' করতে চান?')) return;
+            try {
+                await updateDoc(doc(db, 'coupons', docId), {
+                    active: newState,
+                    updatedAt: new Date().toISOString()
+                });
+                alert('✅ কুপন ' + label + ' করা হয়েছে।');
+                loadCoupons();
+            } catch (err) {
+                alert('❌ ' + (err.message || 'আপডেট করা যায়নি'));
+            }
+        };
+
+        window.deleteCoupon = async (docId, code) => {
+            if (!confirm('কুপন মুছে ফেলতে চান?\n\nকোড: ' + code)) return;
+            try {
+                await deleteDoc(doc(db, 'coupons', docId));
+                alert('✅ কুপন মুছে ফেলা হয়েছে।');
+                loadCoupons();
+            } catch (err) {
+                alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি'));
+            }
+        };
+
+        // ESC key to close coupon modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('coupon-modal');
+                if (modal && modal.classList.contains('active')) {
+                    closeCouponModal();
+                }
+            }
+        });
 
     </script>
 </body>
