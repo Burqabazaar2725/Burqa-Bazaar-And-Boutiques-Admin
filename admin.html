@@ -193,8 +193,10 @@
                 <button class="tab" data-tab="products" onclick="switchTab('products')"><i class="fas fa-box"></i> Products</button>
                 <button class="tab" data-tab="add" onclick="switchTab('add')"><i class="fas fa-plus-circle"></i> Add Product</button>
                 <button class="tab" data-tab="orders" onclick="switchTab('orders')"><i class="fas fa-shopping-bag"></i> Orders</button>
+                <button class="tab" data-tab="reviews" onclick="switchTab('reviews')"><i class="fas fa-star"></i> Reviews</button>
             </div>
 
+            <!-- DASHBOARD -->
             <div class="section active" id="sec-dashboard">
                 <div class="stats">
                     <div class="stat"><i class="fas fa-box"></i><div class="val" id="st-products">0</div><div class="lbl">Products</div></div>
@@ -205,10 +207,11 @@
                 <div class="shead"><h2><i class="fas fa-info-circle"></i> Welcome</h2></div>
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 25px;">
                     <h3 style="color: var(--gold); margin-bottom: 12px; font-family: 'Playfair Display', serif;">স্বাগতম Admin Panel-এ! 🎉</h3>
-                    <p style="color: var(--muted); font-size: 14px; line-height: 1.8;">এই প্যানেল থেকে সহজে প্রোডাক্ট যোগ, এডিট, ডিলিট করতে পারবেন। Orders ট্যাব থেকে অর্ডারের স্ট্যাটাস পরিবর্তনও করতে পারবেন। Stock ০ দিলে ওয়েবসাইটে "Out of Stock" দেখাবে।</p>
+                    <p style="color: var(--muted); font-size: 14px; line-height: 1.8;">এই প্যানেল থেকে সহজে প্রোডাক্ট যোগ, এডিট, ডিলিট করতে পারবেন। Orders ট্যাব থেকে অর্ডারের স্ট্যাটাস পরিবর্তনও করতে পারবেন। Stock ০ দিলে ওয়েবসাইটে "Out of Stock" দেখাবে। Reviews ট্যাব থেকে কাস্টমারদের রিভিউ দেখতে ও ডিলিট করতে পারবেন।</p>
                 </div>
             </div>
 
+            <!-- PRODUCTS -->
             <div class="section" id="sec-products">
                 <div class="shead">
                     <h2><i class="fas fa-box"></i> All Products</h2>
@@ -217,6 +220,7 @@
                 <div id="products-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
             </div>
 
+            <!-- ADD/EDIT PRODUCT -->
             <div class="section" id="sec-add">
                 <div class="shead">
                     <h2 id="form-title"><i class="fas fa-plus-circle"></i> Add New Product</h2>
@@ -270,6 +274,7 @@
                 </form>
             </div>
 
+            <!-- ORDERS -->
             <div class="section" id="sec-orders">
                 <div class="shead">
                     <h2><i class="fas fa-shopping-bag"></i> All Orders</h2>
@@ -282,11 +287,20 @@
                 </div>
                 <div id="orders-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
             </div>
+
+            <!-- REVIEWS -->
+            <div class="section" id="sec-reviews">
+                <div class="shead">
+                    <h2><i class="fas fa-star"></i> Customer Reviews</h2>
+                    <button class="btn-s" onclick="loadReviews()"><i class="fas fa-sync-alt"></i> Refresh</button>
+                </div>
+                <div id="reviews-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
+            </div>
         </div>
     </div>
-<script type="module">
+    <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
         const firebaseConfig = {
@@ -304,6 +318,7 @@
 
         let products = [];
         let orders = [];
+        let reviews = [];
         let editingId = null;
         let selectedSizes = [];
         let orderFilter = 'all';
@@ -420,6 +435,7 @@
             if (sec) sec.classList.add('active');
             if (name === 'products') loadProducts();
             else if (name === 'orders') loadOrders();
+            else if (name === 'reviews') loadReviews();
             else if (name === 'add' && !editingId) resetForm();
         };
 
@@ -464,6 +480,9 @@
         };
         window.extractUrl = extractUrl;
 
+        // ============================================
+        // PRODUCTS
+        // ============================================
         window.loadProducts = async () => {
             const c = document.getElementById('products-container');
             c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div>';
@@ -677,6 +696,9 @@
             }
         };
 
+        // ============================================
+        // ORDERS
+        // ============================================
         window.loadOrders = async () => {
             const c = document.getElementById('orders-container');
             c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div>';
@@ -790,6 +812,118 @@
                 alert('✅ অর্ডার মুছে ফেলা হয়েছে।');
                 loadOrders();
                 loadStats();
+            } catch (err) {
+                alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি'));
+            }
+        };
+
+        // ============================================
+        // REVIEWS (নতুন)
+        // ============================================
+        window.loadReviews = async () => {
+            const c = document.getElementById('reviews-container');
+            c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading Reviews...</p></div>';
+            try {
+                const q = query(collection(db, 'reviews'), orderBy('date', 'desc'));
+                const snap = await getDocs(q);
+                reviews = [];
+                snap.forEach(d => reviews.push({ docId: d.id, ...d.data() }));
+                renderReviews();
+            } catch (err) {
+                console.error(err);
+                // orderBy কাজ না করলে fallback
+                try {
+                    const snap2 = await getDocs(collection(db, 'reviews'));
+                    reviews = [];
+                    snap2.forEach(d => reviews.push({ docId: d.id, ...d.data() }));
+                    reviews.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+                    renderReviews();
+                } catch (err2) {
+                    c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3><p>' + (err2.message || '') + '</p></div>';
+                }
+            }
+        };
+
+        function renderStarsRow(rating) {
+            let html = '';
+            const rt = parseInt(rating) || 0;
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rt) html += '<i class="fas fa-star"></i>';
+                else html += '<i class="far fa-star"></i>';
+            }
+            return html;
+        }
+
+        function getProductNameById(pid) {
+            const p = products.find(x => parseInt(x.id) === parseInt(pid));
+            return p ? p.name : ('Product #' + pid);
+        }
+
+        window.renderReviews = () => {
+            const c = document.getElementById('reviews-container');
+            if (reviews.length === 0) {
+                c.innerHTML = '<div class="empty"><i class="fas fa-star"></i><h3>এখনো কোনো Review নেই</h3><p style="margin-top: 8px; font-size: 13px;">কাস্টমাররা রিভিউ দিলে এখানে দেখা যাবে।</p></div>';
+                return;
+            }
+
+            // Stats
+            let totalRating = 0;
+            reviews.forEach(r => totalRating += (parseInt(r.rating) || 0));
+            const avg = (totalRating / reviews.length).toFixed(1);
+
+            let html = `<div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 18px; display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                <div style="text-align: center; min-width: 90px;">
+                    <div style="font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 800; color: var(--gold); line-height: 1;">${avg}</div>
+                    <div style="color: #ffb800; font-size: 16px; margin-top: 4px;">${renderStarsRow(Math.round(parseFloat(avg)))}</div>
+                    <div style="font-size: 11px; color: var(--muted); margin-top: 4px;">${reviews.length} reviews</div>
+                </div>
+                <div style="flex: 1; min-width: 200px;">
+                    <div style="font-size: 13px; color: var(--muted); line-height: 1.8;">
+                        মোট <strong style="color: var(--gold);">${reviews.length}</strong>টি কাস্টমার রিভিউ পাওয়া গেছে।<br>
+                        এভারেজ রেটিং: <strong style="color: var(--gold);">${avg} / 5</strong>
+                    </div>
+                </div>
+            </div>`;
+
+            html += '<div style="display: flex; flex-direction: column; gap: 12px;">';
+
+            reviews.forEach(r => {
+                const prodName = getProductNameById(r.productId);
+                const rt = parseInt(r.rating) || 0;
+                const dStr = r.date || r.createdAt || '';
+                const niceDate = dStr ? new Date(dStr).toLocaleString('en-GB') : '—';
+
+                html += `<div class="ocard" style="padding: 15px;">
+                    <div class="ohead" style="margin-bottom: 8px;">
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="font-family: 'Playfair Display', serif; color: var(--gold); font-size: 13px; font-weight: 700;">🛍️ ${prodName}</div>
+                            <div style="font-size: 11px; color: var(--muted); margin-top: 2px;">Product ID: ${r.productId}</div>
+                        </div>
+                        <div style="color: #ffb800; font-size: 14px;">${renderStarsRow(rt)}</div>
+                    </div>
+                    <div style="background: var(--bg); border-radius: 8px; padding: 12px; margin-top: 8px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                            <div style="font-weight: 700; color: var(--text); font-size: 14px;">👤 ${r.name || 'Anonymous'}</div>
+                            <div style="font-size: 11px; color: var(--muted);">${niceDate}</div>
+                        </div>
+                        <div style="font-size: 13px; color: var(--muted); line-height: 1.7;">${r.text || '(no comment)'}</div>
+                    </div>
+                    <div class="oactions" style="margin-top: 10px;">
+                        <button class="btn-od" onclick="deleteReview('${r.docId}', '${(r.name || '').replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i> Delete Review</button>
+                    </div>
+                </div>`;
+            });
+
+            html += '</div>';
+            c.innerHTML = html;
+        };
+
+        window.deleteReview = async (docId, name) => {
+            if (!confirm('রিভিউটি মুছে ফেলতে চান? গ্রাহক: "' + name + '"')) return;
+            try {
+                await deleteDoc(doc(db, 'reviews', docId));
+                alert('✅ রিভিউ মুছে ফেলা হয়েছে।');
+                loadReviews();
             } catch (err) {
                 alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি'));
             }
