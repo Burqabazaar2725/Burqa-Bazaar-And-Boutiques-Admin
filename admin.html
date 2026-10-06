@@ -93,13 +93,24 @@
         .abtn.edit:hover { background: var(--gold); color: #0b0b0d; }
         .abtn.del { background: rgba(239,68,68,.15); color: var(--bad); border: 1px solid var(--bad); }
         .abtn.del:hover { background: var(--bad); color: #fff; }
+
+        /* ⚡ STOCK BADGE */
+        .stock-badge {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 3px 10px; border-radius: 20px;
+            font-size: 11px; font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .stock-badge.instock { background: rgba(34,197,94,.15); color: var(--ok); border: 1px solid var(--ok); }
+        .stock-badge.lowstock { background: rgba(245,158,11,.15); color: var(--warn); border: 1px solid var(--warn); }
+        .stock-badge.outofstock { background: rgba(239,68,68,.15); color: var(--bad); border: 1px solid var(--bad); }
+
         .crow { display: grid; grid-template-columns: 1fr 2fr auto; gap: 8px; margin-bottom: 8px; align-items: center; }
         .crow input { padding: 10px 12px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; color: var(--text); font-size: 13px; outline: none; font-family: inherit; }
         .crow input:focus { border-color: var(--gold); }
         .crow .rm { background: transparent; border: 1px solid var(--bad); color: var(--bad); width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; }
         .crow .rm:hover { background: var(--bad); color: #fff; }
 
-        /* SIZE CHECKBOX + SELECT ALL */
         .size-box { display: flex; flex-wrap: wrap; gap: 10px; padding: 5px 0; align-items: center; }
         .size-btn { background: var(--bg); border: 1.5px solid var(--border); color: var(--text); padding: 10px 20px; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; font-family: inherit; transition: all .2s ease; }
         .size-btn:hover { border-color: var(--gold); }
@@ -120,7 +131,6 @@
         .olist { margin-top: 10px; padding-left: 20px; font-size: 12px; color: var(--muted); }
         .ototal { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 13px; font-weight: 700; color: var(--gold); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
 
-        /* ORDER ACTION BUTTONS */
         .oactions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
         .oactions button, .oactions a { padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; border: none; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
         .btn-complete { background: rgba(34,197,94,.15); color: var(--ok); border: 1px solid var(--ok); }
@@ -130,7 +140,6 @@
         .btn-od { background: rgba(239,68,68,.15); color: var(--bad); border: 1px solid var(--bad); }
         .btn-od:hover { background: var(--bad); color: #fff; }
 
-        /* ORDER FILTER */
         .ofilter { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
         .ofilter button { padding: 7px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; border: 1px solid var(--border); background: var(--card); color: var(--text); }
         .ofilter button.active { background: var(--gold); color: #0b0b0d; border-color: var(--gold); }
@@ -147,7 +156,6 @@
 </head>
 <body>
 
-    <!-- LOGIN -->
     <div id="login-screen">
         <div class="login-box">
             <div class="login-logo"><img src="https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png" alt="Logo"></div>
@@ -170,7 +178,6 @@
         </div>
     </div>
 
-    <!-- ADMIN -->
     <div id="admin">
         <header class="head">
             <div class="head-left">
@@ -190,7 +197,6 @@
                 <button class="tab" data-tab="orders" onclick="switchTab('orders')"><i class="fas fa-shopping-bag"></i> Orders</button>
             </div>
 
-            <!-- DASHBOARD -->
             <div class="section active" id="sec-dashboard">
                 <div class="stats">
                     <div class="stat"><i class="fas fa-box"></i><div class="val" id="st-products">0</div><div class="lbl">Products</div></div>
@@ -201,11 +207,10 @@
                 <div class="shead"><h2><i class="fas fa-info-circle"></i> Welcome</h2></div>
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 25px;">
                     <h3 style="color: var(--gold); margin-bottom: 12px; font-family: 'Playfair Display', serif;">স্বাগতম Admin Panel-এ! 🎉</h3>
-                    <p style="color: var(--muted); font-size: 14px; line-height: 1.8;">এই প্যানেল থেকে সহজে প্রোডাক্ট যোগ, এডিট, ডিলিট করতে পারবেন। Orders ট্যাব থেকে অর্ডারের স্ট্যাটাস পরিবর্তনও করতে পারবেন।</p>
+                    <p style="color: var(--muted); font-size: 14px; line-height: 1.8;">এই প্যানেল থেকে সহজে প্রোডাক্ট যোগ, এডিট, ডিলিট করতে পারবেন। Orders ট্যাব থেকে অর্ডারের স্ট্যাটাস পরিবর্তনও করতে পারবেন। Stock ০ দিলে ওয়েবসাইটে "Out of Stock" দেখাবে।</p>
                 </div>
             </div>
 
-            <!-- PRODUCTS -->
             <div class="section" id="sec-products">
                 <div class="shead">
                     <h2><i class="fas fa-box"></i> All Products</h2>
@@ -214,7 +219,6 @@
                 <div id="products-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
             </div>
 
-            <!-- ADD/EDIT PRODUCT -->
             <div class="section" id="sec-add">
                 <div class="shead">
                     <h2 id="form-title"><i class="fas fa-plus-circle"></i> Add New Product</h2>
@@ -233,6 +237,10 @@
                         </select>
                     </div>
                     <div class="fgroup"><label>💰 Price (Taka) *</label><input type="text" id="p-price" placeholder="1000 অথবা Coming Soon" required></div>
+                    <div class="fgroup"><label>📦 Stock Quantity *</label>
+                        <input type="number" id="p-stock" placeholder="যেমন: 10" required min="0" value="1">
+                        <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">০ দিলে ওয়েবসাইটে "Out of Stock" দেখাবে</small>
+                    </div>
                     <div class="fgroup"><label>🖼️ Main Image URL *</label><input type="text" id="p-image" placeholder="https://i.ibb.co/xxxxx/image.png" required>
                         <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">ImgBB Link বা HTML কোড — দুটোই চলবে</small>
                     </div>
@@ -264,25 +272,21 @@
                 </form>
             </div>
 
-            <!-- ORDERS -->
             <div class="section" id="sec-orders">
                 <div class="shead">
                     <h2><i class="fas fa-shopping-bag"></i> All Orders</h2>
                     <button class="btn-s" onclick="loadOrders()"><i class="fas fa-sync-alt"></i> Refresh</button>
                 </div>
-
-                <!-- ORDER FILTER BUTTONS -->
                 <div class="ofilter" id="order-filter">
                     <button class="active" data-filter="all" onclick="filterOrders('all')">📦 All</button>
                     <button data-filter="pending" onclick="filterOrders('pending')">⏳ Pending</button>
                     <button data-filter="completed" onclick="filterOrders('completed')">✅ Completed</button>
                 </div>
-
                 <div id="orders-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
             </div>
         </div>
     </div>
-    <script type="module">
+<script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
@@ -304,12 +308,10 @@
         let orders = [];
         let editingId = null;
         let selectedSizes = [];
-        let orderFilter = 'all';   // ⚡ NEW: Order filter state
+        let orderFilter = 'all';
 
-        // ⚡ SIZE OPTIONS
         const ALL_SIZES = ["50", "52", "54", "56"];
 
-        // ⚡ CATEGORY CHANGE
         window.onCategoryChange = function() {
             const cat = document.getElementById('p-cat').value;
             const sizeSection = document.getElementById('size-section');
@@ -361,7 +363,6 @@
             renderSizeButtons();
         };
 
-        // LOGIN
         window.doLogin = async (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value.trim();
@@ -465,9 +466,6 @@
         };
         window.extractUrl = extractUrl;
 
-        // ============================================
-        // PRODUCTS
-        // ============================================
         window.loadProducts = async () => {
             const c = document.getElementById('products-container');
             c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div>';
@@ -495,11 +493,26 @@
                 const cc = Array.isArray(p.colors) ? p.colors.length : 0;
                 const sc = Array.isArray(p.sizes) ? p.sizes.length : 0;
                 const sizeText = sc > 0 ? sc + ' sizes' : 'no size';
+
+                // ⚡ STOCK BADGE
+                let stockBadge = '';
+                if (p.stock !== undefined && p.stock !== null) {
+                    const stockNum = parseInt(p.stock) || 0;
+                    if (stockNum === 0) {
+                        stockBadge = '<span class="stock-badge outofstock"><i class="fas fa-times-circle"></i> Out of Stock</span>';
+                    } else if (stockNum <= 5) {
+                        stockBadge = '<span class="stock-badge lowstock"><i class="fas fa-exclamation-triangle"></i> Low Stock: ' + stockNum + '</span>';
+                    } else {
+                        stockBadge = '<span class="stock-badge instock"><i class="fas fa-check-circle"></i> In Stock: ' + stockNum + '</span>';
+                    }
+                }
+
                 html += `<div class="pcard">
                     <img src="${img}" class="pimg" onerror="this.src='https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png'">
                     <div class="pinfo">
                         <div class="pname">${p.name || 'Unnamed'}</div>
                         <div class="pmeta">${p.category || ''} • ${sizeText} • ${cc} colors</div>
+                        ${stockBadge}
                         <div class="pprice">${price}</div>
                         <div class="pacts">
                             <button class="abtn edit" onclick="editProduct('${p.docId}')"><i class="fas fa-edit"></i> Edit</button>
@@ -525,6 +538,7 @@
             document.getElementById('p-form').reset();
             document.getElementById('edit-id').value = '';
             document.getElementById('colors').innerHTML = '';
+            document.getElementById('p-stock').value = '1';
             selectedSizes = [];
             editingId = null;
             document.getElementById('form-title').innerHTML = '<i class="fas fa-plus-circle"></i> Add New Product';
@@ -555,6 +569,7 @@
             document.getElementById('p-name').value = p.name || '';
             document.getElementById('p-cat').value = p.category || '';
             document.getElementById('p-price').value = p.price || '';
+            document.getElementById('p-stock').value = (p.stock !== undefined && p.stock !== null) ? p.stock : 1;
             document.getElementById('p-image').value = p.image || '';
             document.getElementById('p-badge').value = p.badge || '';
             document.getElementById('p-desc').value = p.fullDescription || '';
@@ -583,12 +598,13 @@
                 const name = document.getElementById('p-name').value.trim();
                 const category = document.getElementById('p-cat').value;
                 const priceRaw = document.getElementById('p-price').value.trim();
+                const stockRaw = document.getElementById('p-stock').value.trim();
                 const image = document.getElementById('p-image').value.trim();
                 const badge = document.getElementById('p-badge').value;
                 const desc = document.getElementById('p-desc').value.trim();
                 const editId = document.getElementById('edit-id').value;
 
-                if (!name || !category || !priceRaw || !image || !desc) {
+                if (!name || !category || !priceRaw || !image || !desc || stockRaw === '') {
                     showMsg('form-msg', '⚠️ সব ফিল্ড পূরণ করুন।', 'bad');
                     btn.disabled = false;
                     btn.innerHTML = orig;
@@ -601,6 +617,8 @@
                     const p = parseInt(priceRaw.replace(/[^0-9]/g, ''));
                     price = isNaN(p) ? 'Coming Soon' : p;
                 }
+
+                const stock = parseInt(stockRaw) || 0;
 
                 let sizes = [];
                 if (category === 'Burqa Collection' || category === 'Abaya Collection') {
@@ -630,6 +648,7 @@
                 const cleanImg = extractUrl(image) || image;
                 const data = {
                     name, category, price,
+                    stock: stock,
                     image: cleanImg,
                     badge: badge || null,
                     badgeText: badge ? badge.toUpperCase() : null,
@@ -661,9 +680,6 @@
             }
         };
 
-        // ============================================
-        // ORDERS — Full Management
-        // ============================================
         window.loadOrders = async () => {
             const c = document.getElementById('orders-container');
             c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div>';
