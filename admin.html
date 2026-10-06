@@ -29,20 +29,21 @@
         body { background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; min-height: 100vh; }
 
         #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 20px; background: radial-gradient(circle at 50% 0%, rgba(223, 177, 91, 0.08) 0%, transparent 60%); z-index: 1000; }
-        .login-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 40px 30px; width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6); }
+        .login-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 40px 30px; width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6); text-align: center; }
         .login-logo { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--gold-color); overflow: hidden; margin: 0 auto 20px; background: #000; box-shadow: 0 0 25px rgba(223, 177, 91, 0.4); }
         .login-logo img { width: 100%; height: 100%; object-fit: cover; }
-        .login-box h1 { font-family: var(--font-heading); color: var(--gold-color); font-size: 24px; text-align: center; margin-bottom: 5px; }
-        .login-box .subtitle { text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 30px; }
-        .form-group { margin-bottom: 18px; }
-        .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--gold-color); margin-bottom: 8px; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 13px 15px; background: var(--bg-color); border: 1.5px solid var(--border-color); border-radius: 10px; color: var(--text-color); font-size: 14px; outline: none; font-family: inherit; }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold-color); box-shadow: 0 0 0 3px rgba(223, 177, 91, 0.1); }
-        .login-btn { width: 100%; padding: 14px; background: var(--gold-color); color: #0b0b0d; border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; font-family: inherit; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .login-btn:hover { opacity: 0.9; }
-        .login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-        .login-error { background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); color: #fca5a5; padding: 10px 15px; border-radius: 8px; font-size: 13px; margin-bottom: 15px; display: none; }
+        .login-box h1 { font-family: var(--font-heading); color: var(--gold-color); font-size: 24px; margin-bottom: 5px; }
+        .login-box .subtitle { color: var(--text-muted); font-size: 13px; margin-bottom: 30px; }
+
+        .google-btn { width: 100%; padding: 15px; background: #fff; color: #1a1a1e; border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 10px; }
+        .google-btn:hover { opacity: 0.95; box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15); }
+        .google-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .google-btn img { width: 22px; height: 22px; }
+
+        .login-error { background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); color: #fca5a5; padding: 10px 15px; border-radius: 8px; font-size: 13px; margin-bottom: 15px; display: none; text-align: left; }
         .login-error.show { display: block; }
+
+        .login-note { color: var(--text-muted); font-size: 12px; margin-top: 20px; line-height: 1.6; }
 
         #admin-panel { display: none; min-height: 100vh; padding-bottom: 40px; }
         #admin-panel.active { display: block; }
@@ -52,7 +53,7 @@
         .admin-header-logo img { width: 100%; height: 100%; object-fit: cover; }
         .admin-header h1 { font-family: var(--font-heading); font-size: 16px; color: var(--gold-color); }
         .admin-header-right { display: flex; align-items: center; gap: 10px; }
-        .user-badge { background: rgba(223, 177, 91, 0.1); border: 1px solid var(--border-color); color: var(--gold-color); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .user-badge { background: rgba(223, 177, 91, 0.1); border: 1px solid var(--border-color); color: var(--gold-color); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .logout-btn { background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 5px; }
         .logout-btn:hover { background: var(--danger); color: #fff; }
         .admin-container { max-width: 1100px; margin: 0 auto; padding: 20px 15px; }
@@ -84,6 +85,10 @@
         .message.success { background: rgba(34, 197, 94, 0.15); border: 1px solid var(--success); color: #86efac; }
         .message.error { background: rgba(239, 68, 68, 0.15); border: 1px solid var(--danger); color: #fca5a5; }
         .message.info { background: rgba(223, 177, 91, 0.15); border: 1px solid var(--gold-color); color: var(--gold-color); }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--gold-color); margin-bottom: 8px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 13px 15px; background: var(--bg-color); border: 1.5px solid var(--border-color); border-radius: 10px; color: var(--text-color); font-size: 14px; outline: none; font-family: inherit; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold-color); box-shadow: 0 0 0 3px rgba(223, 177, 91, 0.1); }
         .admin-product-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 15px; margin-bottom: 12px; display: flex; gap: 15px; align-items: flex-start; }
         .admin-product-img { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; flex-shrink: 0; background: #000; border: 1px solid var(--border-color); }
         .admin-product-info { flex: 1; min-width: 0; }
@@ -128,11 +133,11 @@
             <h1>Admin Panel</h1>
             <p class="subtitle">Burqa Bazaar & Boutiques</p>
             <div class="login-error" id="login-error"></div>
-            <form id="login-form" onsubmit="handleLogin(event)">
-                <div class="form-group"><label>📧 Email</label><input type="email" id="login-email" placeholder="your-email@example.com" required autocomplete="email"></div>
-                <div class="form-group"><label>🔒 Password</label><input type="password" id="login-password" placeholder="আপনার পাসওয়ার্ড" required autocomplete="current-password"></div>
-                <button type="submit" class="login-btn" id="login-btn"><i class="fas fa-sign-in-alt"></i> Login</button>
-            </form>
+            <button class="google-btn" id="google-login-btn" onclick="handleGoogleLogin()">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                Sign in with Google
+            </button>
+            <p class="login-note">🔐 শুধু Admin-এর Google Account দিয়েই Login করা যাবে।</p>
         </div>
     </div>
 
@@ -164,12 +169,7 @@
                 <div class="section-header"><h2><i class="fas fa-info-circle"></i> Welcome</h2></div>
                 <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 25px;">
                     <h3 style="color: var(--gold-color); margin-bottom: 12px; font-family: var(--font-heading);">স্বাগতম Admin Panel-এ! 🎉</h3>
-                    <p style="color: var(--text-muted); font-size: 14px; line-height: 1.8;">এই প্যানেল থেকে আপনি সহজে প্রোডাক্ট যোগ, এডিট, ডিলিট করতে পারবেন।</p>
-                    <ul style="margin-top: 15px; padding-left: 20px; color: var(--text-color); font-size: 13px; line-height: 2;">
-                        <li>📦 <strong>Products</strong> — সব প্রোডাক্ট দেখা ও ম্যানেজ করা</li>
-                        <li>➕ <strong>Add Product</strong> — নতুন প্রোডাক্ট যোগ করা</li>
-                        <li>🛒 <strong>Orders</strong> — গ্রাহকদের অর্ডার দেখা</li>
-                    </ul>
+                    <p style="color: var(--text-muted); font-size: 14px; line-height: 1.8;">Google Account দিয়ে Login করেছেন। এখন সহজে প্রোডাক্ট যোগ, এডিট, ডিলিট করতে পারবেন।</p>
                 </div>
             </div>
             <div class="admin-section" id="section-products">
@@ -214,7 +214,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA-wdP34QNPMFLKxNqiJr-HM0Gng8JzbZE",
@@ -228,49 +228,79 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        // 🔐 এখানে আপনার Admin Google Email দিন
+        const ADMIN_EMAILS = [
+            "rayhanrayhan5656@gmail.com",
+            "burqabazaarandboutiques@gmail.com"
+        ];
 
         let productsData = [];
         let ordersData = [];
         let currentEditingId = null;
 
-        // LOGIN
-        window.handleLogin = async function(event) {
-            event.preventDefault();
-            const email = document.getElementById('login-email').value.trim();
-            const password = document.getElementById('login-password').value;
-            const btn = document.getElementById('login-btn');
+        // ============================================
+        // GOOGLE LOGIN
+        // ============================================
+        window.handleGoogleLogin = async function() {
+            const btn = document.getElementById('google-login-btn');
             const errorBox = document.getElementById('login-error');
             errorBox.classList.remove('show');
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+
             try {
-                await signInWithEmailAndPassword(auth, email, password);
+                const result = await signInWithPopup(auth, provider);
+                const userEmail = result.user.email;
+
+                // Check if this email is allowed
+                if (!ADMIN_EMAILS.includes(userEmail)) {
+                    await signOut(auth);
+                    errorBox.textContent = '❌ এই Google Account-টি Admin নয়। শুধু Admin-এর Account দিয়েই Login করা যাবে।';
+                    errorBox.classList.add('show');
+                    btn.disabled = false;
+                    btn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Sign in with Google';
+                    return;
+                }
+
+                // Success — onAuthStateChanged handles the rest
             } catch (err) {
+                console.error(err);
                 let msg = 'লগইন ব্যর্থ হয়েছে।';
-                if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') msg = '❌ পাসওয়ার্ড ভুল।';
-                else if (err.code === 'auth/user-not-found') msg = '❌ এই ইমেইলে অ্যাকাউন্ট নেই।';
-                else if (err.code === 'auth/invalid-email') msg = '❌ ইমেইল সঠিক নয়।';
-                else if (err.code === 'auth/too-many-requests') msg = '⏳ অনেকবার চেষ্টা। পরে করুন।';
-                else if (err.code === 'auth/network-request-failed') msg = '🌐 ইন্টারনেট নেই।';
+                if (err.code === 'auth/popup-closed-by-user') msg = '⚠️ Login window বন্ধ করে দিয়েছেন।';
+                else if (err.code === 'auth/popup-blocked') msg = '⚠️ Popup ব্লক হয়েছে। Browser-এর Popup Allow করুন।';
+                else if (err.code === 'auth/network-request-failed') msg = '🌐 ইন্টারনেট সংযোগ নেই।';
+                else if (err.code === 'auth/unauthorized-domain') msg = '❌ এই ডোমেইন Firebase-এ অনুমোদিত নয়।';
                 errorBox.textContent = msg;
                 errorBox.classList.add('show');
                 btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+                btn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Sign in with Google';
             }
         };
 
+        // ============================================
         // LOGOUT
+        // ============================================
         window.handleLogout = async function() {
             if (!confirm('লগআউট করতে চান?')) return;
             await signOut(auth);
         };
 
+        // ============================================
         // AUTH STATE
+        // ============================================
         onAuthStateChanged(auth, (user) => {
             const loginScreen = document.getElementById('login-screen');
             const adminPanel = document.getElementById('admin-panel');
-            const loginBtn = document.getElementById('login-btn');
+            const btn = document.getElementById('google-login-btn');
+
             if (user) {
+                // Extra check
+                if (!ADMIN_EMAILS.includes(user.email)) {
+                    signOut(auth);
+                    return;
+                }
                 loginScreen.style.display = 'none';
                 adminPanel.classList.add('active');
                 document.getElementById('user-email-badge').textContent = user.email;
@@ -279,13 +309,14 @@
             } else {
                 loginScreen.style.display = 'flex';
                 adminPanel.classList.remove('active');
-                loginBtn.disabled = false;
-                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
-                document.getElementById('login-password').value = '';
+                btn.disabled = false;
+                btn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Sign in with Google';
             }
         });
 
+        // ============================================
         // TAB SWITCH
+        // ============================================
         window.switchAdminTab = function(tabName) {
             document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
@@ -298,7 +329,9 @@
             else if (tabName === 'add-product' && !currentEditingId) resetForm();
         };
 
+        // ============================================
         // MESSAGE
+        // ============================================
         window.showMessage = function(containerId, text, type) {
             const el = document.getElementById(containerId);
             if (!el) return;
@@ -307,7 +340,9 @@
             if (type === 'success') setTimeout(() => el.classList.remove('show'), 4000);
         };
 
+        // ============================================
         // STATS
+        // ============================================
         window.loadDashboardStats = async function() {
             try {
                 const productsSnap = await getDocs(collection(db, 'products'));
@@ -331,7 +366,9 @@
             } catch (err) { console.error('Stats error:', err); }
         };
 
+        // ============================================
         // EXTRACT URL
+        // ============================================
         function extractImageUrl(str) {
             if (!str || typeof str !== 'string') return '';
             const trimmed = str.trim();
@@ -344,7 +381,9 @@
         }
         window.extractImageUrl = extractImageUrl;
 
+        // ============================================
         // LOAD PRODUCTS
+        // ============================================
         window.loadProducts = async function() {
             const container = document.getElementById('products-list-container');
             container.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading products...</p></div>';
@@ -359,7 +398,9 @@
             }
         };
 
+        // ============================================
         // RENDER PRODUCTS
+        // ============================================
         window.renderProductsList = function() {
             const container = document.getElementById('products-list-container');
             if (productsData.length === 0) {
@@ -377,7 +418,9 @@
             container.innerHTML = html;
         };
 
+        // ============================================
         // ADD COLOR
+        // ============================================
         window.addColorRow = function(colorName, colorImage) {
             const container = document.getElementById('colors-container');
             const rowId = 'color-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
@@ -388,7 +431,9 @@
             container.appendChild(row);
         };
 
+        // ============================================
         // RESET FORM
+        // ============================================
         window.resetForm = function() {
             document.getElementById('product-form').reset();
             document.getElementById('editing-id').value = '';
@@ -400,7 +445,9 @@
             addColorRow();
         };
 
+        // ============================================
         // DELETE
+        // ============================================
         window.deleteProduct = async function(docId, productName) {
             if (!confirm('আপনি কি "' + productName + '" মুছে ফেলতে চান?')) return;
             try {
@@ -413,7 +460,9 @@
             }
         };
 
+        // ============================================
         // EDIT
+        // ============================================
         window.editProduct = function(docId) {
             const product = productsData.find(p => p.docId === docId);
             if (!product) return alert('পাওয়া যায়নি');
@@ -442,7 +491,9 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
+        // ============================================
         // SUBMIT
+        // ============================================
         window.handleProductSubmit = async function(event) {
             event.preventDefault();
             const submitBtn = document.getElementById('submit-btn');
@@ -521,7 +572,9 @@
             }
         };
 
+        // ============================================
         // LOAD ORDERS
+        // ============================================
         window.loadOrders = async function() {
             const container = document.getElementById('orders-list-container');
             container.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading orders...</p></div>';
@@ -536,7 +589,9 @@
             }
         };
 
+        // ============================================
         // RENDER ORDERS
+        // ============================================
         window.renderOrdersList = function() {
             const container = document.getElementById('orders-list-container');
             if (ordersData.length === 0) {
