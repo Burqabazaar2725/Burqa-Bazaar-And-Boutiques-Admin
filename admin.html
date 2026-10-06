@@ -99,7 +99,7 @@
         .crow .rm { background: transparent; border: 1px solid var(--bad); color: var(--bad); width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; }
         .crow .rm:hover { background: var(--bad); color: #fff; }
 
-        /* ⚡ SIZE CHECKBOX + SELECT ALL */
+        /* SIZE CHECKBOX + SELECT ALL */
         .size-box { display: flex; flex-wrap: wrap; gap: 10px; padding: 5px 0; align-items: center; }
         .size-btn { background: var(--bg); border: 1.5px solid var(--border); color: var(--text); padding: 10px 20px; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; font-family: inherit; transition: all .2s ease; }
         .size-btn:hover { border-color: var(--gold); }
@@ -108,6 +108,7 @@
         .select-all-btn:hover { opacity: .9; }
         .select-all-btn.deselect { background: linear-gradient(135deg, #666, #333); }
 
+        /* ORDER CARDS */
         .ocard { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 12px; }
         .ohead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
         .oid { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 15px; font-weight: 700; }
@@ -117,7 +118,23 @@
         .obody { font-size: 13px; line-height: 1.8; }
         .obody strong { color: var(--gold); }
         .olist { margin-top: 10px; padding-left: 20px; font-size: 12px; color: var(--muted); }
-        .ototal { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 15px; font-weight: 700; color: var(--gold); display: flex; justify-content: space-between; }
+        .ototal { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); font-size: 13px; font-weight: 700; color: var(--gold); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+
+        /* ORDER ACTION BUTTONS */
+        .oactions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+        .oactions button, .oactions a { padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; border: none; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
+        .btn-complete { background: rgba(34,197,94,.15); color: var(--ok); border: 1px solid var(--ok); }
+        .btn-complete:hover { background: var(--ok); color: #fff; }
+        .btn-pending { background: rgba(245,158,11,.15); color: var(--warn); border: 1px solid var(--warn); }
+        .btn-pending:hover { background: var(--warn); color: #fff; }
+        .btn-od { background: rgba(239,68,68,.15); color: var(--bad); border: 1px solid var(--bad); }
+        .btn-od:hover { background: var(--bad); color: #fff; }
+
+        /* ORDER FILTER */
+        .ofilter { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
+        .ofilter button { padding: 7px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; border: 1px solid var(--border); background: var(--card); color: var(--text); }
+        .ofilter button.active { background: var(--gold); color: #0b0b0d; border-color: var(--gold); }
+
         @media (max-width: 500px) {
             .head { padding: 12px 15px; }
             .head h1 { font-size: 14px; }
@@ -184,7 +201,7 @@
                 <div class="shead"><h2><i class="fas fa-info-circle"></i> Welcome</h2></div>
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 25px;">
                     <h3 style="color: var(--gold); margin-bottom: 12px; font-family: 'Playfair Display', serif;">স্বাগতম Admin Panel-এ! 🎉</h3>
-                    <p style="color: var(--muted); font-size: 14px; line-height: 1.8;">এই প্যানেল থেকে সহজে প্রোডাক্ট যোগ, এডিট, ডিলিট করতে পারবেন।</p>
+                    <p style="color: var(--muted); font-size: 14px; line-height: 1.8;">এই প্যানেল থেকে সহজে প্রোডাক্ট যোগ, এডিট, ডিলিট করতে পারবেন। Orders ট্যাব থেকে অর্ডারের স্ট্যাটাস পরিবর্তনও করতে পারবেন।</p>
                 </div>
             </div>
 
@@ -197,7 +214,7 @@
                 <div id="products-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
             </div>
 
-            <!-- ADD/EDIT -->
+            <!-- ADD/EDIT PRODUCT -->
             <div class="section" id="sec-add">
                 <div class="shead">
                     <h2 id="form-title"><i class="fas fa-plus-circle"></i> Add New Product</h2>
@@ -230,9 +247,7 @@
                     </div>
                     <div class="fgroup" id="size-section" style="display: none;">
                         <label>📏 Sizes</label>
-                        <div class="size-box" id="size-box">
-                            <!-- Sizes dynamically আসবে -->
-                        </div>
+                        <div class="size-box" id="size-box"></div>
                     </div>
                     <div class="fgroup">
                         <label>🎨 Colors *</label>
@@ -255,11 +270,18 @@
                     <h2><i class="fas fa-shopping-bag"></i> All Orders</h2>
                     <button class="btn-s" onclick="loadOrders()"><i class="fas fa-sync-alt"></i> Refresh</button>
                 </div>
+
+                <!-- ORDER FILTER BUTTONS -->
+                <div class="ofilter" id="order-filter">
+                    <button class="active" data-filter="all" onclick="filterOrders('all')">📦 All</button>
+                    <button data-filter="pending" onclick="filterOrders('pending')">⏳ Pending</button>
+                    <button data-filter="completed" onclick="filterOrders('completed')">✅ Completed</button>
+                </div>
+
                 <div id="orders-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
             </div>
         </div>
     </div>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
@@ -282,15 +304,15 @@
         let orders = [];
         let editingId = null;
         let selectedSizes = [];
+        let orderFilter = 'all';   // ⚡ NEW: Order filter state
 
         // ⚡ SIZE OPTIONS
         const ALL_SIZES = ["50", "52", "54", "56"];
 
-        // ⚡ CATEGORY CHANGE — Hijab হলে Size hide
+        // ⚡ CATEGORY CHANGE
         window.onCategoryChange = function() {
             const cat = document.getElementById('p-cat').value;
             const sizeSection = document.getElementById('size-section');
-
             if (cat === 'Hijab Collection') {
                 sizeSection.style.display = 'none';
                 selectedSizes = [];
@@ -303,12 +325,10 @@
             }
         };
 
-        // ⚡ RENDER SIZE BUTTONS + SELECT ALL
         function renderSizeButtons() {
             const box = document.getElementById('size-box');
             const allSelected = ALL_SIZES.every(s => selectedSizes.includes(s));
             box.innerHTML = '';
-
             ALL_SIZES.forEach(size => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
@@ -317,8 +337,6 @@
                 btn.onclick = function() { toggleSize(size); };
                 box.appendChild(btn);
             });
-
-            // Select All / Deselect All বাটন
             const allBtn = document.createElement('button');
             allBtn.type = 'button';
             allBtn.className = 'select-all-btn' + (allSelected ? ' deselect' : '');
@@ -329,7 +347,6 @@
             box.appendChild(allBtn);
         }
 
-        // ⚡ TOGGLE SINGLE SIZE
         window.toggleSize = function(size) {
             const idx = selectedSizes.indexOf(size);
             if (idx > -1) selectedSizes.splice(idx, 1);
@@ -338,14 +355,9 @@
             renderSizeButtons();
         };
 
-        // ⚡ TOGGLE SELECT ALL / DESELECT ALL
         window.toggleSelectAll = function() {
             const allSelected = ALL_SIZES.every(s => selectedSizes.includes(s));
-            if (allSelected) {
-                selectedSizes = [];
-            } else {
-                selectedSizes = ALL_SIZES.slice();
-            }
+            selectedSizes = allSelected ? [] : ALL_SIZES.slice();
             renderSizeButtons();
         };
 
@@ -356,11 +368,9 @@
             const password = document.getElementById('password').value;
             const btn = document.getElementById('login-btn');
             const errBox = document.getElementById('err');
-
             errBox.classList.remove('show');
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
-
             try {
                 await signInWithEmailAndPassword(auth, email, password);
             } catch (err) {
@@ -387,7 +397,6 @@
             const loginScreen = document.getElementById('login-screen');
             const admin = document.getElementById('admin');
             const btn = document.getElementById('login-btn');
-
             if (user) {
                 loginScreen.style.display = 'none';
                 admin.classList.add('active');
@@ -456,6 +465,9 @@
         };
         window.extractUrl = extractUrl;
 
+        // ============================================
+        // PRODUCTS
+        // ============================================
         window.loadProducts = async () => {
             const c = document.getElementById('products-container');
             c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div>';
@@ -546,10 +558,8 @@
             document.getElementById('p-image').value = p.image || '';
             document.getElementById('p-badge').value = p.badge || '';
             document.getElementById('p-desc').value = p.fullDescription || '';
-
             selectedSizes = Array.isArray(p.sizes) ? p.sizes.slice() : [];
             onCategoryChange();
-
             const cc = document.getElementById('colors');
             cc.innerHTML = '';
             if (Array.isArray(p.colors) && p.colors.length > 0) {
@@ -569,7 +579,6 @@
             const orig = btn.innerHTML;
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-
             try {
                 const name = document.getElementById('p-name').value.trim();
                 const category = document.getElementById('p-cat').value;
@@ -652,6 +661,9 @@
             }
         };
 
+        // ============================================
+        // ORDERS — Full Management
+        // ============================================
         window.loadOrders = async () => {
             const c = document.getElementById('orders-container');
             c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div>';
@@ -666,18 +678,34 @@
             }
         };
 
+        window.filterOrders = (filter) => {
+            orderFilter = filter;
+            document.querySelectorAll('#order-filter button').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-filter') === filter);
+            });
+            renderOrders();
+        };
+
         window.renderOrders = () => {
             const c = document.getElementById('orders-container');
-            if (orders.length === 0) {
-                c.innerHTML = '<div class="empty"><i class="fas fa-shopping-bag"></i><h3>এখনো কোনো অর্ডার নেই</h3></div>';
+            let filtered = orders;
+            if (orderFilter === 'pending') filtered = orders.filter(o => o.status !== 'completed');
+            else if (orderFilter === 'completed') filtered = orders.filter(o => o.status === 'completed');
+
+            if (filtered.length === 0) {
+                const emptyMsg = orderFilter === 'all' ? 'এখনো কোনো অর্ডার নেই' :
+                                orderFilter === 'pending' ? 'কোনো Pending অর্ডার নেই' : 'কোনো Completed অর্ডার নেই';
+                c.innerHTML = '<div class="empty"><i class="fas fa-shopping-bag"></i><h3>' + emptyMsg + '</h3></div>';
                 return;
             }
+
             let html = '';
-            orders.forEach(o => {
+            filtered.forEach(o => {
                 const st = (o.status === 'completed') ? 'completed' : 'pending';
-                const stTxt = (st === 'completed') ? 'Completed' : 'Pending';
+                const stTxt = (st === 'completed') ? '✅ Completed' : '⏳ Pending';
                 const dStr = o.date || o.createdAt || '';
                 const niceDate = dStr ? new Date(dStr).toLocaleString('en-GB') : '—';
+
                 let ph = '';
                 if (Array.isArray(o.products)) {
                     o.products.forEach(p => {
@@ -685,9 +713,14 @@
                         if (p.size) m.push('Size: ' + p.size);
                         if (p.color) m.push('Color: ' + p.color);
                         const ms = m.length ? ' (' + m.join(', ') + ')' : '';
-                        ph += `<li>${p.name || 'Product'}${ms} × ${p.quantity || 1}</li>`;
+                        const priceStr = (typeof p.price === 'number') ? '৳' + p.price : 'TBD';
+                        ph += `<li>${p.name || 'Product'}${ms} — ${priceStr} × ${p.quantity || 1}</li>`;
                     });
                 }
+
+                const phoneClean = (o.phone || '').replace(/[^0-9]/g, '');
+                const waLink = phoneClean ? 'https://wa.me/88' + (phoneClean.startsWith('0') ? phoneClean.substring(1) : phoneClean) : '#';
+
                 html += `<div class="ocard">
                     <div class="ohead">
                         <div class="oid">📦 ${o.orderId || 'N/A'}</div>
@@ -696,15 +729,57 @@
                     <div class="obody">
                         <div><strong>👤 Name:</strong> ${o.name || '—'}</div>
                         <div><strong>📞 Phone:</strong> ${o.phone || '—'}</div>
-                        <div><strong>📍 Address:</strong> ${o.address || ''}, ${o.thana || ''}, ${o.district || ''}</div>
+                        <div><strong>📍 Address:</strong> ${o.address || ''}, ${o.thana || ''}, ${o.city || ''}, ${o.district || ''}</div>
                         <div><strong>💳 Payment:</strong> ${o.paymentMethod || '—'}</div>
+                        ${o.senderNumber ? '<div><strong>📱 Sender No:</strong> ' + o.senderNumber + '</div>' : ''}
+                        ${o.trxId ? '<div><strong>🔑 TrxID:</strong> ' + o.trxId + '</div>' : ''}
+                        ${o.notes ? '<div><strong>📝 Notes:</strong> ' + o.notes + '</div>' : ''}
                         <div><strong>🕐 Date:</strong> ${niceDate}</div>
                         ${ph ? '<div style="margin-top: 10px;"><strong>🛍️ Products:</strong></div><ul class="olist">' + ph + '</ul>' : ''}
-                        <div class="ototal"><span>💰 Total:</span><span>৳ ${o.totalAmount || 0}</span></div>
+                        <div class="ototal">
+                            <span>Subtotal: ৳${o.subtotal || 0} | Delivery: ৳${o.deliveryCharge || 0}</span>
+                            <span>💰 Total: ৳${o.totalAmount || 0}</span>
+                        </div>
+                    </div>
+                    <div class="oactions">
+                        ${st === 'pending'
+                            ? `<button class="btn-complete" onclick="updateOrderStatus('${o.docId}', 'completed')"><i class="fas fa-check-circle"></i> Mark Completed</button>`
+                            : `<button class="btn-pending" onclick="updateOrderStatus('${o.docId}', 'pending')"><i class="fas fa-clock"></i> Mark Pending</button>`
+                        }
+                        <a href="${waLink}" target="_blank" class="btn-complete"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                        <button class="btn-od" onclick="deleteOrder('${o.docId}', '${(o.orderId || '').replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i> Delete</button>
                     </div>
                 </div>`;
             });
             c.innerHTML = html;
+        };
+
+        window.updateOrderStatus = async (docId, newStatus) => {
+            const label = newStatus === 'completed' ? 'Completed' : 'Pending';
+            if (!confirm('অর্ডারটি "' + label + '" হিসেবে মার্ক করতে চান?')) return;
+            try {
+                await updateDoc(doc(db, 'orders', docId), {
+                    status: newStatus,
+                    statusUpdatedAt: new Date().toISOString()
+                });
+                alert('✅ অর্ডার স্ট্যাটাস "' + label + '" আপডেট হয়েছে!');
+                loadOrders();
+                loadStats();
+            } catch (err) {
+                alert('❌ ' + (err.message || 'আপডেট করা যায়নি'));
+            }
+        };
+
+        window.deleteOrder = async (docId, orderId) => {
+            if (!confirm('অর্ডারটি মুছে ফেলতে চান?\n\n' + orderId)) return;
+            try {
+                await deleteDoc(doc(db, 'orders', docId));
+                alert('✅ অর্ডার মুছে ফেলা হয়েছে।');
+                loadOrders();
+                loadStats();
+            } catch (err) {
+                alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি'));
+            }
         };
     </script>
 </body>
