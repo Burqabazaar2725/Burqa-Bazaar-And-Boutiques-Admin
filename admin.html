@@ -26,7 +26,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
 
-        /* LOGIN */
         #login-screen { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; padding: 20px; background: radial-gradient(circle at 50% 0%, rgba(223,177,91,.08), transparent 60%); z-index: 1000; }
         .login-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 40px 30px; width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,.6); }
         .login-logo { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--gold); overflow: hidden; margin: 0 auto 20px; background: #000; box-shadow: 0 0 25px rgba(223,177,91,.4); }
@@ -35,15 +34,14 @@
         .login-box .sub { text-align: center; color: var(--muted); font-size: 13px; margin-bottom: 30px; }
         .fgroup { margin-bottom: 18px; }
         .fgroup label { display: block; font-size: 13px; font-weight: 600; color: var(--gold); margin-bottom: 8px; }
-        .fgroup input { width: 100%; padding: 13px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; color: var(--text); font-size: 14px; outline: none; font-family: inherit; }
-        .fgroup input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(223,177,91,.1); }
+        .fgroup input, .fgroup select, .fgroup textarea { width: 100%; padding: 13px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; color: var(--text); font-size: 14px; outline: none; font-family: inherit; }
+        .fgroup input:focus, .fgroup select:focus, .fgroup textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(223,177,91,.1); }
         .login-btn { width: 100%; padding: 14px; background: var(--gold); color: #0b0b0d; border: none; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .login-btn:hover { opacity: .9; }
         .login-btn:disabled { opacity: .6; cursor: not-allowed; }
         .err { background: rgba(239,68,68,.15); border: 1px solid var(--bad); color: #fca5a5; padding: 10px 15px; border-radius: 8px; font-size: 13px; margin-bottom: 15px; display: none; }
         .err.show { display: block; }
 
-        /* ADMIN */
         #admin { display: none; min-height: 100vh; padding-bottom: 40px; }
         #admin.active { display: block; }
         .head { background: var(--dark); border-bottom: 1px solid var(--border); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
@@ -100,6 +98,14 @@
         .crow input:focus { border-color: var(--gold); }
         .crow .rm { background: transparent; border: 1px solid var(--bad); color: var(--bad); width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; }
         .crow .rm:hover { background: var(--bad); color: #fff; }
+
+        /* ⚡ SIZE CHECKBOX */
+        .size-box { display: flex; flex-wrap: wrap; gap: 10px; padding: 5px 0; }
+        .size-btn { background: var(--bg); border: 1.5px solid var(--border); color: var(--text); padding: 10px 20px; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; font-family: inherit; transition: all .2s ease; }
+        .size-btn:hover { border-color: var(--gold); }
+        .size-btn.selected { background: var(--gold); color: #0b0b0d; border-color: var(--gold); box-shadow: 0 0 15px rgba(223,177,91,.4); }
+        .no-size-note { color: var(--muted); font-size: 13px; font-style: italic; padding: 10px 0; }
+
         .ocard { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 12px; }
         .ohead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
         .oid { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 15px; font-weight: 700; }
@@ -199,7 +205,7 @@
                     <input type="hidden" id="edit-id">
                     <div class="fgroup"><label>📝 Product Name *</label><input type="text" id="p-name" required></div>
                     <div class="fgroup"><label>📁 Category *</label>
-                        <select id="p-cat" required style="width: 100%; padding: 13px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; color: var(--text); font-size: 14px; outline: none; font-family: inherit;">
+                        <select id="p-cat" required onchange="onCategoryChange()">
                             <option value="">-- Select --</option>
                             <option value="Hijab Collection">Hijab Collection</option>
                             <option value="Burqa Collection">Burqa Collection</option>
@@ -211,7 +217,7 @@
                         <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">ImgBB Link বা HTML কোড — দুটোই চলবে</small>
                     </div>
                     <div class="fgroup"><label>🏷️ Badge (ঐচ্ছিক)</label>
-                        <select id="p-badge" style="width: 100%; padding: 13px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; color: var(--text); font-size: 14px; outline: none; font-family: inherit;">
+                        <select id="p-badge">
                             <option value="">None</option>
                             <option value="new">NEW</option>
                             <option value="hot">HOT</option>
@@ -219,14 +225,19 @@
                             <option value="soldout">SOLD OUT</option>
                         </select>
                     </div>
-                    <div class="fgroup"><label>📏 Sizes (কমা দিয়ে) *</label><input type="text" id="p-sizes" value="50,52,54,56" required></div>
+                    <div class="fgroup" id="size-section">
+                        <label>📏 Sizes</label>
+                        <div class="size-box" id="size-box">
+                            <!-- Sizes আসবে dynamically -->
+                        </div>
+                    </div>
                     <div class="fgroup">
                         <label>🎨 Colors *</label>
                         <div id="colors"></div>
                         <button type="button" class="btn-s" onclick="addColor()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add Color</button>
                     </div>
                     <div class="fgroup"><label>📄 Description *</label>
-                        <textarea id="p-desc" rows="8" required style="width: 100%; padding: 13px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px; color: var(--text); font-size: 14px; outline: none; font-family: inherit;"></textarea>
+                        <textarea id="p-desc" rows="8" required></textarea>
                     </div>
                     <div style="display: flex; gap: 10px; margin-top: 25px; flex-wrap: wrap;">
                         <button type="submit" class="btn-p" id="submit-btn" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save</button>
@@ -267,6 +278,66 @@
         let products = [];
         let orders = [];
         let editingId = null;
+        let selectedSizes = [];
+
+        // ============================================
+        // SIZE OPTIONS
+        // ============================================
+        const ALL_SIZES = ["50", "52", "54", "56"];
+
+        // ============================================
+        // CATEGORY CHANGE
+        // ============================================
+        window.onCategoryChange = function() {
+            const cat = document.getElementById('p-cat').value;
+            const sizeSection = document.getElementById('size-section');
+            const sizeBox = document.getElementById('size-box');
+
+            if (cat === 'Hijab Collection') {
+                // Hijab — কোনো সাইজ নেই
+                sizeSection.style.display = 'none';
+                selectedSizes = [];
+            } else if (cat === 'Burqa Collection' || cat === 'Abaya Collection') {
+                // Burqa / Abaya — সাইজ আছে
+                sizeSection.style.display = 'block';
+                renderSizeButtons();
+            } else {
+                sizeSection.style.display = 'none';
+                selectedSizes = [];
+            }
+        };
+
+        // ============================================
+        // RENDER SIZE BUTTONS
+        // ============================================
+        function renderSizeButtons() {
+            const box = document.getElementById('size-box');
+            box.innerHTML = '';
+            ALL_SIZES.forEach(size => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'size-btn' + (selectedSizes.includes(size) ? ' selected' : '');
+                btn.textContent = size;
+                btn.onclick = function() {
+                    toggleSize(size);
+                };
+                box.appendChild(btn);
+            });
+        }
+
+        // ============================================
+        // TOGGLE SIZE
+        // ============================================
+        window.toggleSize = function(size) {
+            const idx = selectedSizes.indexOf(size);
+            if (idx > -1) {
+                selectedSizes.splice(idx, 1);
+            } else {
+                selectedSizes.push(size);
+            }
+            selectedSizes.sort((a, b) => parseInt(a) - parseInt(b));
+            renderSizeButtons();
+        };
 
         // LOGIN
         window.doLogin = async (e) => {
@@ -290,8 +361,6 @@
                 else if (err.code === 'auth/invalid-email') msg = '❌ ইমেইল সঠিক নয়।';
                 else if (err.code === 'auth/too-many-requests') msg = '⏳ অনেকবার চেষ্টা। পরে করুন।';
                 else if (err.code === 'auth/network-request-failed') msg = '🌐 ইন্টারনেট নেই।';
-                else if (err.code === 'auth/invalid-api-key') msg = '❌ API Key ভুল।';
-                else if (err.code === 'auth/operation-not-allowed') msg = '❌ Email/Password Login চালু নেই।';
                 errBox.textContent = msg;
                 errBox.classList.add('show');
                 btn.disabled = false;
@@ -411,11 +480,12 @@
                 const img = extractUrl(p.image) || 'https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png';
                 const cc = Array.isArray(p.colors) ? p.colors.length : 0;
                 const sc = Array.isArray(p.sizes) ? p.sizes.length : 0;
+                const sizeText = sc > 0 ? sc + ' sizes' : 'no size';
                 html += `<div class="pcard">
                     <img src="${img}" class="pimg" onerror="this.src='https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png'">
                     <div class="pinfo">
                         <div class="pname">${p.name || 'Unnamed'}</div>
-                        <div class="pmeta">${p.category || ''} • ${sc} sizes • ${cc} colors</div>
+                        <div class="pmeta">${p.category || ''} • ${sizeText} • ${cc} colors</div>
                         <div class="pprice">${price}</div>
                         <div class="pacts">
                             <button class="abtn edit" onclick="editProduct('${p.docId}')"><i class="fas fa-edit"></i> Edit</button>
@@ -443,10 +513,13 @@
             document.getElementById('p-form').reset();
             document.getElementById('edit-id').value = '';
             document.getElementById('colors').innerHTML = '';
+            selectedSizes = [];
             editingId = null;
             document.getElementById('form-title').innerHTML = '<i class="fas fa-plus-circle"></i> Add New Product';
             document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Save';
             document.getElementById('form-msg').classList.remove('show');
+            document.getElementById('size-section').style.display = 'none';
+            document.getElementById('size-box').innerHTML = '';
             addColor();
         };
 
@@ -474,8 +547,13 @@
             document.getElementById('p-price').value = p.price || '';
             document.getElementById('p-image').value = p.image || '';
             document.getElementById('p-badge').value = p.badge || '';
-            document.getElementById('p-sizes').value = Array.isArray(p.sizes) ? p.sizes.join(',') : '';
             document.getElementById('p-desc').value = p.fullDescription || '';
+
+            // Sizes
+            selectedSizes = Array.isArray(p.sizes) ? p.sizes.slice() : [];
+            onCategoryChange();
+
+            // Colors
             const cc = document.getElementById('colors');
             cc.innerHTML = '';
             if (Array.isArray(p.colors) && p.colors.length > 0) {
@@ -503,11 +581,10 @@
                 const priceRaw = document.getElementById('p-price').value.trim();
                 const image = document.getElementById('p-image').value.trim();
                 const badge = document.getElementById('p-badge').value;
-                const sizesRaw = document.getElementById('p-sizes').value.trim();
                 const desc = document.getElementById('p-desc').value.trim();
                 const editId = document.getElementById('edit-id').value;
 
-                if (!name || !category || !priceRaw || !image || !sizesRaw || !desc) {
+                if (!name || !category || !priceRaw || !image || !desc) {
                     showMsg('form-msg', '⚠️ সব ফিল্ড পূরণ করুন।', 'bad');
                     btn.disabled = false;
                     btn.innerHTML = orig;
@@ -521,7 +598,20 @@
                     price = isNaN(p) ? 'Coming Soon' : p;
                 }
 
-                const sizes = sizesRaw.split(',').map(s => s.trim()).filter(s => s);
+                // Sizes — শুধু Burqa/Abaya হলে
+                let sizes = [];
+                if (category === 'Burqa Collection' || category === 'Abaya Collection') {
+                    sizes = selectedSizes.slice();
+                    if (sizes.length === 0) {
+                        showMsg('form-msg', '⚠️ অন্তত একটি Size সিলেক্ট করুন।', 'bad');
+                        btn.disabled = false;
+                        btn.innerHTML = orig;
+                        return;
+                    }
+                }
+                // Hijab হলে sizes খালি থাকবে
+
+                // Colors
                 const colors = [];
                 document.querySelectorAll('#colors .crow').forEach(row => {
                     const n = row.querySelector('.cname').value.trim();
@@ -542,7 +632,8 @@
                     image: cleanImg,
                     badge: badge || null,
                     badgeText: badge ? badge.toUpperCase() : null,
-                    sizes, colors,
+                    sizes: sizes,
+                    colors: colors,
                     images: [cleanImg],
                     fullDescription: desc,
                     updatedAt: new Date().toISOString()
