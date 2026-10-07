@@ -285,7 +285,7 @@
                 <div class="shead"><h2><i class="fas fa-info-circle"></i> Welcome</h2></div>
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 25px;">
                     <h3 style="color: var(--gold); margin-bottom: 12px; font-family: 'Playfair Display', serif;">স্বাগতম Admin Panel-এ! 🎉</h3>
-                    <p style="color: var(--muted); font-size: 14px; line-height: 1.8;">এই প্যানেল থেকে প্রোডাক্ট, অর্ডার, রিভিউ, নিউজলেটার এবং কুপন সবকিছু ম্যানেজ করতে পারবেন। এখন প্রতিটি প্রোডাক্টে <strong>Multiple Images</strong> যোগ করতে পারবেন।</p>
+                    <p style="color: var(--muted); font-size: 14px; line-height: 1.8;">এই প্যানেল থেকে প্রোডাক্ট, অর্ডার, রিভিউ, নিউজলেটার এবং কুপন সবকিছু ম্যানেজ করতে পারবেন। এখন প্রতিটি প্রোডাক্টে <strong>Multiple Images</strong> ও <strong>Video</strong> যোগ করতে পারবেন।</p>
                 </div>
             </div>
 
@@ -334,6 +334,15 @@
                         </button>
                         <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 8px;">
                             💡 প্রথম ছবিটি <strong>Main Image</strong> হিসেবে থাকবে। এখানে আরো ছবি যোগ করলে কাস্টমার <strong>Gallery আকারে</strong> সব দেখতে পাবে।
+                        </small>
+                    </div>
+
+                    <!-- ⚡ VIDEO URL (NEW) -->
+                    <div class="fgroup">
+                        <label>🎥 Video URL (ঐচ্ছিক)</label>
+                        <input type="text" id="p-video" placeholder="YouTube / Facebook / Vimeo Video Link">
+                        <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 8px;">
+                            💡 <strong>YouTube</strong>, <strong>Facebook</strong> বা <strong>Vimeo</strong> — যেকোনো ভিডিও লিংক পেস্ট করুন। খালি রাখলে ভিডিও সেকশন দেখাবে না।
                         </small>
                     </div>
 
@@ -710,7 +719,7 @@
         window.extractUrl = extractUrl;
 
         // ============================================
-        // ADD ADDITIONAL IMAGE
+        // ADD IMAGE / COLOR
         // ============================================
         window.addAdditionalImage = (url) => {
             const c = document.getElementById('additional-images');
@@ -739,32 +748,29 @@
         };
 
         // ============================================
-        // ⚡ RESET FORM (FIXED — বাটন enable করে)
+        // RESET FORM
         // ============================================
         window.resetForm = () => {
-            // ⚡ প্রথমেই বাটন enable করি
             const btn = document.getElementById('submit-btn');
             if (btn) {
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-save"></i> Save';
             }
 
-            // State reset
             editingId = null;
             selectedSizes = [];
 
-            // Form reset
             document.getElementById('p-form').reset();
             document.getElementById('edit-id').value = '';
             document.getElementById('colors').innerHTML = '';
             document.getElementById('additional-images').innerHTML = '';
+            document.getElementById('p-video').value = '';
             document.getElementById('p-stock').value = '1';
             document.getElementById('form-title').innerHTML = '<i class="fas fa-plus-circle"></i> Add New Product';
             document.getElementById('form-msg').classList.remove('show');
             document.getElementById('size-section').style.display = 'none';
             document.getElementById('size-box').innerHTML = '';
 
-            // Default empty rows
             addColor();
             addAdditionalImage();
         };
@@ -799,6 +805,7 @@
                 const cc = Array.isArray(p.colors) ? p.colors.length : 0;
                 const sc = Array.isArray(p.sizes) ? p.sizes.length : 0;
                 const imgCount = Array.isArray(p.images) ? p.images.length : 1;
+                const hasVideo = p.video && p.video.length > 5;
                 const sizeText = sc > 0 ? sc + ' sizes' : 'no size';
 
                 let stockBadge = '';
@@ -813,11 +820,13 @@
                     }
                 }
 
+                let videoTag = hasVideo ? ' • 🎥 video' : '';
+
                 html += `<div class="pcard">
                     <img src="${img}" class="pimg" onerror="this.src='https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png'">
                     <div class="pinfo">
                         <div class="pname">${p.name || 'Unnamed'}</div>
-                        <div class="pmeta">${p.category || ''} • ${sizeText} • ${cc} colors • 📸 ${imgCount} image${imgCount !== 1 ? 's' : ''}</div>
+                        <div class="pmeta">${p.category || ''} • ${sizeText} • ${cc} colors • 📸 ${imgCount} image${imgCount !== 1 ? 's' : ''}${videoTag}</div>
                         ${stockBadge}
                         <div class="pprice">${price}</div>
                         <div class="pacts">
@@ -843,20 +852,19 @@
         };
 
         // ============================================
-        // ⚡ EDIT PRODUCT (FIXED — বাটন enable + form পরিষ্কার)
+        // EDIT PRODUCT (with Video)
         // ============================================
         window.editProduct = (docId) => {
             const p = products.find(x => x.docId === docId);
             if (!p) { alert('প্রোডাক্ট পাওয়া যায়নি'); return; }
 
-            // ⚡ STEP 1: বাটন enable করি
             const btn = document.getElementById('submit-btn');
             if (btn) {
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-save"></i> Update';
             }
 
-            // ⚡ STEP 2: সম্পূর্ণ ফর্ম পরিষ্কার করি
+            // Clear
             document.getElementById('p-form').reset();
             document.getElementById('edit-id').value = '';
             document.getElementById('p-name').value = '';
@@ -864,6 +872,7 @@
             document.getElementById('p-price').value = '';
             document.getElementById('p-stock').value = '1';
             document.getElementById('p-image').value = '';
+            document.getElementById('p-video').value = '';
             document.getElementById('p-badge').value = '';
             document.getElementById('p-desc').value = '';
             document.getElementById('colors').innerHTML = '';
@@ -874,7 +883,7 @@
             editingId = null;
             selectedSizes = [];
 
-            // ⚡ STEP 3: নতুন ডেটা বসাই
+            // Set new data
             editingId = docId;
             document.getElementById('edit-id').value = docId;
             document.getElementById('p-name').value = p.name || '';
@@ -882,14 +891,12 @@
             document.getElementById('p-price').value = p.price || '';
             document.getElementById('p-stock').value = (p.stock !== undefined && p.stock !== null) ? p.stock : 1;
             document.getElementById('p-image').value = p.image || '';
+            document.getElementById('p-video').value = p.video || '';
             document.getElementById('p-badge').value = p.badge || '';
             document.getElementById('p-desc').value = p.fullDescription || '';
             selectedSizes = Array.isArray(p.sizes) ? p.sizes.slice() : [];
-
-            // Category trigger
             onCategoryChange();
 
-            // Colors
             const cc = document.getElementById('colors');
             cc.innerHTML = '';
             if (Array.isArray(p.colors) && p.colors.length > 0) {
@@ -898,7 +905,6 @@
                 addColor();
             }
 
-            // Additional Images
             const ai = document.getElementById('additional-images');
             ai.innerHTML = '';
             if (Array.isArray(p.images) && p.images.length > 1) {
@@ -909,20 +915,17 @@
 
             document.getElementById('form-title').innerHTML = '<i class="fas fa-edit"></i> Edit Product';
             document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Update';
-
-            // Switch to add tab
             switchTab('add');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
         // ============================================
-        // ⚡ SUBMIT PRODUCT (FIXED)
+        // SUBMIT PRODUCT (with Video)
         // ============================================
         window.submitProduct = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
 
-            // ⚡ ডাবল ক্লিক প্রতিরোধ
             if (btn.disabled) return;
 
             const orig = btn.innerHTML;
@@ -935,6 +938,7 @@
                 const priceRaw = document.getElementById('p-price').value.trim();
                 const stockRaw = document.getElementById('p-stock').value.trim();
                 const image = document.getElementById('p-image').value.trim();
+                const videoUrl = document.getElementById('p-video') ? document.getElementById('p-video').value.trim() : '';
                 const badge = document.getElementById('p-badge').value;
                 const desc = document.getElementById('p-desc').value.trim();
                 const editId = document.getElementById('edit-id').value;
@@ -997,6 +1001,7 @@
                     name, category, price,
                     stock: stock,
                     image: cleanImg,
+                    video: videoUrl || null,
                     badge: badge || null,
                     badgeText: badge ? badge.toUpperCase() : null,
                     sizes: sizes,
@@ -1008,7 +1013,7 @@
 
                 if (editId) {
                     await updateDoc(doc(db, 'products', editId), data);
-                    showMsg('form-msg', '✅ আপডেট হয়েছে! (মোট ' + uniqueImages.length + 'টি ছবি)', 'ok');
+                    showMsg('form-msg', '✅ আপডেট হয়েছে!', 'ok');
                     setTimeout(() => {
                         resetForm();
                         switchTab('products');
@@ -1021,7 +1026,7 @@
                     data.id = maxId + 1;
                     data.createdAt = new Date().toISOString();
                     await addDoc(collection(db, 'products'), data);
-                    showMsg('form-msg', '✅ নতুন প্রোডাক্ট যোগ হয়েছে! (মোট ' + uniqueImages.length + 'টি ছবি)', 'ok');
+                    showMsg('form-msg', '✅ নতুন প্রোডাক্ট যোগ হয়েছে!', 'ok');
                     setTimeout(() => {
                         resetForm();
                         switchTab('products');
