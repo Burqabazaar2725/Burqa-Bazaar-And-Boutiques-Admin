@@ -95,12 +95,7 @@
         .abtn.del { background: rgba(239,68,68,.15); color: var(--bad); border: 1px solid var(--bad); }
         .abtn.del:hover { background: var(--bad); color: #fff; }
 
-        .stock-badge {
-            display: inline-flex; align-items: center; gap: 4px;
-            padding: 3px 10px; border-radius: 20px;
-            font-size: 11px; font-weight: 700;
-            margin-bottom: 8px;
-        }
+        .stock-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; margin-bottom: 8px; }
         .stock-badge.instock { background: rgba(34,197,94,.15); color: var(--ok); border: 1px solid var(--ok); }
         .stock-badge.lowstock { background: rgba(245,158,11,.15); color: var(--warn); border: 1px solid var(--warn); }
         .stock-badge.outofstock { background: rgba(239,68,68,.15); color: var(--bad); border: 1px solid var(--bad); }
@@ -272,6 +267,7 @@
                 <button class="tab" data-tab="reviews" onclick="switchTab('reviews')"><i class="fas fa-star"></i> Reviews</button>
                 <button class="tab" data-tab="newsletter" onclick="switchTab('newsletter')"><i class="fas fa-envelope"></i> Newsletter</button>
                 <button class="tab" data-tab="coupons" onclick="switchTab('coupons')"><i class="fas fa-ticket-alt"></i> Coupons</button>
+                <button class="tab" data-tab="banners" onclick="switchTab('banners')"><i class="fas fa-images"></i> Banners</button>
             </div>
 
             <!-- DASHBOARD -->
@@ -285,7 +281,7 @@
                 <div class="shead"><h2><i class="fas fa-info-circle"></i> Welcome</h2></div>
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 25px;">
                     <h3 style="color: var(--gold); margin-bottom: 12px; font-family: 'Playfair Display', serif;">স্বাগতম Admin Panel-এ! 🎉</h3>
-                    <p style="color: var(--muted); font-size: 14px; line-height: 1.8;">এই প্যানেল থেকে প্রোডাক্ট, অর্ডার, রিভিউ, নিউজলেটার এবং কুপন সবকিছু ম্যানেজ করতে পারবেন। এখন প্রতিটি প্রোডাক্টে <strong>Multiple Images</strong> ও <strong>Video</strong> যোগ করতে পারবেন।</p>
+                    <p style="color: var(--muted); font-size: 14px; line-height: 1.8;">এই প্যানেল থেকে প্রোডাক্ট, অর্ডার, রিভিউ, নিউজলেটার, কুপন এবং <strong>Banner</strong> সবকিছু ম্যানেজ করতে পারবেন। এখন <strong>Banners</strong> ট্যাব থেকে হোম পেজের স্লাইডার ম্যানেজ করতে পারবেন।</p>
                 </div>
             </div>
 
@@ -325,7 +321,6 @@
                         <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">ImgBB Link বা HTML কোড — দুটোই চলবে</small>
                     </div>
 
-                    <!-- ADDITIONAL IMAGES -->
                     <div class="fgroup">
                         <label>🖼️ Additional Images (ঐচ্ছিক)</label>
                         <div id="additional-images"></div>
@@ -337,7 +332,6 @@
                         </small>
                     </div>
 
-                    <!-- ⚡ VIDEO URL (NEW) -->
                     <div class="fgroup">
                         <label>🎥 Video URL (ঐচ্ছিক)</label>
                         <input type="text" id="p-video" placeholder="YouTube / Facebook / Vimeo Video Link">
@@ -453,6 +447,28 @@
                 <div id="coupons-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
             </div>
 
+            <!-- BANNERS (NEW) -->
+            <div class="section" id="sec-banners">
+                <div class="shead">
+                    <h2><i class="fas fa-images"></i> Promo Banners</h2>
+                    <button class="btn-p" onclick="openBannerModal()"><i class="fas fa-plus"></i> Add Banner</button>
+                </div>
+                <div class="coupon-hero" style="background: linear-gradient(135deg, rgba(59,130,246,.12) 0%, rgba(59,130,246,.03) 100%); border-color: rgba(59,130,246,.4);">
+                    <div class="coupon-hero-left">
+                        <div class="coupon-hero-icon" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); box-shadow: 0 0 20px rgba(59,130,246,.4);"><i class="fas fa-images"></i></div>
+                        <div class="coupon-hero-text">
+                            <h3 style="color: #60a5fa;">Active Banners</h3>
+                            <p>ওয়েবসাইটের হোম পেজে এই ব্যানারগুলো স্লাইড হবে</p>
+                        </div>
+                    </div>
+                    <div class="coupon-count-big" id="banner-total-count" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">0</div>
+                </div>
+                <div style="background: rgba(59,130,246,.08); border: 1px solid rgba(59,130,246,.3); border-radius: 10px; padding: 12px 15px; margin-bottom: 15px; font-size: 12px; color: var(--muted);">
+                    <strong style="color: #60a5fa;">💡 টিপস:</strong> ছবি ImgBB-তে <strong>1600×900</strong> সাইজে আপলোড করুন। Order নম্বর কম হলে আগে দেখাবে। কোনো banner না থাকলে ওয়েবসাইটে পুরনো static banner দেখাবে।
+                </div>
+                <div id="banners-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading Banners...</p></div></div>
+            </div>
+
         </div>
     </div>
 
@@ -520,6 +536,103 @@
             </div>
         </div>
     </div>
+
+    <!-- BANNER FORM MODAL (NEW) -->
+    <div class="coupon-form-modal" id="banner-modal">
+        <div class="coupon-form-box">
+            <h3 id="banner-modal-title"><i class="fas fa-image"></i> Add New Banner</h3>
+            <div id="banner-form-msg" class="msg"></div>
+
+            <input type="hidden" id="b-edit-id">
+
+            <div class="fgroup">
+                <label>🖼️ Banner Image URL *</label>
+                <input type="text" id="b-image" placeholder="https://i.ibb.co/xxxxx/banner.png" required>
+                <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">
+                    💡 ImgBB লিংক বা HTML কোড — দুটোই চলবে। Recommended: 1600×900 px
+                </small>
+            </div>
+
+            <div class="fgroup">
+                <label>🔗 Banner Title (ঐচ্ছিক)</label>
+                <input type="text" id="b-title" placeholder="যেমন: ঈদ স্পেশাল কালেকশন">
+                <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">
+                    শুধু admin panel এ চেনার জন্য, website এ দেখাবে না
+                </small>
+            </div>
+
+            <div class="fgroup">
+                <label>🎯 Click করলে কী হবে? (ঐচ্ছিক)</label>
+                <select id="b-link-type" onchange="onBannerLinkTypeChange()">
+                    <option value="none">🔇 কিছুই হবে না (শুধু ছবি)</option>
+                    <option value="category">📁 Category Page এ যাবে</option>
+                    <option value="tab">📄 Website Section এ যাবে</option>
+                    <option value="external">🌐 External Website এ যাবে</option>
+                </select>
+            </div>
+
+            <div class="fgroup" id="b-category-group" style="display: none;">
+                <label>📁 Category সিলেক্ট করুন</label>
+                <select id="b-category-value">
+                    <option value="Hijab Collection">Hijab Collection</option>
+                    <option value="Burqa Collection">Burqa Collection</option>
+                    <option value="Abaya Collection">Abaya Collection</option>
+                </select>
+            </div>
+
+            <div class="fgroup" id="b-tab-group" style="display: none;">
+                <label>📄 Section সিলেক্ট করুন</label>
+                <select id="b-tab-value">
+                    <option value="shop">Shop</option>
+                    <option value="wishlist">Wishlist</option>
+                    <option value="faq">FAQ</option>
+                    <option value="about">About Us</option>
+                    <option value="contact">Contact Us</option>
+                    <option value="track-order">Track Order</option>
+                </select>
+            </div>
+
+            <div class="fgroup" id="b-external-group" style="display: none;">
+                <label>🌐 External URL</label>
+                <input type="text" id="b-external-value" placeholder="https://facebook.com/yourpage">
+            </div>
+
+            <div class="fgroup">
+                <label>🔢 Order (কম নম্বর আগে দেখাবে) *</label>
+                <input type="number" id="b-order" placeholder="1" min="1" value="1" required>
+                <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">
+                    1 = প্রথমে, 2 = দ্বিতীয়, এভাবে...
+                </small>
+            </div>
+
+            <div class="fgroup" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px;">
+                <div>
+                    <div style="font-size: 13px; font-weight: 600; color: var(--gold);">🟢 Active Status</div>
+                    <div style="font-size: 11px; color: var(--muted); margin-top: 2px;">চালু রাখলে ওয়েবসাইটে দেখাবে</div>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="b-active" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+
+            <div style="margin-top: 15px; padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px;">
+                <div style="font-size: 11px; color: var(--muted); margin-bottom: 8px;">🖼️ Preview:</div>
+                <div id="b-preview" style="width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                    <span style="color: var(--muted); font-size: 12px;">ছবি দেখতে URL দিন</span>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
+                <button type="button" class="btn-p" id="b-submit-btn" onclick="submitBanner()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;">
+                    <i class="fas fa-save"></i> Save Banner
+                </button>
+                <button type="button" class="btn-s" onclick="closeBannerModal()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </div>
+    </div>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
@@ -543,8 +656,10 @@
         let reviews = [];
         let newsletterList = [];
         let coupons = [];
+        let banners = [];
         let editingId = null;
         let editingCouponId = null;
+        let editingBannerId = null;
         let selectedSizes = [];
         let orderFilter = 'all';
         let newsSearchQuery = '';
@@ -671,6 +786,7 @@
             else if (name === 'reviews') loadReviews();
             else if (name === 'newsletter') loadNewsletter();
             else if (name === 'coupons') loadCoupons();
+            else if (name === 'banners') loadBanners();
             else if (name === 'add' && !editingId) resetForm();
         };
 
@@ -852,7 +968,7 @@
         };
 
         // ============================================
-        // EDIT PRODUCT (with Video)
+        // EDIT PRODUCT
         // ============================================
         window.editProduct = (docId) => {
             const p = products.find(x => x.docId === docId);
@@ -864,7 +980,6 @@
                 btn.innerHTML = '<i class="fas fa-save"></i> Update';
             }
 
-            // Clear
             document.getElementById('p-form').reset();
             document.getElementById('edit-id').value = '';
             document.getElementById('p-name').value = '';
@@ -883,7 +998,6 @@
             editingId = null;
             selectedSizes = [];
 
-            // Set new data
             editingId = docId;
             document.getElementById('edit-id').value = docId;
             document.getElementById('p-name').value = p.name || '';
@@ -920,7 +1034,7 @@
         };
 
         // ============================================
-        // SUBMIT PRODUCT (with Video)
+        // SUBMIT PRODUCT
         // ============================================
         window.submitProduct = async (e) => {
             e.preventDefault();
@@ -1643,10 +1757,272 @@
             } catch (err) { alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি')); }
         };
 
+        // ============================================
+        // 🎨 BANNERS (NEW)
+        // ============================================
+        window.loadBanners = async () => {
+            const c = document.getElementById('banners-container');
+            if (!c) return;
+            c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading Banners...</p></div>';
+            try {
+                let snap;
+                try {
+                    const q = query(collection(db, 'banners'), orderBy('order', 'asc'));
+                    snap = await getDocs(q);
+                } catch (orderErr) {
+                    snap = await getDocs(collection(db, 'banners'));
+                }
+                banners = [];
+                snap.forEach(d => banners.push({ docId: d.id, ...d.data() }));
+                banners.sort((a, b) => (parseInt(a.order) || 99) - (parseInt(b.order) || 99));
+                renderBanners();
+            } catch (err) {
+                console.error(err);
+                c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3><p>' + (err.message || '') + '</p></div>';
+            }
+        };
+
+        window.renderBanners = () => {
+            const c = document.getElementById('banners-container');
+            const countEl = document.getElementById('banner-total-count');
+            if (!c) return;
+
+            let activeCount = 0;
+            banners.forEach(b => { if (b.active !== false) activeCount++; });
+            if (countEl) countEl.textContent = activeCount;
+
+            if (banners.length === 0) {
+                c.innerHTML = '<div class="empty"><i class="fas fa-images"></i><h3>এখনো কোনো Banner নেই</h3><p style="margin-top: 8px; font-size: 13px;">"Add Banner" বাটনে ক্লিক করে প্রথম ব্যানার তৈরি করুন।</p><button class="btn-p" onclick="openBannerModal()" style="margin-top: 15px;"><i class="fas fa-plus"></i> Add Banner</button></div>';
+                return;
+            }
+
+            let html = '';
+            banners.forEach(b => {
+                const img = extractUrl(b.image) || b.image || '';
+                const isActive = b.active !== false;
+
+                let linkText = '<span style="color: var(--muted);">কোনো link নেই</span>';
+                if (b.link && b.linkType) {
+                    if (b.linkType === 'category') linkText = '📁 ' + b.link.replace('category:', '');
+                    else if (b.linkType === 'tab') linkText = '📄 ' + b.link.replace('tab:', '');
+                    else if (b.linkType === 'external') linkText = '🌐 ' + (b.link.length > 40 ? b.link.substring(0, 40) + '...' : b.link);
+                }
+
+                html += `<div class="coupon-card ${isActive ? '' : 'inactive'}" style="padding: 15px;">
+                    <div style="display: grid; grid-template-columns: 140px 1fr; gap: 15px; align-items: start;">
+                        <div style="width: 140px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; border: 1px solid var(--border);">
+                            <img src="${img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://i.ibb.co/V8xTN72/file-000000004028820a835dbfabe40a11d2.png'">
+                        </div>
+                        <div style="min-width: 0;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
+                                <div style="font-family: 'Playfair Display', serif; color: var(--gold); font-size: 15px; font-weight: 700;">
+                                    ${b.title || 'Untitled Banner'}
+                                </div>
+                                <span class="coupon-status ${isActive ? 'active' : 'inactive'}">${isActive ? 'Active' : 'Inactive'}</span>
+                            </div>
+                            <div style="font-size: 12px; color: var(--muted); line-height: 1.8; margin-bottom: 10px;">
+                                <div><strong style="color: var(--text);">🔢 Order:</strong> ${b.order || 99}</div>
+                                <div><strong style="color: var(--text);">🎯 Link:</strong> ${linkText}</div>
+                            </div>
+                            <div class="coupon-actions">
+                                <button class="abtn edit" onclick="editBanner('${b.docId}')"><i class="fas fa-edit"></i> Edit</button>
+                                <button class="abtn edit" onclick="toggleBannerActive('${b.docId}')"><i class="fas fa-${isActive ? 'pause' : 'play'}"></i> ${isActive ? 'Deactivate' : 'Activate'}</button>
+                                <button class="abtn del" onclick="deleteBanner('${b.docId}', '${(b.title || 'Banner').replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i> Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            c.innerHTML = html;
+        };
+
+        window.onBannerLinkTypeChange = function() {
+            const type = document.getElementById('b-link-type').value;
+            document.getElementById('b-category-group').style.display = (type === 'category') ? 'block' : 'none';
+            document.getElementById('b-tab-group').style.display = (type === 'tab') ? 'block' : 'none';
+            document.getElementById('b-external-group').style.display = (type === 'external') ? 'block' : 'none';
+        };
+
+        // Live image preview for banner
+        document.addEventListener('input', function(e) {
+            if (e.target && e.target.id === 'b-image') {
+                const url = extractUrl(e.target.value.trim()) || e.target.value.trim();
+                const preview = document.getElementById('b-preview');
+                if (!preview) return;
+                if (url && url.length > 5 && url.startsWith('http')) {
+                    preview.innerHTML = `<img src="${url}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML='<span style=&quot;color:var(--bad);font-size:12px;&quot;>❌ ছবি লোড হয়নি</span>'">`;
+                } else {
+                    preview.innerHTML = '<span style="color: var(--muted); font-size: 12px;">ছবি দেখতে URL দিন</span>';
+                }
+            }
+        });
+
+        window.openBannerModal = () => {
+            editingBannerId = null;
+            document.getElementById('banner-modal-title').innerHTML = '<i class="fas fa-image"></i> Add New Banner';
+            document.getElementById('b-edit-id').value = '';
+            document.getElementById('b-image').value = '';
+            document.getElementById('b-title').value = '';
+            document.getElementById('b-link-type').value = 'none';
+            document.getElementById('b-category-value').value = 'Hijab Collection';
+            document.getElementById('b-tab-value').value = 'shop';
+            document.getElementById('b-external-value').value = '';
+            document.getElementById('b-order').value = (banners.length + 1);
+            document.getElementById('b-active').checked = true;
+            document.getElementById('b-submit-btn').innerHTML = '<i class="fas fa-save"></i> Save Banner';
+            document.getElementById('banner-form-msg').classList.remove('show');
+            document.getElementById('b-preview').innerHTML = '<span style="color: var(--muted); font-size: 12px;">ছবি দেখতে URL দিন</span>';
+            onBannerLinkTypeChange();
+            document.getElementById('banner-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeBannerModal = () => {
+            document.getElementById('banner-modal').classList.remove('active');
+            document.body.style.overflow = '';
+            editingBannerId = null;
+        };
+
+        window.editBanner = (docId) => {
+            const b = banners.find(x => x.docId === docId);
+            if (!b) return alert('পাওয়া যায়নি');
+            editingBannerId = docId;
+            document.getElementById('banner-modal-title').innerHTML = '<i class="fas fa-edit"></i> Edit Banner';
+            document.getElementById('b-edit-id').value = docId;
+            document.getElementById('b-image').value = b.image || '';
+            document.getElementById('b-title').value = b.title || '';
+            const lt = b.linkType || 'none';
+            document.getElementById('b-link-type').value = lt;
+            if (lt === 'category') {
+                document.getElementById('b-category-value').value = (b.link || '').replace('category:', '') || 'Hijab Collection';
+            } else if (lt === 'tab') {
+                document.getElementById('b-tab-value').value = (b.link || '').replace('tab:', '') || 'shop';
+            } else if (lt === 'external') {
+                document.getElementById('b-external-value').value = b.link || '';
+            }
+            document.getElementById('b-order').value = b.order || 1;
+            document.getElementById('b-active').checked = b.active !== false;
+            document.getElementById('b-submit-btn').innerHTML = '<i class="fas fa-save"></i> Update Banner';
+            document.getElementById('banner-form-msg').classList.remove('show');
+
+            // Preview
+            const imgUrl = extractUrl(b.image) || b.image || '';
+            const preview = document.getElementById('b-preview');
+            if (imgUrl && imgUrl.startsWith('http')) {
+                preview.innerHTML = `<img src="${imgUrl}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.parentElement.innerHTML='<span style=&quot;color:var(--bad);font-size:12px;&quot;>❌ ছবি লোড হয়নি</span>'">`;
+            } else {
+                preview.innerHTML = '<span style="color: var(--muted); font-size: 12px;">ছবি দেখতে URL দিন</span>';
+            }
+
+            onBannerLinkTypeChange();
+            document.getElementById('banner-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.submitBanner = async () => {
+            const btn = document.getElementById('b-submit-btn');
+            const orig = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+            try {
+                const imageRaw = document.getElementById('b-image').value.trim();
+                const title = document.getElementById('b-title').value.trim();
+                const linkType = document.getElementById('b-link-type').value;
+                const order = parseInt(document.getElementById('b-order').value) || 1;
+                const active = document.getElementById('b-active').checked;
+                const editId = document.getElementById('b-edit-id').value;
+
+                if (!imageRaw) {
+                    showMsg('banner-form-msg', '⚠️ Banner Image URL দিন।', 'bad');
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
+                    return;
+                }
+
+                const cleanImg = extractUrl(imageRaw) || imageRaw;
+                if (!cleanImg || !cleanImg.startsWith('http')) {
+                    showMsg('banner-form-msg', '⚠️ সঠিক Image URL দিন।', 'bad');
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
+                    return;
+                }
+
+                let link = '';
+                if (linkType === 'category') {
+                    link = 'category:' + document.getElementById('b-category-value').value;
+                } else if (linkType === 'tab') {
+                    link = 'tab:' + document.getElementById('b-tab-value').value;
+                } else if (linkType === 'external') {
+                    const ext = document.getElementById('b-external-value').value.trim();
+                    if (!ext) {
+                        showMsg('banner-form-msg', '⚠️ External URL দিন।', 'bad');
+                        btn.disabled = false;
+                        btn.innerHTML = orig;
+                        return;
+                    }
+                    link = ext;
+                }
+
+                const data = {
+                    image: cleanImg,
+                    title: title || '',
+                    link: link,
+                    linkType: linkType,
+                    order: order,
+                    active: active,
+                    updatedAt: new Date().toISOString()
+                };
+
+                if (editId) {
+                    await updateDoc(doc(db, 'banners', editId), data);
+                    showMsg('banner-form-msg', '✅ Banner আপডেট হয়েছে!', 'ok');
+                    setTimeout(() => { closeBannerModal(); loadBanners(); }, 1000);
+                } else {
+                    data.createdAt = new Date().toISOString();
+                    await addDoc(collection(db, 'banners'), data);
+                    showMsg('banner-form-msg', '✅ নতুন Banner তৈরি হয়েছে!', 'ok');
+                    setTimeout(() => { closeBannerModal(); loadBanners(); }, 1000);
+                }
+            } catch (err) {
+                console.error(err);
+                showMsg('banner-form-msg', '❌ সেভ করা যায়নি: ' + (err.message || ''), 'bad');
+                btn.disabled = false;
+                btn.innerHTML = orig;
+            }
+        };
+
+        window.toggleBannerActive = async (docId) => {
+            const b = banners.find(x => x.docId === docId);
+            if (!b) return;
+            const newState = !b.active;
+            const label = newState ? 'চালু' : 'বন্ধ';
+            if (!confirm('Banner টি ' + label + ' করতে চান?')) return;
+            try {
+                await updateDoc(doc(db, 'banners', docId), { active: newState, updatedAt: new Date().toISOString() });
+                alert('✅ Banner ' + label + ' করা হয়েছে।');
+                loadBanners();
+            } catch (err) { alert('❌ ' + (err.message || 'আপডেট করা যায়নি')); }
+        };
+
+        window.deleteBanner = async (docId, title) => {
+            if (!confirm('Banner মুছে ফেলতে চান?\n\n' + title)) return;
+            try {
+                await deleteDoc(doc(db, 'banners', docId));
+                alert('✅ Banner মুছে ফেলা হয়েছে।');
+                loadBanners();
+            } catch (err) { alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি')); }
+        };
+
+        // ============================================
+        // KEYBOARD ESC
+        // ============================================
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                const modal = document.getElementById('coupon-modal');
-                if (modal && modal.classList.contains('active')) closeCouponModal();
+                const couponModal = document.getElementById('coupon-modal');
+                if (couponModal && couponModal.classList.contains('active')) closeCouponModal();
+                const bannerModal = document.getElementById('banner-modal');
+                if (bannerModal && bannerModal.classList.contains('active')) closeBannerModal();
             }
         });
 
