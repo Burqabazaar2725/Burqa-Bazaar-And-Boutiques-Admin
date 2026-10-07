@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
@@ -111,6 +111,13 @@
         .crow .rm { background: transparent; border: 1px solid var(--bad); color: var(--bad); width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; }
         .crow .rm:hover { background: var(--bad); color: #fff; }
 
+        /* ⚡ ADDITIONAL IMAGES ROW */
+        .crow-img { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-bottom: 8px; align-items: center; }
+        .crow-img input { padding: 10px 12px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; color: var(--text); font-size: 13px; outline: none; font-family: inherit; width: 100%; }
+        .crow-img input:focus { border-color: var(--gold); }
+        .crow-img .rm { background: transparent; border: 1px solid var(--bad); color: var(--bad); width: 36px; height: 36px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+        .crow-img .rm:hover { background: var(--bad); color: #fff; }
+
         .size-box { display: flex; flex-wrap: wrap; gap: 10px; padding: 5px 0; align-items: center; }
         .size-btn { background: var(--bg); border: 1.5px solid var(--border); color: var(--text); padding: 10px 20px; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer; font-family: inherit; transition: all .2s ease; }
         .size-btn:hover { border-color: var(--gold); }
@@ -119,6 +126,7 @@
         .select-all-btn:hover { opacity: .9; }
         .select-all-btn.deselect { background: linear-gradient(135deg, #666, #333); }
 
+        /* ORDER CARDS */
         .ocard { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 12px; }
         .ohead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
         .oid { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 15px; font-weight: 700; }
@@ -169,193 +177,44 @@
         .search-news-box input:focus { border-color: var(--gold); }
         .search-news-box i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gold); }
 
-        /* ⚡ COUPON STYLES */
-        .coupon-hero {
-            background: linear-gradient(135deg, rgba(255,0,127,.12) 0%, rgba(121,40,202,.08) 100%);
-            border: 1px solid rgba(255,0,127,.4);
-            border-radius: 14px;
-            padding: 22px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
+        /* COUPONS */
+        .coupon-hero { background: linear-gradient(135deg, rgba(255,0,127,.12) 0%, rgba(121,40,202,.08) 100%); border: 1px solid rgba(255,0,127,.4); border-radius: 14px; padding: 22px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 15px; flex-wrap: wrap; }
         .coupon-hero-left { display: flex; align-items: center; gap: 15px; }
         .coupon-hero-icon { width: 55px; height: 55px; border-radius: 50%; background: linear-gradient(135deg, #ff007f, #7928ca); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; box-shadow: 0 0 20px rgba(255,0,127,.4); }
         .coupon-hero-text h3 { font-family: 'Playfair Display', serif; color: #ff6bb5; font-size: 16px; margin-bottom: 4px; }
         .coupon-hero-text p { color: var(--muted); font-size: 12px; }
         .coupon-count-big { font-family: 'Playfair Display', serif; font-size: 42px; font-weight: 800; background: linear-gradient(135deg, #ff007f, #7928ca); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
-
-        .coupon-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 18px;
-            margin-bottom: 12px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.2s;
-        }
+        .coupon-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 12px; position: relative; overflow: hidden; transition: all 0.2s; }
         .coupon-card:hover { border-color: var(--gold); box-shadow: 0 4px 20px rgba(223,177,91,.1); }
-        .coupon-card::before {
-            content: '';
-            position: absolute;
-            left: 0; top: 0; bottom: 0;
-            width: 5px;
-            background: linear-gradient(180deg, #ff007f, #7928ca);
-        }
+        .coupon-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: linear-gradient(180deg, #ff007f, #7928ca); }
         .coupon-card.inactive { opacity: 0.55; }
         .coupon-card.inactive::before { background: #666; }
         .coupon-card.expired::before { background: #ef4444; }
-
-        .coupon-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 12px;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-        }
-        .coupon-code-big {
-            font-family: 'Playfair Display', serif;
-            font-size: 22px;
-            font-weight: 800;
-            color: var(--gold);
-            letter-spacing: 2px;
-            background: rgba(223,177,91,.1);
-            border: 1.5px dashed var(--gold);
-            padding: 6px 14px;
-            border-radius: 8px;
-            display: inline-block;
-        }
-        .coupon-status {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-        }
+        .coupon-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+        .coupon-code-big { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 800; color: var(--gold); letter-spacing: 2px; background: rgba(223,177,91,.1); border: 1.5px dashed var(--gold); padding: 6px 14px; border-radius: 8px; display: inline-block; }
+        .coupon-status { padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
         .coupon-status.active { background: rgba(34,197,94,.15); color: var(--ok); border: 1px solid var(--ok); }
         .coupon-status.inactive { background: rgba(107,114,128,.15); color: #9ca3af; border: 1px solid #9ca3af; }
         .coupon-status.expired { background: rgba(239,68,68,.15); color: var(--bad); border: 1px solid var(--bad); }
-
-        .coupon-discount-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #22c55e, #16a34a);
-            color: #fff;
-            padding: 4px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 800;
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
-        }
-
-        .coupon-details-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin-bottom: 14px;
-            padding: 12px;
-            background: var(--bg);
-            border-radius: 10px;
-        }
-        .coupon-detail-item {
-            font-size: 12px;
-            color: var(--muted);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .coupon-detail-item strong {
-            color: var(--text);
-            font-weight: 700;
-        }
-        .coupon-detail-item i {
-            color: var(--gold);
-            width: 14px;
-        }
-
-        .coupon-actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .coupon-form-modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,.85);
-            z-index: 500;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            overflow-y: auto;
-        }
+        .coupon-discount-badge { display: inline-block; background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 800; margin-bottom: 12px; letter-spacing: 0.5px; }
+        .coupon-details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 14px; padding: 12px; background: var(--bg); border-radius: 10px; }
+        .coupon-detail-item { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+        .coupon-detail-item strong { color: var(--text); font-weight: 700; }
+        .coupon-detail-item i { color: var(--gold); width: 14px; }
+        .coupon-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .coupon-form-modal { position: fixed; inset: 0; background: rgba(0,0,0,.85); z-index: 500; display: none; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
         .coupon-form-modal.active { display: flex; }
-        .coupon-form-box {
-            background: var(--card);
-            border: 1px solid var(--gold);
-            border-radius: 16px;
-            padding: 25px;
-            max-width: 520px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,.8);
-        }
-        .coupon-form-box h3 {
-            font-family: 'Playfair Display', serif;
-            color: var(--gold);
-            font-size: 18px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .coupon-form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 26px;
-            flex-shrink: 0;
-        }
+        .coupon-form-box { background: var(--card); border: 1px solid var(--gold); border-radius: 16px; padding: 25px; max-width: 520px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.8); }
+        .coupon-form-box h3 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+        .toggle-switch { position: relative; display: inline-block; width: 50px; height: 26px; flex-shrink: 0; }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #555;
-            transition: .3s;
-            border-radius: 26px;
-        }
-        .toggle-slider::before {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .3s;
-            border-radius: 50%;
-        }
-        .toggle-switch input:checked + .toggle-slider {
-            background: linear-gradient(135deg, #22c55e, #16a34a);
-        }
-        .toggle-switch input:checked + .toggle-slider::before {
-            transform: translateX(24px);
-        }
+        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #555; transition: .3s; border-radius: 26px; }
+        .toggle-slider::before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
+        .toggle-switch input:checked + .toggle-slider { background: linear-gradient(135deg, #22c55e, #16a34a); }
+        .toggle-switch input:checked + .toggle-slider::before { transform: translateX(24px); }
+
+        /* REVIEWS */
+        .review-stars-row { color: #ffb800; font-size: 14px; }
 
         @media (max-width: 500px) {
             .head { padding: 12px 15px; }
@@ -432,7 +291,7 @@
                 <div class="shead"><h2><i class="fas fa-info-circle"></i> Welcome</h2></div>
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 25px;">
                     <h3 style="color: var(--gold); margin-bottom: 12px; font-family: 'Playfair Display', serif;">স্বাগতম Admin Panel-এ! 🎉</h3>
-                    <p style="color: var(--muted); font-size: 14px; line-height: 1.8;">এই প্যানেল থেকে প্রোডাক্ট, অর্ডার, রিভিউ, নিউজলেটার এবং কুপন সবকিছু ম্যানেজ করতে পারবেন। Coupons ট্যাব থেকে কুপন কোড তৈরি করে কাস্টমারদের ছাড় দিতে পারবেন।</p>
+                    <p style="color: var(--muted); font-size: 14px; line-height: 1.8;">এই প্যানেল থেকে প্রোডাক্ট, অর্ডার, রিভিউ, নিউজলেটার এবং কুপন সবকিছু ম্যানেজ করতে পারবেন। এখন প্রতিটি প্রোডাক্টে <strong>Multiple Images</strong> যোগ করতে পারবেন।</p>
                 </div>
             </div>
 
@@ -471,6 +330,19 @@
                     <div class="fgroup"><label>🖼️ Main Image URL *</label><input type="text" id="p-image" placeholder="https://i.ibb.co/xxxxx/image.png" required>
                         <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">ImgBB Link বা HTML কোড — দুটোই চলবে</small>
                     </div>
+
+                    <!-- ⚡ ADDITIONAL IMAGES (NEW) -->
+                    <div class="fgroup">
+                        <label>🖼️ Additional Images (ঐচ্ছিক)</label>
+                        <div id="additional-images"></div>
+                        <button type="button" class="btn-s" onclick="addAdditionalImage()" style="margin-top: 10px; width: 100%; justify-content: center;">
+                            <i class="fas fa-plus"></i> Add Another Image
+                        </button>
+                        <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 8px;">
+                            💡 প্রথম ছবিটি <strong>Main Image</strong> হিসেবে থাকবে। এখানে আরো ছবি যোগ করলে কাস্টমার <strong>Gallery আকারে</strong> সব দেখতে পাবে (থাম্বনেইল সহ)।
+                        </small>
+                    </div>
+
                     <div class="fgroup"><label>🏷️ Badge (ঐচ্ছিক)</label>
                         <select id="p-badge">
                             <option value="">None</option>
@@ -553,13 +425,12 @@
                 <div id="newsletter-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
             </div>
 
-            <!-- ⚡ COUPONS (NEW) -->
+            <!-- COUPONS -->
             <div class="section" id="sec-coupons">
                 <div class="shead">
                     <h2><i class="fas fa-ticket-alt"></i> Discount Coupons</h2>
                     <button class="btn-p" onclick="openCouponModal()"><i class="fas fa-plus"></i> Add Coupon</button>
                 </div>
-
                 <div class="coupon-hero">
                     <div class="coupon-hero-left">
                         <div class="coupon-hero-icon"><i class="fas fa-tags"></i></div>
@@ -570,14 +441,12 @@
                     </div>
                     <div class="coupon-count-big" id="coupon-total-count">0</div>
                 </div>
-
                 <div class="ofilter" id="coupon-filter">
                     <button class="active" data-cfilter="all" onclick="filterCoupons('all')">📦 All</button>
                     <button data-cfilter="active" onclick="filterCoupons('active')">✅ Active</button>
                     <button data-cfilter="inactive" onclick="filterCoupons('inactive')">⏸️ Inactive</button>
                     <button data-cfilter="expired" onclick="filterCoupons('expired')">❌ Expired</button>
                 </div>
-
                 <div id="coupons-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
             </div>
 
@@ -620,7 +489,6 @@
             <div class="fgroup">
                 <label>📅 Expiry Date *</label>
                 <input type="date" id="c-expiry" required>
-                <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">এই তারিখের পর কুপন আর কাজ করবে না</small>
             </div>
 
             <div class="fgroup">
@@ -649,7 +517,7 @@
             </div>
         </div>
     </div>
-<script type="module">
+    <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
@@ -682,7 +550,7 @@
         const ALL_SIZES = ["50", "52", "54", "56"];
 
         // ============================================
-        // CATEGORY / SIZE LOGIC
+        // CATEGORY / SIZE
         // ============================================
         window.onCategoryChange = function() {
             const cat = document.getElementById('p-cat').value;
@@ -714,9 +582,7 @@
             const allBtn = document.createElement('button');
             allBtn.type = 'button';
             allBtn.className = 'select-all-btn' + (allSelected ? ' deselect' : '');
-            allBtn.innerHTML = allSelected
-                ? '<i class="fas fa-times-circle"></i> Deselect All'
-                : '<i class="fas fa-check-double"></i> Select All';
+            allBtn.innerHTML = allSelected ? '<i class="fas fa-times-circle"></i> Deselect All' : '<i class="fas fa-check-double"></i> Select All';
             allBtn.onclick = function() { toggleSelectAll(); };
             box.appendChild(allBtn);
         }
@@ -728,7 +594,6 @@
             selectedSizes.sort((a, b) => parseInt(a) - parseInt(b));
             renderSizeButtons();
         };
-
         window.toggleSelectAll = function() {
             const allSelected = ALL_SIZES.every(s => selectedSizes.includes(s));
             selectedSizes = allSelected ? [] : ALL_SIZES.slice();
@@ -851,6 +716,25 @@
         window.extractUrl = extractUrl;
 
         // ============================================
+        // ⚡ ADD ADDITIONAL IMAGE (NEW)
+        // ============================================
+        window.addAdditionalImage = (url) => {
+            const c = document.getElementById('additional-images');
+            if (!c) return;
+            const id = 'ai-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+            const row = document.createElement('div');
+            row.className = 'crow-img';
+            row.id = id;
+            row.innerHTML = `
+                <input type="text" placeholder="Image URL (ImgBB link)" value="${url || ''}" class="aimg">
+                <button type="button" class="rm" onclick="document.getElementById('${id}').remove()" title="Remove">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            c.appendChild(row);
+        };
+
+        // ============================================
         // PRODUCTS
         // ============================================
         window.loadProducts = async () => {
@@ -879,6 +763,7 @@
                 const img = extractUrl(p.image) || 'https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png';
                 const cc = Array.isArray(p.colors) ? p.colors.length : 0;
                 const sc = Array.isArray(p.sizes) ? p.sizes.length : 0;
+                const imgCount = Array.isArray(p.images) ? p.images.length : 1;
                 const sizeText = sc > 0 ? sc + ' sizes' : 'no size';
 
                 let stockBadge = '';
@@ -897,7 +782,7 @@
                     <img src="${img}" class="pimg" onerror="this.src='https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png'">
                     <div class="pinfo">
                         <div class="pname">${p.name || 'Unnamed'}</div>
-                        <div class="pmeta">${p.category || ''} • ${sizeText} • ${cc} colors</div>
+                        <div class="pmeta">${p.category || ''} • ${sizeText} • ${cc} colors • 📸 ${imgCount} image${imgCount !== 1 ? 's' : ''}</div>
                         ${stockBadge}
                         <div class="pprice">${price}</div>
                         <div class="pacts">
@@ -912,7 +797,7 @@
 
         window.addColor = (name, img) => {
             const c = document.getElementById('colors');
-            const id = 'c-' + Date.now() + '-' + Math.random();
+            const id = 'c-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
             const row = document.createElement('div');
             row.className = 'crow';
             row.id = id;
@@ -924,6 +809,7 @@
             document.getElementById('p-form').reset();
             document.getElementById('edit-id').value = '';
             document.getElementById('colors').innerHTML = '';
+            document.getElementById('additional-images').innerHTML = '';
             document.getElementById('p-stock').value = '1';
             selectedSizes = [];
             editingId = null;
@@ -933,6 +819,7 @@
             document.getElementById('size-section').style.display = 'none';
             document.getElementById('size-box').innerHTML = '';
             addColor();
+            addAdditionalImage();
         };
 
         window.deleteProduct = async (docId, name) => {
@@ -961,6 +848,8 @@
             document.getElementById('p-desc').value = p.fullDescription || '';
             selectedSizes = Array.isArray(p.sizes) ? p.sizes.slice() : [];
             onCategoryChange();
+
+            // Colors
             const cc = document.getElementById('colors');
             cc.innerHTML = '';
             if (Array.isArray(p.colors) && p.colors.length > 0) {
@@ -968,6 +857,17 @@
             } else {
                 addColor();
             }
+
+            // ⚡ Additional Images
+            const ai = document.getElementById('additional-images');
+            ai.innerHTML = '';
+            if (Array.isArray(p.images) && p.images.length > 1) {
+                // Skip first (main image) and add the rest
+                p.images.slice(1).forEach(imgUrl => addAdditionalImage(extractUrl(imgUrl) || imgUrl));
+            } else {
+                addAdditionalImage();
+            }
+
             document.getElementById('form-title').innerHTML = '<i class="fas fa-edit"></i> Edit Product';
             document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Update';
             switchTab('add');
@@ -1031,7 +931,22 @@
                     return;
                 }
 
+                // ⚡ Additional Images collect
+                const additionalImages = [];
+                document.querySelectorAll('#additional-images .crow-img').forEach(row => {
+                    const urlInput = row.querySelector('.aimg');
+                    if (urlInput) {
+                        const cleanUrl = extractUrl(urlInput.value.trim()) || urlInput.value.trim();
+                        if (cleanUrl && cleanUrl.length > 5) additionalImages.push(cleanUrl);
+                    }
+                });
+
                 const cleanImg = extractUrl(image) || image;
+                // ⚡ Combined images array (main + additional)
+                const allImages = [cleanImg, ...additionalImages];
+                // Remove duplicates
+                const uniqueImages = [...new Set(allImages)];
+
                 const data = {
                     name, category, price,
                     stock: stock,
@@ -1040,14 +955,14 @@
                     badgeText: badge ? badge.toUpperCase() : null,
                     sizes: sizes,
                     colors: colors,
-                    images: [cleanImg],
+                    images: uniqueImages,
                     fullDescription: desc,
                     updatedAt: new Date().toISOString()
                 };
 
                 if (editId) {
                     await updateDoc(doc(db, 'products', editId), data);
-                    showMsg('form-msg', '✅ আপডেট হয়েছে!', 'ok');
+                    showMsg('form-msg', '✅ আপডেট হয়েছে! (মোট ' + uniqueImages.length + 'টি ছবি)', 'ok');
                     setTimeout(() => { resetForm(); switchTab('products'); loadStats(); }, 1200);
                 } else {
                     const snap = await getDocs(collection(db, 'products'));
@@ -1056,7 +971,7 @@
                     data.id = maxId + 1;
                     data.createdAt = new Date().toISOString();
                     await addDoc(collection(db, 'products'), data);
-                    showMsg('form-msg', '✅ নতুন প্রোডাক্ট যোগ হয়েছে!', 'ok');
+                    showMsg('form-msg', '✅ নতুন প্রোডাক্ট যোগ হয়েছে! (মোট ' + uniqueImages.length + 'টি ছবি)', 'ok');
                     setTimeout(() => { resetForm(); switchTab('products'); loadStats(); }, 1200);
                 }
             } catch (err) {
@@ -1126,7 +1041,6 @@
                 const phoneClean = (o.phone || '').replace(/[^0-9]/g, '');
                 const waLink = phoneClean ? 'https://wa.me/88' + (phoneClean.startsWith('0') ? phoneClean.substring(1) : phoneClean) : '#';
 
-                // ⚡ COUPON LINE
                 let couponLine = '';
                 if (o.couponCode) {
                     couponLine = '<div style="color: #22c55e; font-weight: 700;"><strong>🎟️ Coupon:</strong> ' + o.couponCode + ' (-৳' + (o.discountAmount || 0) + ')</div>';
@@ -1170,16 +1084,11 @@
             const label = newStatus === 'completed' ? 'Completed' : 'Pending';
             if (!confirm('অর্ডারটি "' + label + '" হিসেবে মার্ক করতে চান?')) return;
             try {
-                await updateDoc(doc(db, 'orders', docId), {
-                    status: newStatus,
-                    statusUpdatedAt: new Date().toISOString()
-                });
+                await updateDoc(doc(db, 'orders', docId), { status: newStatus, statusUpdatedAt: new Date().toISOString() });
                 alert('✅ অর্ডার স্ট্যাটাস "' + label + '" আপডেট হয়েছে!');
                 loadOrders();
                 loadStats();
-            } catch (err) {
-                alert('❌ ' + (err.message || 'আপডেট করা যায়নি'));
-            }
+            } catch (err) { alert('❌ ' + (err.message || 'আপডেট করা যায়নি')); }
         };
 
         window.deleteOrder = async (docId, orderId) => {
@@ -1189,9 +1098,7 @@
                 alert('✅ অর্ডার মুছে ফেলা হয়েছে।');
                 loadOrders();
                 loadStats();
-            } catch (err) {
-                alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি'));
-            }
+            } catch (err) { alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি')); }
         };
 
         // ============================================
@@ -1249,7 +1156,7 @@
             let html = `<div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 18px; display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
                 <div style="text-align: center; min-width: 90px;">
                     <div style="font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 800; color: var(--gold); line-height: 1;">${avg}</div>
-                    <div style="color: #ffb800; font-size: 16px; margin-top: 4px;">${renderStarsRow(Math.round(parseFloat(avg)))}</div>
+                    <div class="review-stars-row" style="margin-top: 4px;">${renderStarsRow(Math.round(parseFloat(avg)))}</div>
                     <div style="font-size: 11px; color: var(--muted); margin-top: 4px;">${reviews.length} reviews</div>
                 </div>
                 <div style="flex: 1; min-width: 200px;">
@@ -1274,7 +1181,7 @@
                             <div style="font-family: 'Playfair Display', serif; color: var(--gold); font-size: 13px; font-weight: 700;">🛍️ ${prodName}</div>
                             <div style="font-size: 11px; color: var(--muted); margin-top: 2px;">Product ID: ${r.productId}</div>
                         </div>
-                        <div style="color: #ffb800; font-size: 14px;">${renderStarsRow(rt)}</div>
+                        <div class="review-stars-row">${renderStarsRow(rt)}</div>
                     </div>
                     <div style="background: var(--bg); border-radius: 8px; padding: 12px; margin-top: 8px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
@@ -1299,9 +1206,7 @@
                 await deleteDoc(doc(db, 'reviews', docId));
                 alert('✅ রিভিউ মুছে ফেলা হয়েছে।');
                 loadReviews();
-            } catch (err) {
-                alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি'));
-            }
+            } catch (err) { alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি')); }
         };
 
         // ============================================
@@ -1331,7 +1236,6 @@
         window.renderNewsletter = () => {
             const c = document.getElementById('newsletter-container');
             const totalEl = document.getElementById('news-total-count');
-
             if (totalEl) totalEl.textContent = newsletterList.length;
 
             let filtered = newsletterList;
@@ -1341,17 +1245,13 @@
             }
 
             if (filtered.length === 0) {
-                const emptyMsg = newsSearchQuery.trim() 
-                    ? 'কোনো ইমেইল পাওয়া যায়নি: "' + newsSearchQuery + '"'
-                    : 'এখনো কোনো সাবস্ক্রাইবার নেই';
-                c.innerHTML = '<div class="empty"><i class="fas fa-envelope-open-text"></i><h3>' + emptyMsg + '</h3>' + 
-                    (!newsSearchQuery.trim() ? '<p style="margin-top: 8px; font-size: 13px;">ওয়েবসাইটের Newsletter ফর্ম থেকে কেউ সাবস্ক্রাইব করলে এখানে দেখা যাবে।</p>' : '') +
-                    '</div>';
+                const emptyMsg = newsSearchQuery.trim() ? 'কোনো ইমেইল পাওয়া যায়নি: "' + newsSearchQuery + '"' : 'এখনো কোনো সাবস্ক্রাইবার নেই';
+                c.innerHTML = '<div class="empty"><i class="fas fa-envelope-open-text"></i><h3>' + emptyMsg + '</h3></div>';
                 return;
             }
 
             let html = '';
-            filtered.forEach((n, idx) => {
+            filtered.forEach((n) => {
                 const email = n.email || '(no email)';
                 const initial = email.charAt(0).toUpperCase();
                 const dStr = n.date || n.createdAt || '';
@@ -1370,16 +1270,11 @@
                         </div>
                     </div>
                     <div class="news-actions">
-                        <button class="news-btn-copy" onclick="copyNewsEmail('${email.replace(/'/g, "\\'")}')">
-                            <i class="fas fa-copy"></i> Copy
-                        </button>
-                        <button class="abtn del" onclick="deleteNewsletter('${n.docId}', '${email.replace(/'/g, "\\'")}')">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
+                        <button class="news-btn-copy" onclick="copyNewsEmail('${email.replace(/'/g, "\\'")}')"><i class="fas fa-copy"></i> Copy</button>
+                        <button class="abtn del" onclick="deleteNewsletter('${n.docId}', '${email.replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i></button>
                     </div>
                 </div>`;
             });
-
             c.innerHTML = html;
         };
 
@@ -1388,33 +1283,16 @@
             newsSearchQuery = input ? input.value : '';
             renderNewsletter();
         };
-
         window.copyNewsEmail = (email) => {
-            navigator.clipboard.writeText(email).then(() => {
-                alert('✅ ইমেইল কপি হয়েছে:\n' + email);
-            }).catch(() => {
-                alert('❌ কপি করা যায়নি।');
-            });
+            navigator.clipboard.writeText(email).then(() => { alert('✅ ইমেইল কপি হয়েছে:\n' + email); }).catch(() => alert('❌ কপি করা যায়নি।'));
         };
-
         window.copyAllEmails = () => {
-            if (newsletterList.length === 0) {
-                alert('⚠️ কোনো ইমেইল নেই।');
-                return;
-            }
+            if (newsletterList.length === 0) { alert('⚠️ কোনো ইমেইল নেই।'); return; }
             const allEmails = newsletterList.map(n => n.email).filter(e => e).join(', ');
-            navigator.clipboard.writeText(allEmails).then(() => {
-                alert('✅ সব ইমেইল কপি হয়েছে (' + newsletterList.length + 'টি)');
-            }).catch(() => {
-                alert('❌ কপি করা যায়নি।');
-            });
+            navigator.clipboard.writeText(allEmails).then(() => { alert('✅ সব ইমেইল কপি হয়েছে (' + newsletterList.length + 'টি)'); }).catch(() => alert('❌ কপি করা যায়নি।'));
         };
-
         window.exportNewsletterCSV = () => {
-            if (newsletterList.length === 0) {
-                alert('⚠️ Export করার জন্য কোনো ইমেইল নেই।');
-                return;
-            }
+            if (newsletterList.length === 0) { alert('⚠️ Export করার জন্য কোনো ইমেইল নেই।'); return; }
             let csv = 'Email,Date\n';
             newsletterList.forEach(n => {
                 const email = (n.email || '').replace(/"/g, '""');
@@ -1422,7 +1300,6 @@
                 const niceDate = dStr ? new Date(dStr).toLocaleString('en-GB').replace(/,/g, ' ') : '';
                 csv += `"${email}","${niceDate}"\n`;
             });
-
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
@@ -1433,23 +1310,19 @@
             link.click();
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
-
             alert('✅ CSV ডাউনলোড শুরু হয়েছে (' + newsletterList.length + 'টি)');
         };
-
         window.deleteNewsletter = async (docId, email) => {
             if (!confirm('মুছে ফেলতে চান?\n\n' + email)) return;
             try {
                 await deleteDoc(doc(db, 'newsletter', docId));
                 alert('✅ সাবস্ক্রাইবার মুছে ফেলা হয়েছে।');
                 loadNewsletter();
-            } catch (err) {
-                alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি'));
-            }
+            } catch (err) { alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি')); }
         };
 
         // ============================================
-        // ⚡ COUPONS (NEW)
+        // COUPONS
         // ============================================
         window.loadCoupons = async () => {
             const c = document.getElementById('coupons-container');
@@ -1496,7 +1369,6 @@
             const c = document.getElementById('coupons-container');
             const countEl = document.getElementById('coupon-total-count');
 
-            // Active count
             let activeCount = 0;
             coupons.forEach(co => { if (getCouponStatus(co) === 'active') activeCount++; });
             if (countEl) countEl.textContent = activeCount;
@@ -1523,13 +1395,9 @@
                 if (st === 'inactive') stTxt = 'Inactive';
                 else if (st === 'expired') stTxt = 'Expired';
 
-                // Discount badge
                 let discountBadge = '';
-                if (co.type === 'percentage') {
-                    discountBadge = co.value + '% OFF';
-                } else {
-                    discountBadge = '৳' + co.value + ' OFF';
-                }
+                if (co.type === 'percentage') discountBadge = co.value + '% OFF';
+                else discountBadge = '৳' + co.value + ' OFF';
 
                 const couponClass = st === 'inactive' ? 'inactive' : (st === 'expired' ? 'expired' : '');
 
@@ -1540,32 +1408,17 @@
                     </div>
                     <div class="coupon-discount-badge">🎉 ${discountBadge}</div>
                     ${co.description ? '<p style="font-size: 13px; color: var(--muted); margin-bottom: 12px;">' + co.description + '</p>' : ''}
-                    
                     <div class="coupon-details-grid">
-                        <div class="coupon-detail-item">
-                            <i class="fas fa-shopping-cart"></i>
-                            Min Order: <strong>৳${co.minOrder || 0}</strong>
-                        </div>
-                        <div class="coupon-detail-item">
-                            <i class="fas fa-calendar-times"></i>
-                            Expires: <strong>${formatCouponExpiry(co.expiry)}</strong>
-                        </div>
-                        <div class="coupon-detail-item">
-                            <i class="fas fa-hashtag"></i>
-                            Used: <strong>${co.usedCount || 0} times</strong>
-                        </div>
+                        <div class="coupon-detail-item"><i class="fas fa-shopping-cart"></i> Min Order: <strong>৳${co.minOrder || 0}</strong></div>
+                        <div class="coupon-detail-item"><i class="fas fa-calendar-times"></i> Expires: <strong>${formatCouponExpiry(co.expiry)}</strong></div>
                     </div>
-
                     <div class="coupon-actions">
                         <button class="abtn edit" onclick="editCoupon('${co.docId}')"><i class="fas fa-edit"></i> Edit</button>
-                        <button class="abtn edit" onclick="toggleCouponActive('${co.docId}')">
-                            <i class="fas fa-${co.active ? 'pause' : 'play'}"></i> ${co.active ? 'Deactivate' : 'Activate'}
-                        </button>
+                        <button class="abtn edit" onclick="toggleCouponActive('${co.docId}')"><i class="fas fa-${co.active ? 'pause' : 'play'}"></i> ${co.active ? 'Deactivate' : 'Activate'}</button>
                         <button class="abtn del" onclick="deleteCoupon('${co.docId}', '${(co.code || '').replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i> Delete</button>
                     </div>
                 </div>`;
             });
-
             c.innerHTML = html;
         };
 
@@ -1606,12 +1459,9 @@
             document.getElementById('c-submit-btn').innerHTML = '<i class="fas fa-save"></i> Save Coupon';
             document.getElementById('coupon-form-msg').classList.remove('show');
             onCouponTypeChange();
-
-            // Set default expiry = 30 days from now
             const d = new Date();
             d.setDate(d.getDate() + 30);
             document.getElementById('c-expiry').value = d.toISOString().split('T')[0];
-
             document.getElementById('coupon-modal').classList.add('active');
             document.body.style.overflow = 'hidden';
         };
@@ -1679,10 +1529,7 @@
                     return;
                 }
 
-                // ডুপ্লিকেট চেক
-                const dupCheck = coupons.find(x => 
-                    x.code === code && x.docId !== editId
-                );
+                const dupCheck = coupons.find(x => x.code === code && x.docId !== editId);
                 if (dupCheck) {
                     showMsg('coupon-form-msg', '⚠️ এই কোড দিয়ে ইতিমধ্যে একটি কুপন আছে।', 'bad');
                     btn.disabled = false;
@@ -1691,13 +1538,8 @@
                 }
 
                 const data = {
-                    code: code,
-                    type: type,
-                    value: value,
-                    minOrder: minOrder,
-                    expiry: expiry,
-                    description: description,
-                    active: active,
+                    code: code, type: type, value: value, minOrder: minOrder,
+                    expiry: expiry, description: description, active: active,
                     updatedAt: new Date().toISOString()
                 };
 
@@ -1726,15 +1568,10 @@
             const label = newState ? 'চালু' : 'বন্ধ';
             if (!confirm('কুপনটি ' + label + ' করতে চান?')) return;
             try {
-                await updateDoc(doc(db, 'coupons', docId), {
-                    active: newState,
-                    updatedAt: new Date().toISOString()
-                });
+                await updateDoc(doc(db, 'coupons', docId), { active: newState, updatedAt: new Date().toISOString() });
                 alert('✅ কুপন ' + label + ' করা হয়েছে।');
                 loadCoupons();
-            } catch (err) {
-                alert('❌ ' + (err.message || 'আপডেট করা যায়নি'));
-            }
+            } catch (err) { alert('❌ ' + (err.message || 'আপডেট করা যায়নি')); }
         };
 
         window.deleteCoupon = async (docId, code) => {
@@ -1743,18 +1580,13 @@
                 await deleteDoc(doc(db, 'coupons', docId));
                 alert('✅ কুপন মুছে ফেলা হয়েছে।');
                 loadCoupons();
-            } catch (err) {
-                alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি'));
-            }
+            } catch (err) { alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি')); }
         };
 
-        // ESC key to close coupon modal
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 const modal = document.getElementById('coupon-modal');
-                if (modal && modal.classList.contains('active')) {
-                    closeCouponModal();
-                }
+                if (modal && modal.classList.contains('active')) closeCouponModal();
             }
         });
 
