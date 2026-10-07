@@ -325,7 +325,7 @@
                         <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">ImgBB Link বা HTML কোড — দুটোই চলবে</small>
                     </div>
 
-                    <!-- ⚡ ADDITIONAL IMAGES -->
+                    <!-- ADDITIONAL IMAGES -->
                     <div class="fgroup">
                         <label>🖼️ Additional Images (ঐচ্ছিক)</label>
                         <div id="additional-images"></div>
@@ -710,7 +710,7 @@
         window.extractUrl = extractUrl;
 
         // ============================================
-        // ⚡ ADD ADDITIONAL IMAGE
+        // ADD ADDITIONAL IMAGE
         // ============================================
         window.addAdditionalImage = (url) => {
             const c = document.getElementById('additional-images');
@@ -726,6 +726,47 @@
                 </button>
             `;
             c.appendChild(row);
+        };
+
+        window.addColor = (name, img) => {
+            const c = document.getElementById('colors');
+            const id = 'c-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+            const row = document.createElement('div');
+            row.className = 'crow';
+            row.id = id;
+            row.innerHTML = `<input type="text" placeholder="Color Name" value="${name || ''}" class="cname"><input type="text" placeholder="Image URL" value="${img || ''}" class="cimg"><button type="button" class="rm" onclick="document.getElementById('${id}').remove()"><i class="fas fa-times"></i></button>`;
+            c.appendChild(row);
+        };
+
+        // ============================================
+        // ⚡ RESET FORM (FIXED — বাটন enable করে)
+        // ============================================
+        window.resetForm = () => {
+            // ⚡ প্রথমেই বাটন enable করি
+            const btn = document.getElementById('submit-btn');
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-save"></i> Save';
+            }
+
+            // State reset
+            editingId = null;
+            selectedSizes = [];
+
+            // Form reset
+            document.getElementById('p-form').reset();
+            document.getElementById('edit-id').value = '';
+            document.getElementById('colors').innerHTML = '';
+            document.getElementById('additional-images').innerHTML = '';
+            document.getElementById('p-stock').value = '1';
+            document.getElementById('form-title').innerHTML = '<i class="fas fa-plus-circle"></i> Add New Product';
+            document.getElementById('form-msg').classList.remove('show');
+            document.getElementById('size-section').style.display = 'none';
+            document.getElementById('size-box').innerHTML = '';
+
+            // Default empty rows
+            addColor();
+            addAdditionalImage();
         };
 
         // ============================================
@@ -789,33 +830,6 @@
             c.innerHTML = html;
         };
 
-        window.addColor = (name, img) => {
-            const c = document.getElementById('colors');
-            const id = 'c-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-            const row = document.createElement('div');
-            row.className = 'crow';
-            row.id = id;
-            row.innerHTML = `<input type="text" placeholder="Color Name" value="${name || ''}" class="cname"><input type="text" placeholder="Image URL" value="${img || ''}" class="cimg"><button type="button" class="rm" onclick="document.getElementById('${id}').remove()"><i class="fas fa-times"></i></button>`;
-            c.appendChild(row);
-        };
-
-        window.resetForm = () => {
-            document.getElementById('p-form').reset();
-            document.getElementById('edit-id').value = '';
-            document.getElementById('colors').innerHTML = '';
-            document.getElementById('additional-images').innerHTML = '';
-            document.getElementById('p-stock').value = '1';
-            selectedSizes = [];
-            editingId = null;
-            document.getElementById('form-title').innerHTML = '<i class="fas fa-plus-circle"></i> Add New Product';
-            document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Save';
-            document.getElementById('form-msg').classList.remove('show');
-            document.getElementById('size-section').style.display = 'none';
-            document.getElementById('size-box').innerHTML = '';
-            addColor();
-            addAdditionalImage();
-        };
-
         window.deleteProduct = async (docId, name) => {
             if (!confirm('মুছে ফেলতে চান: "' + name + '"?')) return;
             try {
@@ -828,9 +842,39 @@
             }
         };
 
+        // ============================================
+        // ⚡ EDIT PRODUCT (FIXED — বাটন enable + form পরিষ্কার)
+        // ============================================
         window.editProduct = (docId) => {
             const p = products.find(x => x.docId === docId);
-            if (!p) return alert('পাওয়া যায়নি');
+            if (!p) { alert('প্রোডাক্ট পাওয়া যায়নি'); return; }
+
+            // ⚡ STEP 1: বাটন enable করি
+            const btn = document.getElementById('submit-btn');
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-save"></i> Update';
+            }
+
+            // ⚡ STEP 2: সম্পূর্ণ ফর্ম পরিষ্কার করি
+            document.getElementById('p-form').reset();
+            document.getElementById('edit-id').value = '';
+            document.getElementById('p-name').value = '';
+            document.getElementById('p-cat').value = '';
+            document.getElementById('p-price').value = '';
+            document.getElementById('p-stock').value = '1';
+            document.getElementById('p-image').value = '';
+            document.getElementById('p-badge').value = '';
+            document.getElementById('p-desc').value = '';
+            document.getElementById('colors').innerHTML = '';
+            document.getElementById('additional-images').innerHTML = '';
+            document.getElementById('size-box').innerHTML = '';
+            document.getElementById('form-msg').classList.remove('show');
+
+            editingId = null;
+            selectedSizes = [];
+
+            // ⚡ STEP 3: নতুন ডেটা বসাই
             editingId = docId;
             document.getElementById('edit-id').value = docId;
             document.getElementById('p-name').value = p.name || '';
@@ -841,8 +885,11 @@
             document.getElementById('p-badge').value = p.badge || '';
             document.getElementById('p-desc').value = p.fullDescription || '';
             selectedSizes = Array.isArray(p.sizes) ? p.sizes.slice() : [];
+
+            // Category trigger
             onCategoryChange();
 
+            // Colors
             const cc = document.getElementById('colors');
             cc.innerHTML = '';
             if (Array.isArray(p.colors) && p.colors.length > 0) {
@@ -851,6 +898,7 @@
                 addColor();
             }
 
+            // Additional Images
             const ai = document.getElementById('additional-images');
             ai.innerHTML = '';
             if (Array.isArray(p.images) && p.images.length > 1) {
@@ -861,16 +909,26 @@
 
             document.getElementById('form-title').innerHTML = '<i class="fas fa-edit"></i> Edit Product';
             document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Update';
+
+            // Switch to add tab
             switchTab('add');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
+        // ============================================
+        // ⚡ SUBMIT PRODUCT (FIXED)
+        // ============================================
         window.submitProduct = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
+
+            // ⚡ ডাবল ক্লিক প্রতিরোধ
+            if (btn.disabled) return;
+
             const orig = btn.innerHTML;
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
             try {
                 const name = document.getElementById('p-name').value.trim();
                 const category = document.getElementById('p-cat').value;
@@ -951,7 +1009,11 @@
                 if (editId) {
                     await updateDoc(doc(db, 'products', editId), data);
                     showMsg('form-msg', '✅ আপডেট হয়েছে! (মোট ' + uniqueImages.length + 'টি ছবি)', 'ok');
-                    setTimeout(() => { resetForm(); switchTab('products'); loadStats(); }, 1200);
+                    setTimeout(() => {
+                        resetForm();
+                        switchTab('products');
+                        loadStats();
+                    }, 1000);
                 } else {
                     const snap = await getDocs(collection(db, 'products'));
                     let maxId = 0;
@@ -960,9 +1022,14 @@
                     data.createdAt = new Date().toISOString();
                     await addDoc(collection(db, 'products'), data);
                     showMsg('form-msg', '✅ নতুন প্রোডাক্ট যোগ হয়েছে! (মোট ' + uniqueImages.length + 'টি ছবি)', 'ok');
-                    setTimeout(() => { resetForm(); switchTab('products'); loadStats(); }, 1200);
+                    setTimeout(() => {
+                        resetForm();
+                        switchTab('products');
+                        loadStats();
+                    }, 1000);
                 }
             } catch (err) {
+                console.error(err);
                 showMsg('form-msg', '❌ সেভ করা যায়নি: ' + (err.message || ''), 'bad');
                 btn.disabled = false;
                 btn.innerHTML = orig;
