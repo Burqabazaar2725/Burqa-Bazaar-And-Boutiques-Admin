@@ -268,6 +268,7 @@
                 <button class="tab" data-tab="newsletter" onclick="switchTab('newsletter')"><i class="fas fa-envelope"></i> Newsletter</button>
                 <button class="tab" data-tab="coupons" onclick="switchTab('coupons')"><i class="fas fa-ticket-alt"></i> Coupons</button>
                 <button class="tab" data-tab="banners" onclick="switchTab('banners')"><i class="fas fa-images"></i> Banners</button>
+                <button class="tab" data-tab="pages" onclick="switchTab('pages')"><i class="fas fa-file-alt"></i> Pages</button>
             </div>
 
             <!-- DASHBOARD -->
@@ -281,7 +282,7 @@
                 <div class="shead"><h2><i class="fas fa-info-circle"></i> Welcome</h2></div>
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 25px;">
                     <h3 style="color: var(--gold); margin-bottom: 12px; font-family: 'Playfair Display', serif;">স্বাগতম Admin Panel-এ! 🎉</h3>
-                    <p style="color: var(--muted); font-size: 14px; line-height: 1.8;">এই প্যানেল থেকে প্রোডাক্ট, অর্ডার, রিভিউ, নিউজলেটার, কুপন এবং <strong>Banner</strong> সবকিছু ম্যানেজ করতে পারবেন। এখন <strong>Banners</strong> ট্যাব থেকে হোম পেজের স্লাইডার ম্যানেজ করতে পারবেন।</p>
+                    <p style="color: var(--muted); font-size: 14px; line-height: 1.8;">এই প্যানেল থেকে প্রোডাক্ট, অর্ডার, রিভিউ, নিউজলেটার, কুপন, <strong>Banner</strong> এবং <strong>Pages</strong> সবকিছু ম্যানেজ করতে পারবেন।</p>
                 </div>
             </div>
 
@@ -320,26 +321,17 @@
                     <div class="fgroup"><label>🖼️ Main Image URL *</label><input type="text" id="p-image" placeholder="https://i.ibb.co/xxxxx/image.png" required>
                         <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">ImgBB Link বা HTML কোড — দুটোই চলবে</small>
                     </div>
-
                     <div class="fgroup">
                         <label>🖼️ Additional Images (ঐচ্ছিক)</label>
                         <div id="additional-images"></div>
                         <button type="button" class="btn-s" onclick="addAdditionalImage()" style="margin-top: 10px; width: 100%; justify-content: center;">
                             <i class="fas fa-plus"></i> Add Another Image
                         </button>
-                        <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 8px;">
-                            💡 প্রথম ছবিটি <strong>Main Image</strong> হিসেবে থাকবে। এখানে আরো ছবি যোগ করলে কাস্টমার <strong>Gallery আকারে</strong> সব দেখতে পাবে।
-                        </small>
                     </div>
-
                     <div class="fgroup">
                         <label>🎥 Video URL (ঐচ্ছিক)</label>
                         <input type="text" id="p-video" placeholder="YouTube / Facebook / Vimeo Video Link">
-                        <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 8px;">
-                            💡 <strong>YouTube</strong>, <strong>Facebook</strong> বা <strong>Vimeo</strong> — যেকোনো ভিডিও লিংক পেস্ট করুন। খালি রাখলে ভিডিও সেকশন দেখাবে না।
-                        </small>
                     </div>
-
                     <div class="fgroup"><label>🏷️ Badge (ঐচ্ছিক)</label>
                         <select id="p-badge">
                             <option value="">None</option>
@@ -408,12 +400,8 @@
                     <div class="news-count-big" id="news-total-count">0</div>
                 </div>
                 <div class="news-export-bar">
-                    <button class="news-export-btn" onclick="exportNewsletterCSV()">
-                        <i class="fas fa-file-csv"></i> Export as CSV
-                    </button>
-                    <button class="btn-s" onclick="copyAllEmails()" style="padding: 10px 18px;">
-                        <i class="fas fa-copy"></i> Copy All Emails
-                    </button>
+                    <button class="news-export-btn" onclick="exportNewsletterCSV()"><i class="fas fa-file-csv"></i> Export as CSV</button>
+                    <button class="btn-s" onclick="copyAllEmails()" style="padding: 10px 18px;"><i class="fas fa-copy"></i> Copy All Emails</button>
                 </div>
                 <div class="search-news-box">
                     <i class="fas fa-search"></i>
@@ -447,7 +435,7 @@
                 <div id="coupons-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
             </div>
 
-            <!-- BANNERS (NEW) -->
+            <!-- BANNERS -->
             <div class="section" id="sec-banners">
                 <div class="shead">
                     <h2><i class="fas fa-images"></i> Promo Banners</h2>
@@ -464,696 +452,675 @@
                     <div class="coupon-count-big" id="banner-total-count" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">0</div>
                 </div>
                 <div style="background: rgba(59,130,246,.08); border: 1px solid rgba(59,130,246,.3); border-radius: 10px; padding: 12px 15px; margin-bottom: 15px; font-size: 12px; color: var(--muted);">
-                    <strong style="color: #60a5fa;">💡 টিপস:</strong> ছবি ImgBB-তে <strong>1600×900</strong> সাইজে আপলোড করুন। Order নম্বর কম হলে আগে দেখাবে। কোনো banner না থাকলে ওয়েবসাইটে পুরনো static banner দেখাবে।
+                    <strong style="color: #60a5fa;">💡 টিপস:</strong> ছবি ImgBB-তে <strong>1600×900</strong> সাইজে আপলোড করুন। Order নম্বর কম হলে আগে দেখাবে।
                 </div>
                 <div id="banners-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading Banners...</p></div></div>
             </div>
 
-        </div>
-    </div>
-
-    <!-- COUPON FORM MODAL -->
-    <div class="coupon-form-modal" id="coupon-modal">
-        <div class="coupon-form-box">
-            <h3 id="coupon-modal-title"><i class="fas fa-ticket-alt"></i> Add New Coupon</h3>
-            <div id="coupon-form-msg" class="msg"></div>
-
-            <input type="hidden" id="c-edit-id">
-
-            <div class="fgroup">
-                <label>🎟️ Coupon Code *</label>
-                <input type="text" id="c-code" placeholder="যেমন: EID20, WINTER50" required style="text-transform: uppercase;">
-                <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">শুধু ইংরেজি অক্ষর ও সংখ্যা ব্যবহার করুন</small>
-            </div>
-
-            <div class="fgroup">
-                <label>📉 Discount Type *</label>
-                <select id="c-type" required onchange="onCouponTypeChange()">
-                    <option value="percentage">Percentage (%)</option>
-                    <option value="flat">Flat (৳)</option>
-                </select>
-            </div>
-
-            <div class="fgroup">
-                <label id="c-value-label">💯 Discount Value * <span style="color: var(--muted); font-size: 11px;">(%, 1-100)</span></label>
-                <input type="number" id="c-value" placeholder="20" required min="1" step="1">
-            </div>
-
-            <div class="fgroup">
-                <label>🛒 Minimum Order Amount (৳) *</label>
-                <input type="number" id="c-minorder" placeholder="500" required min="0" value="0">
-                <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">0 দিলে যেকোনো অর্ডারে কাজ করবে</small>
-            </div>
-
-            <div class="fgroup">
-                <label>📅 Expiry Date *</label>
-                <input type="date" id="c-expiry" required>
-            </div>
-
-            <div class="fgroup">
-                <label>📝 Description (ঐচ্ছিক)</label>
-                <input type="text" id="c-desc" placeholder="যেমন: ঈদ স্পেশাল ২০% ছাড়">
-            </div>
-
-            <div class="fgroup" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px;">
-                <div>
-                    <div style="font-size: 13px; font-weight: 600; color: var(--gold);">🟢 Active Status</div>
-                    <div style="font-size: 11px; color: var(--muted); margin-top: 2px;">চালু রাখলে কাস্টমাররা ব্যবহার করতে পারবে</div>
+            <!-- PAGES EDITOR -->
+            <div class="section" id="sec-pages">
+                <div class="shead">
+                    <h2><i class="fas fa-file-alt"></i> Website Pages Editor</h2>
+                    <button class="btn-s" onclick="loadPages()"><i class="fas fa-sync-alt"></i> Refresh</button>
                 </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="c-active" checked>
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
 
-            <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
-                <button type="button" class="btn-p" id="c-submit-btn" onclick="submitCoupon()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;">
-                    <i class="fas fa-save"></i> Save Coupon
-                </button>
-                <button type="button" class="btn-s" onclick="closeCouponModal()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;">
-                    <i class="fas fa-times"></i> Cancel
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- BANNER FORM MODAL (NEW) -->
-    <div class="coupon-form-modal" id="banner-modal">
-        <div class="coupon-form-box">
-            <h3 id="banner-modal-title"><i class="fas fa-image"></i> Add New Banner</h3>
-            <div id="banner-form-msg" class="msg"></div>
-
-            <input type="hidden" id="b-edit-id">
-
-            <div class="fgroup">
-                <label>🖼️ Banner Image URL *</label>
-                <input type="text" id="b-image" placeholder="https://i.ibb.co/xxxxx/banner.png" required>
-                <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">
-                    💡 ImgBB লিংক বা HTML কোড — দুটোই চলবে। Recommended: 1600×900 px
-                </small>
-            </div>
-
-            <div class="fgroup">
-                <label>🔗 Banner Title (ঐচ্ছিক)</label>
-                <input type="text" id="b-title" placeholder="যেমন: ঈদ স্পেশাল কালেকশন">
-                <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">
-                    শুধু admin panel এ চেনার জন্য, website এ দেখাবে না
-                </small>
-            </div>
-
-            <div class="fgroup">
-                <label>🎯 Click করলে কী হবে? (ঐচ্ছিক)</label>
-                <select id="b-link-type" onchange="onBannerLinkTypeChange()">
-                    <option value="none">🔇 কিছুই হবে না (শুধু ছবি)</option>
-                    <option value="category">📁 Category Page এ যাবে</option>
-                    <option value="tab">📄 Website Section এ যাবে</option>
-                    <option value="external">🌐 External Website এ যাবে</option>
-                </select>
-            </div>
-
-            <div class="fgroup" id="b-category-group" style="display: none;">
-                <label>📁 Category সিলেক্ট করুন</label>
-                <select id="b-category-value">
-                    <option value="Hijab Collection">Hijab Collection</option>
-                    <option value="Burqa Collection">Burqa Collection</option>
-                    <option value="Abaya Collection">Abaya Collection</option>
-                </select>
-            </div>
-
-            <div class="fgroup" id="b-tab-group" style="display: none;">
-                <label>📄 Section সিলেক্ট করুন</label>
-                <select id="b-tab-value">
-                    <option value="shop">Shop</option>
-                    <option value="wishlist">Wishlist</option>
-                    <option value="faq">FAQ</option>
-                    <option value="about">About Us</option>
-                    <option value="contact">Contact Us</option>
-                    <option value="track-order">Track Order</option>
-                </select>
-            </div>
-
-            <div class="fgroup" id="b-external-group" style="display: none;">
-                <label>🌐 External URL</label>
-                <input type="text" id="b-external-value" placeholder="https://facebook.com/yourpage">
-            </div>
-
-            <div class="fgroup">
-                <label>🔢 Order (কম নম্বর আগে দেখাবে) *</label>
-                <input type="number" id="b-order" placeholder="1" min="1" value="1" required>
-                <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">
-                    1 = প্রথমে, 2 = দ্বিতীয়, এভাবে...
-                </small>
-            </div>
-
-            <div class="fgroup" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px;">
-                <div>
-                    <div style="font-size: 13px; font-weight: 600; color: var(--gold);">🟢 Active Status</div>
-                    <div style="font-size: 11px; color: var(--muted); margin-top: 2px;">চালু রাখলে ওয়েবসাইটে দেখাবে</div>
+                <div style="background: rgba(59,130,246,.08); border: 1px solid rgba(59,130,246,.3); border-radius: 10px; padding: 12px 15px; margin-bottom: 15px; font-size: 12px; color: var(--muted);">
+                    <strong style="color: #60a5fa;">💡 টিপস:</strong> প্রতিটা page-এর HTML code এখানে edit করুন। Save করলে website-এ সাথে সাথে দেখা যাবে। HTML tag ব্যবহার করুন — যেমন <code style="color: var(--gold);">&lt;h3&gt;</code>, <code style="color: var(--gold);">&lt;p&gt;</code>, <code style="color: var(--gold);">&lt;ul&gt;&lt;li&gt;</code>, <code style="color: var(--gold);">&lt;strong&gt;</code>।
                 </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="b-active" checked>
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
 
-            <div style="margin-top: 15px; padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px;">
-                <div style="font-size: 11px; color: var(--muted); margin-bottom: 8px;">🖼️ Preview:</div>
-                <div id="b-preview" style="width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
-                    <span style="color: var(--muted); font-size: 12px;">ছবি দেখতে URL দিন</span>
+                <div class="ofilter" id="page-filter">
+                    <button class="active" data-page="about" onclick="switchPage('about')">🌸 About Us</button>
+                    <button data-page="privacy" onclick="switchPage('privacy')">🔒 Privacy</button>
+                    <button data-page="terms" onclick="switchPage('terms')">📜 Terms</button>
+                    <button data-page="return-policy" onclick="switchPage('return-policy')">🔄 Return Policy</button>
+                    <button data-page="contact" onclick="switchPage('contact')">📞 Contact</button>
+                    <button data-page="track-order" onclick="switchPage('track-order')">📦 Track Order</button>
                 </div>
-            </div>
 
-            <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
-                <button type="button" class="btn-p" id="b-submit-btn" onclick="submitBanner()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;">
-                    <i class="fas fa-save"></i> Save Banner
-                </button>
-                <button type="button" class="btn-s" onclick="closeBannerModal()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;">
-                    <i class="fas fa-times"></i> Cancel
-                </button>
-            </div>
-        </div>
-    </div>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBz6nILSzcvSofF9iyPt-h3ffseEXTwgnA",
-            authDomain: "burqa-bazaar-boutiques.firebaseapp.com",
-            projectId: "burqa-bazaar-boutiques",
-            storageBucket: "burqa-bazaar-boutiques.firebasestorage.app",
-            messagingSenderId: "504652889061",
-            appId: "1:504652889061:web:26696946c3bf33f6794d0c"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-
-        let products = [];
-        let orders = [];
-        let reviews = [];
-        let newsletterList = [];
-        let coupons = [];
-        let banners = [];
-        let editingId = null;
-        let editingCouponId = null;
-        let editingBannerId = null;
-        let selectedSizes = [];
-        let orderFilter = 'all';
-        let newsSearchQuery = '';
-        let couponFilter = 'all';
-
-        const ALL_SIZES = ["50", "52", "54", "56"];
-
-        // ============================================
-        // CATEGORY / SIZE
-        // ============================================
-        window.onCategoryChange = function() {
-            const cat = document.getElementById('p-cat').value;
-            const sizeSection = document.getElementById('size-section');
-            if (cat === 'Hijab Collection') {
-                sizeSection.style.display = 'none';
-                selectedSizes = [];
-            } else if (cat === 'Burqa Collection' || cat === 'Abaya Collection') {
-                sizeSection.style.display = 'block';
-                renderSizeButtons();
-            } else {
-                sizeSection.style.display = 'none';
-                selectedSizes = [];
-            }
-        };
-
-        function renderSizeButtons() {
-            const box = document.getElementById('size-box');
-            const allSelected = ALL_SIZES.every(s => selectedSizes.includes(s));
-            box.innerHTML = '';
-            ALL_SIZES.forEach(size => {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'size-btn' + (selectedSizes.includes(size) ? ' selected' : '');
-                btn.textContent = size;
-                btn.onclick = function() { toggleSize(size); };
-                box.appendChild(btn);
-            });
-            const allBtn = document.createElement('button');
-            allBtn.type = 'button';
-            allBtn.className = 'select-all-btn' + (allSelected ? ' deselect' : '');
-            allBtn.innerHTML = allSelected ? '<i class="fas fa-times-circle"></i> Deselect All' : '<i class="fas fa-check-double"></i> Select All';
-            allBtn.onclick = function() { toggleSelectAll(); };
-            box.appendChild(allBtn);
-        }
-
-        window.toggleSize = function(size) {
-            const idx = selectedSizes.indexOf(size);
-            if (idx > -1) selectedSizes.splice(idx, 1);
-            else selectedSizes.push(size);
-            selectedSizes.sort((a, b) => parseInt(a) - parseInt(b));
-            renderSizeButtons();
-        };
-        window.toggleSelectAll = function() {
-            const allSelected = ALL_SIZES.every(s => selectedSizes.includes(s));
-            selectedSizes = allSelected ? [] : ALL_SIZES.slice();
-            renderSizeButtons();
-        };
-
-        // ============================================
-        // AUTH
-        // ============================================
-        window.doLogin = async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            const btn = document.getElementById('login-btn');
-            const errBox = document.getElementById('err');
-            errBox.classList.remove('show');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-            } catch (err) {
-                console.error(err);
-                let msg = 'লগইন ব্যর্থ হয়েছে।';
-                if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') msg = '❌ পাসওয়ার্ড ভুল।';
-                else if (err.code === 'auth/user-not-found') msg = '❌ এই ইমেইলে অ্যাকাউন্ট নেই।';
-                else if (err.code === 'auth/invalid-email') msg = '❌ ইমেইল সঠিক নয়।';
-                else if (err.code === 'auth/too-many-requests') msg = '⏳ অনেকবার চেষ্টা। পরে করুন।';
-                else if (err.code === 'auth/network-request-failed') msg = '🌐 ইন্টারনেট নেই।';
-                errBox.textContent = msg;
-                errBox.classList.add('show');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
-            }
-        };
-
-        window.doLogout = async () => {
-            if (!confirm('লগআউট করতে চান?')) return;
-            await signOut(auth);
-        };
-
-        onAuthStateChanged(auth, (user) => {
-            const loginScreen = document.getElementById('login-screen');
-            const admin = document.getElementById('admin');
-            const btn = document.getElementById('login-btn');
-            if (user) {
-                loginScreen.style.display = 'none';
-                admin.classList.add('active');
-                document.getElementById('user-badge').textContent = user.email;
-                loadStats();
-                switchTab('dashboard');
-            } else {
-                loginScreen.style.display = 'flex';
-                admin.classList.remove('active');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
-                document.getElementById('password').value = '';
-            }
-        });
-
-        // ============================================
-        // TAB SWITCH
-        // ============================================
-        window.switchTab = (name) => {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            const tab = document.querySelector(`.tab[data-tab="${name}"]`);
-            const sec = document.getElementById('sec-' + name);
-            if (tab) tab.classList.add('active');
-            if (sec) sec.classList.add('active');
-            if (name === 'products') loadProducts();
-            else if (name === 'orders') loadOrders();
-            else if (name === 'reviews') loadReviews();
-            else if (name === 'newsletter') loadNewsletter();
-            else if (name === 'coupons') loadCoupons();
-            else if (name === 'banners') loadBanners();
-            else if (name === 'add' && !editingId) resetForm();
-        };
-
-        window.showMsg = (id, text, type) => {
-            const el = document.getElementById(id);
-            if (!el) return;
-            el.textContent = text;
-            el.className = 'msg show ' + (type || 'ok');
-            if (type === 'ok') setTimeout(() => el.classList.remove('show'), 4000);
-        };
-
-        // ============================================
-        // STATS
-        // ============================================
-        window.loadStats = async () => {
-            try {
-                const pSnap = await getDocs(collection(db, 'products'));
-                document.getElementById('st-products').textContent = pSnap.size;
-                try {
-                    const oSnap = await getDocs(collection(db, 'orders'));
-                    let pend = 0, comp = 0;
-                    oSnap.forEach(d => {
-                        const data = d.data();
-                        if (data.status === 'completed') comp++;
-                        else pend++;
-                    });
-                    document.getElementById('st-orders').textContent = oSnap.size;
-                    document.getElementById('st-pending').textContent = pend;
-                    document.getElementById('st-completed').textContent = comp;
-                } catch (e) {
-                    document.getElementById('st-orders').textContent = '0';
-                    document.getElementById('st-pending').textContent = '0';
-                    document.getElementById('st-completed').textContent = '0';
-                }
-            } catch (err) { console.error(err); }
-        };
-
-        const extractUrl = (str) => {
-            if (!str || typeof str !== 'string') return '';
-            const t = str.trim();
-            const m = t.match(/src=["']([^"']+)["']/);
-            if (m && m[1]) return m[1];
-            if (t.startsWith('http')) return t.split(/[\s<"']/)[0];
-            return '';
-        };
-        window.extractUrl = extractUrl;
-
-        // ============================================
-        // ADD IMAGE / COLOR
-        // ============================================
-        window.addAdditionalImage = (url) => {
-            const c = document.getElementById('additional-images');
-            if (!c) return;
-            const id = 'ai-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-            const row = document.createElement('div');
-            row.className = 'crow-img';
-            row.id = id;
-            row.innerHTML = `
-                <input type="text" placeholder="Image URL (ImgBB link)" value="${url || ''}" class="aimg">
-                <button type="button" class="rm" onclick="document.getElementById('${id}').remove()" title="Remove">
-                    <i class="fas fa-times"></i>
-                </button>
-            `;
-            c.appendChild(row);
-        };
-
-        window.addColor = (name, img) => {
-            const c = document.getElementById('colors');
-            const id = 'c-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-            const row = document.createElement('div');
-            row.className = 'crow';
-            row.id = id;
-            row.innerHTML = `<input type="text" placeholder="Color Name" value="${name || ''}" class="cname"><input type="text" placeholder="Image URL" value="${img || ''}" class="cimg"><button type="button" class="rm" onclick="document.getElementById('${id}').remove()"><i class="fas fa-times"></i></button>`;
-            c.appendChild(row);
-        };
-
-        // ============================================
-        // RESET FORM
-        // ============================================
-        window.resetForm = () => {
-            const btn = document.getElementById('submit-btn');
-            if (btn) {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-save"></i> Save';
-            }
-
-            editingId = null;
-            selectedSizes = [];
-
-            document.getElementById('p-form').reset();
-            document.getElementById('edit-id').value = '';
-            document.getElementById('colors').innerHTML = '';
-            document.getElementById('additional-images').innerHTML = '';
-            document.getElementById('p-video').value = '';
-            document.getElementById('p-stock').value = '1';
-            document.getElementById('form-title').innerHTML = '<i class="fas fa-plus-circle"></i> Add New Product';
-            document.getElementById('form-msg').classList.remove('show');
-            document.getElementById('size-section').style.display = 'none';
-            document.getElementById('size-box').innerHTML = '';
-
-            addColor();
-            addAdditionalImage();
-        };
-
-        // ============================================
-        // PRODUCTS
-        // ============================================
-        window.loadProducts = async () => {
-            const c = document.getElementById('products-container');
-            c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div>';
-            try {
-                const snap = await getDocs(collection(db, 'products'));
-                products = [];
-                snap.forEach(d => products.push({ docId: d.id, ...d.data() }));
-                products.sort((a, b) => (parseInt(a.id) || 0) - (parseInt(b.id) || 0));
-                renderProducts();
-            } catch (err) {
-                c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3><p>' + (err.message || '') + '</p><button class="btn-s" onclick="loadProducts()" style="margin-top: 15px;">আবার চেষ্টা</button></div>';
-            }
-        };
-
-        window.renderProducts = () => {
-            const c = document.getElementById('products-container');
-            if (products.length === 0) {
-                c.innerHTML = '<div class="empty"><i class="fas fa-box-open"></i><h3>এখনো কোনো প্রোডাক্ট নেই</h3><p style="margin-bottom: 20px;">প্রথম প্রোডাক্ট যোগ করুন</p><button class="btn-p" onclick="switchTab(\'add\')"><i class="fas fa-plus"></i> Add Product</button></div>';
-                return;
-            }
-            let html = '';
-            products.forEach(p => {
-                const price = (typeof p.price === 'number') ? '৳ ' + p.price : (p.price || 'Coming Soon');
-                const img = extractUrl(p.image) || 'https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png';
-                const cc = Array.isArray(p.colors) ? p.colors.length : 0;
-                const sc = Array.isArray(p.sizes) ? p.sizes.length : 0;
-                const imgCount = Array.isArray(p.images) ? p.images.length : 1;
-                const hasVideo = p.video && p.video.length > 5;
-                const sizeText = sc > 0 ? sc + ' sizes' : 'no size';
-
-                let stockBadge = '';
-                if (p.stock !== undefined && p.stock !== null) {
-                    const stockNum = parseInt(p.stock) || 0;
-                    if (stockNum === 0) {
-                        stockBadge = '<span class="stock-badge outofstock"><i class="fas fa-times-circle"></i> Out of Stock</span>';
-                    } else if (stockNum <= 5) {
-                        stockBadge = '<span class="stock-badge lowstock"><i class="fas fa-exclamation-triangle"></i> Low Stock: ' + stockNum + '</span>';
-                    } else {
-                        stockBadge = '<span class="stock-badge instock"><i class="fas fa-check-circle"></i> In Stock: ' + stockNum + '</span>';
-                    }
-                }
-
-                let videoTag = hasVideo ? ' • 🎥 video' : '';
-
-                html += `<div class="pcard">
-                    <img src="${img}" class="pimg" onerror="this.src='https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png'">
-                    <div class="pinfo">
-                        <div class="pname">${p.name || 'Unnamed'}</div>
-                        <div class="pmeta">${p.category || ''} • ${sizeText} • ${cc} colors • 📸 ${imgCount} image${imgCount !== 1 ? 's' : ''}${videoTag}</div>
-                        ${stockBadge}
-                        <div class="pprice">${price}</div>
-                        <div class="pacts">
-                            <button class="abtn edit" onclick="editProduct('${p.docId}')"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="abtn del" onclick="deleteProduct('${p.docId}', '${(p.name || '').replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i> Delete</button>
-                        </div>
+                <div id="page-editor-wrapper" style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px;">
+                    <div class="shead" style="margin-bottom: 12px;">
+                        <h2 id="page-editor-title" style="font-size: 16px;"><i class="fas fa-edit"></i> Editing: About Us</h2>
+                        <span id="page-editor-status" style="font-size: 11px; color: var(--muted);"></span>
                     </div>
-                </div>`;
-            });
-            c.innerHTML = html;
-        };
+                    <div class="fgroup">
+                        <label>📝 HTML Content <span style="color: var(--muted); font-size: 11px;">(সব delete করে নতুন লিখতে পারবেন)</span></label>
+                        <textarea id="page-html-editor" rows="20" style="font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.6; resize: vertical; min-height: 400px;"></textarea>
+                    </div>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+                        <button class="btn-p" id="page-save-btn" onclick="savePage()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;">
+                            <i class="fas fa-save"></i> Save Page
+                        </button>
+                        <button class="btn-s" onclick="resetPageToDefault()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;">
+                            <i class="fas fa-undo"></i> Reset to Default
+                        </button>
+                        <button class="btn-s" onclick="previewPage()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;">
+                            <i class="fas fa-eye"></i> Preview
+                        </button>
+                    </div>
+                    <div id="page-form-msg" class="msg" style="margin-top: 12px;"></div>
+                </div>
+            </div>
 
-        window.deleteProduct = async (docId, name) => {
-            if (!confirm('মুছে ফেলতে চান: "' + name + '"?')) return;
-            try {
-                await deleteDoc(doc(db, 'products', docId));
-                alert('✅ মুছে ফেলা হয়েছে।');
-                loadProducts();
-                loadStats();
-            } catch (err) {
-                alert('❌ ' + (err.message || ''));
-            }
-        };
+        </div>
+    </div>
+<!-- COUPON FORM MODAL -->
+<div class="coupon-form-modal" id="coupon-modal">
+    <div class="coupon-form-box">
+        <h3 id="coupon-modal-title"><i class="fas fa-ticket-alt"></i> Add New Coupon</h3>
+        <div id="coupon-form-msg" class="msg"></div>
+        <input type="hidden" id="c-edit-id">
+        <div class="fgroup">
+            <label>🎟️ Coupon Code *</label>
+            <input type="text" id="c-code" placeholder="যেমন: EID20, WINTER50" required style="text-transform: uppercase;">
+            <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">শুধু ইংরেজি অক্ষর ও সংখ্যা ব্যবহার করুন</small>
+        </div>
+        <div class="fgroup">
+            <label>📉 Discount Type *</label>
+            <select id="c-type" required onchange="onCouponTypeChange()">
+                <option value="percentage">Percentage (%)</option>
+                <option value="flat">Flat (৳)</option>
+            </select>
+        </div>
+        <div class="fgroup">
+            <label id="c-value-label">💯 Discount Value * <span style="color: var(--muted); font-size: 11px;">(%, 1-100)</span></label>
+            <input type="number" id="c-value" placeholder="20" required min="1" step="1">
+        </div>
+        <div class="fgroup">
+            <label>🛒 Minimum Order Amount (৳) *</label>
+            <input type="number" id="c-minorder" placeholder="500" required min="0" value="0">
+            <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">0 দিলে যেকোনো অর্ডারে কাজ করবে</small>
+        </div>
+        <div class="fgroup">
+            <label>📅 Expiry Date *</label>
+            <input type="date" id="c-expiry" required>
+        </div>
+        <div class="fgroup">
+            <label>📝 Description (ঐচ্ছিক)</label>
+            <input type="text" id="c-desc" placeholder="যেমন: ঈদ স্পেশাল ২০% ছাড়">
+        </div>
+        <div class="fgroup" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px;">
+            <div>
+                <div style="font-size: 13px; font-weight: 600; color: var(--gold);">🟢 Active Status</div>
+                <div style="font-size: 11px; color: var(--muted); margin-top: 2px;">চালু রাখলে কাস্টমাররা ব্যবহার করতে পারবে</div>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="c-active" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
+            <button type="button" class="btn-p" id="c-submit-btn" onclick="submitCoupon()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;">
+                <i class="fas fa-save"></i> Save Coupon
+            </button>
+            <button type="button" class="btn-s" onclick="closeCouponModal()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+        </div>
+    </div>
+</div>
 
-        // ============================================
-        // EDIT PRODUCT
-        // ============================================
-        window.editProduct = (docId) => {
-            const p = products.find(x => x.docId === docId);
-            if (!p) { alert('প্রোডাক্ট পাওয়া যায়নি'); return; }
+<!-- BANNER FORM MODAL -->
+<div class="coupon-form-modal" id="banner-modal">
+    <div class="coupon-form-box">
+        <h3 id="banner-modal-title"><i class="fas fa-image"></i> Add New Banner</h3>
+        <div id="banner-form-msg" class="msg"></div>
+        <input type="hidden" id="b-edit-id">
+        <div class="fgroup">
+            <label>🖼️ Banner Image URL *</label>
+            <input type="text" id="b-image" placeholder="https://i.ibb.co/xxxxx/banner.png" required>
+            <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">💡 ImgBB লিংক বা HTML কোড — দুটোই চলবে। Recommended: 1600×900 px</small>
+        </div>
+        <div class="fgroup">
+            <label>🔗 Banner Title (ঐচ্ছিক)</label>
+            <input type="text" id="b-title" placeholder="যেমন: ঈদ স্পেশাল কালেকশন">
+            <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">শুধু admin panel এ চেনার জন্য, website এ দেখাবে না</small>
+        </div>
+        <div class="fgroup">
+            <label>🎯 Click করলে কী হবে? (ঐচ্ছিক)</label>
+            <select id="b-link-type" onchange="onBannerLinkTypeChange()">
+                <option value="none">🔇 কিছুই হবে না (শুধু ছবি)</option>
+                <option value="category">📁 Category Page এ যাবে</option>
+                <option value="tab">📄 Website Section এ যাবে</option>
+                <option value="external">🌐 External Website এ যাবে</option>
+            </select>
+        </div>
+        <div class="fgroup" id="b-category-group" style="display: none;">
+            <label>📁 Category সিলেক্ট করুন</label>
+            <select id="b-category-value">
+                <option value="Hijab Collection">Hijab Collection</option>
+                <option value="Burqa Collection">Burqa Collection</option>
+                <option value="Abaya Collection">Abaya Collection</option>
+            </select>
+        </div>
+        <div class="fgroup" id="b-tab-group" style="display: none;">
+            <label>📄 Section সিলেক্ট করুন</label>
+            <select id="b-tab-value">
+                <option value="shop">Shop</option>
+                <option value="wishlist">Wishlist</option>
+                <option value="faq">FAQ</option>
+                <option value="about">About Us</option>
+                <option value="contact">Contact Us</option>
+                <option value="track-order">Track Order</option>
+            </select>
+        </div>
+        <div class="fgroup" id="b-external-group" style="display: none;">
+            <label>🌐 External URL</label>
+            <input type="text" id="b-external-value" placeholder="https://facebook.com/yourpage">
+        </div>
+        <div class="fgroup">
+            <label>🔢 Order (কম নম্বর আগে দেখাবে) *</label>
+            <input type="number" id="b-order" placeholder="1" min="1" value="1" required>
+            <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">1 = প্রথমে, 2 = দ্বিতীয়, এভাবে...</small>
+        </div>
+        <div class="fgroup" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 10px;">
+            <div>
+                <div style="font-size: 13px; font-weight: 600; color: var(--gold);">🟢 Active Status</div>
+                <div style="font-size: 11px; color: var(--muted); margin-top: 2px;">চালু রাখলে ওয়েবসাইটে দেখাবে</div>
+            </div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="b-active" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        <div style="margin-top: 15px; padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px;">
+            <div style="font-size: 11px; color: var(--muted); margin-bottom: 8px;">🖼️ Preview:</div>
+            <div id="b-preview" style="width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                <span style="color: var(--muted); font-size: 12px;">ছবি দেখতে URL দিন</span>
+            </div>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
+            <button type="button" class="btn-p" id="b-submit-btn" onclick="submitBanner()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;">
+                <i class="fas fa-save"></i> Save Banner
+            </button>
+            <button type="button" class="btn-s" onclick="closeBannerModal()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+        </div>
+    </div>
+</div>
 
-            const btn = document.getElementById('submit-btn');
-            if (btn) {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-save"></i> Update';
-            }
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, setDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
-            document.getElementById('p-form').reset();
-            document.getElementById('edit-id').value = '';
-            document.getElementById('p-name').value = '';
-            document.getElementById('p-cat').value = '';
-            document.getElementById('p-price').value = '';
-            document.getElementById('p-stock').value = '1';
-            document.getElementById('p-image').value = '';
-            document.getElementById('p-video').value = '';
-            document.getElementById('p-badge').value = '';
-            document.getElementById('p-desc').value = '';
-            document.getElementById('colors').innerHTML = '';
-            document.getElementById('additional-images').innerHTML = '';
-            document.getElementById('size-box').innerHTML = '';
-            document.getElementById('form-msg').classList.remove('show');
+    const firebaseConfig = {
+        apiKey: "AIzaSyBz6nILSzcvSofF9iyPt-h3ffseEXTwgnA",
+        authDomain: "burqa-bazaar-boutiques.firebaseapp.com",
+        projectId: "burqa-bazaar-boutiques",
+        storageBucket: "burqa-bazaar-boutiques.firebasestorage.app",
+        messagingSenderId: "504652889061",
+        appId: "1:504652889061:web:26696946c3bf33f6794d0c"
+    };
 
-            editingId = null;
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    let products = [];
+    let orders = [];
+    let reviews = [];
+    let newsletterList = [];
+    let coupons = [];
+    let banners = [];
+    let editingId = null;
+    let editingCouponId = null;
+    let editingBannerId = null;
+    let selectedSizes = [];
+    let orderFilter = 'all';
+    let newsSearchQuery = '';
+    let couponFilter = 'all';
+
+    const ALL_SIZES = ["50", "52", "54", "56"];
+
+    // ============================================
+    // CATEGORY / SIZE
+    // ============================================
+    window.onCategoryChange = function() {
+        const cat = document.getElementById('p-cat').value;
+        const sizeSection = document.getElementById('size-section');
+        if (cat === 'Hijab Collection') {
+            sizeSection.style.display = 'none';
             selectedSizes = [];
+        } else if (cat === 'Burqa Collection' || cat === 'Abaya Collection') {
+            sizeSection.style.display = 'block';
+            renderSizeButtons();
+        } else {
+            sizeSection.style.display = 'none';
+            selectedSizes = [];
+        }
+    };
 
-            editingId = docId;
-            document.getElementById('edit-id').value = docId;
-            document.getElementById('p-name').value = p.name || '';
-            document.getElementById('p-cat').value = p.category || '';
-            document.getElementById('p-price').value = p.price || '';
-            document.getElementById('p-stock').value = (p.stock !== undefined && p.stock !== null) ? p.stock : 1;
-            document.getElementById('p-image').value = p.image || '';
-            document.getElementById('p-video').value = p.video || '';
-            document.getElementById('p-badge').value = p.badge || '';
-            document.getElementById('p-desc').value = p.fullDescription || '';
-            selectedSizes = Array.isArray(p.sizes) ? p.sizes.slice() : [];
-            onCategoryChange();
+    function renderSizeButtons() {
+        const box = document.getElementById('size-box');
+        const allSelected = ALL_SIZES.every(s => selectedSizes.includes(s));
+        box.innerHTML = '';
+        ALL_SIZES.forEach(size => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'size-btn' + (selectedSizes.includes(size) ? ' selected' : '');
+            btn.textContent = size;
+            btn.onclick = function() { toggleSize(size); };
+            box.appendChild(btn);
+        });
+        const allBtn = document.createElement('button');
+        allBtn.type = 'button';
+        allBtn.className = 'select-all-btn' + (allSelected ? ' deselect' : '');
+        allBtn.innerHTML = allSelected ? '<i class="fas fa-times-circle"></i> Deselect All' : '<i class="fas fa-check-double"></i> Select All';
+        allBtn.onclick = function() { toggleSelectAll(); };
+        box.appendChild(allBtn);
+    }
 
-            const cc = document.getElementById('colors');
-            cc.innerHTML = '';
-            if (Array.isArray(p.colors) && p.colors.length > 0) {
-                p.colors.forEach(col => addColor(col.name || '', col.image || ''));
-            } else {
-                addColor();
-            }
+    window.toggleSize = function(size) {
+        const idx = selectedSizes.indexOf(size);
+        if (idx > -1) selectedSizes.splice(idx, 1);
+        else selectedSizes.push(size);
+        selectedSizes.sort((a, b) => parseInt(a) - parseInt(b));
+        renderSizeButtons();
+    };
+    window.toggleSelectAll = function() {
+        const allSelected = ALL_SIZES.every(s => selectedSizes.includes(s));
+        selectedSizes = allSelected ? [] : ALL_SIZES.slice();
+        renderSizeButtons();
+    };
 
-            const ai = document.getElementById('additional-images');
-            ai.innerHTML = '';
-            if (Array.isArray(p.images) && p.images.length > 1) {
-                p.images.slice(1).forEach(imgUrl => addAdditionalImage(extractUrl(imgUrl) || imgUrl));
-            } else {
-                addAdditionalImage();
-            }
+    // ============================================
+    // AUTH
+    // ============================================
+    window.doLogin = async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const btn = document.getElementById('login-btn');
+        const errBox = document.getElementById('err');
+        errBox.classList.remove('show');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+        } catch (err) {
+            console.error(err);
+            let msg = 'লগইন ব্যর্থ হয়েছে।';
+            if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') msg = '❌ পাসওয়ার্ড ভুল।';
+            else if (err.code === 'auth/user-not-found') msg = '❌ এই ইমেইলে অ্যাকাউন্ট নেই।';
+            else if (err.code === 'auth/invalid-email') msg = '❌ ইমেইল সঠিক নয়।';
+            else if (err.code === 'auth/too-many-requests') msg = '⏳ অনেকবার চেষ্টা। পরে করুন।';
+            else if (err.code === 'auth/network-request-failed') msg = '🌐 ইন্টারনেট নেই।';
+            errBox.textContent = msg;
+            errBox.classList.add('show');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+        }
+    };
 
-            document.getElementById('form-title').innerHTML = '<i class="fas fa-edit"></i> Edit Product';
-            document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Update';
-            switchTab('add');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
+    window.doLogout = async () => {
+        if (!confirm('লগআউট করতে চান?')) return;
+        await signOut(auth);
+    };
 
-        // ============================================
-        // SUBMIT PRODUCT
-        // ============================================
-        window.submitProduct = async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('submit-btn');
+    onAuthStateChanged(auth, (user) => {
+        const loginScreen = document.getElementById('login-screen');
+        const admin = document.getElementById('admin');
+        const btn = document.getElementById('login-btn');
+        if (user) {
+            loginScreen.style.display = 'none';
+            admin.classList.add('active');
+            document.getElementById('user-badge').textContent = user.email;
+            loadStats();
+            switchTab('dashboard');
+        } else {
+            loginScreen.style.display = 'flex';
+            admin.classList.remove('active');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+            document.getElementById('password').value = '';
+        }
+    });
 
-            if (btn.disabled) return;
+    // ============================================
+    // TAB SWITCH
+    // ============================================
+    window.switchTab = (name) => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        const tab = document.querySelector(`.tab[data-tab="${name}"]`);
+        const sec = document.getElementById('sec-' + name);
+        if (tab) tab.classList.add('active');
+        if (sec) sec.classList.add('active');
+        if (name === 'products') loadProducts();
+        else if (name === 'orders') loadOrders();
+        else if (name === 'reviews') loadReviews();
+        else if (name === 'newsletter') loadNewsletter();
+        else if (name === 'coupons') loadCoupons();
+        else if (name === 'banners') loadBanners();
+        else if (name === 'pages') { loadPages().then(() => switchPage(currentEditingPage || 'about')); }
+        else if (name === 'add' && !editingId) resetForm();
+    };
 
-            const orig = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+    window.showMsg = (id, text, type) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = text;
+        el.className = 'msg show ' + (type || 'ok');
+        if (type === 'ok') setTimeout(() => el.classList.remove('show'), 4000);
+    };
 
+    // ============================================
+    // STATS
+    // ============================================
+    window.loadStats = async () => {
+        try {
+            const pSnap = await getDocs(collection(db, 'products'));
+            document.getElementById('st-products').textContent = pSnap.size;
             try {
-                const name = document.getElementById('p-name').value.trim();
-                const category = document.getElementById('p-cat').value;
-                const priceRaw = document.getElementById('p-price').value.trim();
-                const stockRaw = document.getElementById('p-stock').value.trim();
-                const image = document.getElementById('p-image').value.trim();
-                const videoUrl = document.getElementById('p-video') ? document.getElementById('p-video').value.trim() : '';
-                const badge = document.getElementById('p-badge').value;
-                const desc = document.getElementById('p-desc').value.trim();
-                const editId = document.getElementById('edit-id').value;
-
-                if (!name || !category || !priceRaw || !image || !desc || stockRaw === '') {
-                    showMsg('form-msg', '⚠️ সব ফিল্ড পূরণ করুন।', 'bad');
-                    btn.disabled = false;
-                    btn.innerHTML = orig;
-                    return;
-                }
-
-                let price;
-                if (priceRaw.toLowerCase().includes('coming')) price = 'Coming Soon';
-                else {
-                    const p = parseInt(priceRaw.replace(/[^0-9]/g, ''));
-                    price = isNaN(p) ? 'Coming Soon' : p;
-                }
-
-                const stock = parseInt(stockRaw) || 0;
-
-                let sizes = [];
-                if (category === 'Burqa Collection' || category === 'Abaya Collection') {
-                    sizes = selectedSizes.slice();
-                    if (sizes.length === 0) {
-                        showMsg('form-msg', '⚠️ অন্তত একটি Size সিলেক্ট করুন।', 'bad');
-                        btn.disabled = false;
-                        btn.innerHTML = orig;
-                        return;
-                    }
-                }
-
-                const colors = [];
-                document.querySelectorAll('#colors .crow').forEach(row => {
-                    const n = row.querySelector('.cname').value.trim();
-                    const i = row.querySelector('.cimg').value.trim();
-                    if (n && i) colors.push({ name: n, image: extractUrl(i) || i });
+                const oSnap = await getDocs(collection(db, 'orders'));
+                let pend = 0, comp = 0;
+                oSnap.forEach(d => {
+                    const data = d.data();
+                    if (data.status === 'completed') comp++;
+                    else pend++;
                 });
+                document.getElementById('st-orders').textContent = oSnap.size;
+                document.getElementById('st-pending').textContent = pend;
+                document.getElementById('st-completed').textContent = comp;
+            } catch (e) {
+                document.getElementById('st-orders').textContent = '0';
+                document.getElementById('st-pending').textContent = '0';
+                document.getElementById('st-completed').textContent = '0';
+            }
+        } catch (err) { console.error(err); }
+    };
 
-                if (colors.length === 0) {
-                    showMsg('form-msg', '⚠️ অন্তত একটি Color যোগ করুন।', 'bad');
-                    btn.disabled = false;
-                    btn.innerHTML = orig;
-                    return;
-                }
+    const extractUrl = (str) => {
+        if (!str || typeof str !== 'string') return '';
+        const t = str.trim();
+        const m = t.match(/src=["']([^"']+)["']/);
+        if (m && m[1]) return m[1];
+        if (t.startsWith('http')) return t.split(/[\s<"']/)[0];
+        return '';
+    };
+    window.extractUrl = extractUrl;
 
-                const additionalImages = [];
-                document.querySelectorAll('#additional-images .crow-img').forEach(row => {
-                    const urlInput = row.querySelector('.aimg');
-                    if (urlInput) {
-                        const cleanUrl = extractUrl(urlInput.value.trim()) || urlInput.value.trim();
-                        if (cleanUrl && cleanUrl.length > 5) additionalImages.push(cleanUrl);
-                    }
-                });
+    // ============================================
+    // ADD IMAGE / COLOR
+    // ============================================
+    window.addAdditionalImage = (url) => {
+        const c = document.getElementById('additional-images');
+        if (!c) return;
+        const id = 'ai-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        const row = document.createElement('div');
+        row.className = 'crow-img';
+        row.id = id;
+        row.innerHTML = `
+            <input type="text" placeholder="Image URL (ImgBB link)" value="${url || ''}" class="aimg">
+            <button type="button" class="rm" onclick="document.getElementById('${id}').remove()" title="Remove">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        c.appendChild(row);
+    };
 
-                const cleanImg = extractUrl(image) || image;
-                const allImages = [cleanImg, ...additionalImages];
-                const uniqueImages = [...new Set(allImages)];
+    window.addColor = (name, img) => {
+        const c = document.getElementById('colors');
+        const id = 'c-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        const row = document.createElement('div');
+        row.className = 'crow';
+        row.id = id;
+        row.innerHTML = `<input type="text" placeholder="Color Name" value="${name || ''}" class="cname"><input type="text" placeholder="Image URL" value="${img || ''}" class="cimg"><button type="button" class="rm" onclick="document.getElementById('${id}').remove()"><i class="fas fa-times"></i></button>`;
+        c.appendChild(row);
+    };
 
-                const data = {
-                    name, category, price,
-                    stock: stock,
-                    image: cleanImg,
-                    video: videoUrl || null,
-                    badge: badge || null,
-                    badgeText: badge ? badge.toUpperCase() : null,
-                    sizes: sizes,
-                    colors: colors,
-                    images: uniqueImages,
-                    fullDescription: desc,
-                    updatedAt: new Date().toISOString()
-                };
+    // ============================================
+    // RESET FORM
+    // ============================================
+    window.resetForm = () => {
+        const btn = document.getElementById('submit-btn');
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Save';
+        }
+        editingId = null;
+        selectedSizes = [];
+        document.getElementById('p-form').reset();
+        document.getElementById('edit-id').value = '';
+        document.getElementById('colors').innerHTML = '';
+        document.getElementById('additional-images').innerHTML = '';
+        document.getElementById('p-video').value = '';
+        document.getElementById('p-stock').value = '1';
+        document.getElementById('form-title').innerHTML = '<i class="fas fa-plus-circle"></i> Add New Product';
+        document.getElementById('form-msg').classList.remove('show');
+        document.getElementById('size-section').style.display = 'none';
+        document.getElementById('size-box').innerHTML = '';
+        addColor();
+        addAdditionalImage();
+    };
 
-                if (editId) {
-                    await updateDoc(doc(db, 'products', editId), data);
-                    showMsg('form-msg', '✅ আপডেট হয়েছে!', 'ok');
-                    setTimeout(() => {
-                        resetForm();
-                        switchTab('products');
-                        loadStats();
-                    }, 1000);
+    // ============================================
+    // PRODUCTS
+    // ============================================
+    window.loadProducts = async () => {
+        const c = document.getElementById('products-container');
+        c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div>';
+        try {
+            const snap = await getDocs(collection(db, 'products'));
+            products = [];
+            snap.forEach(d => products.push({ docId: d.id, ...d.data() }));
+            products.sort((a, b) => (parseInt(a.id) || 0) - (parseInt(b.id) || 0));
+            renderProducts();
+        } catch (err) {
+            c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3><p>' + (err.message || '') + '</p><button class="btn-s" onclick="loadProducts()" style="margin-top: 15px;">আবার চেষ্টা</button></div>';
+        }
+    };
+
+    window.renderProducts = () => {
+        const c = document.getElementById('products-container');
+        if (products.length === 0) {
+            c.innerHTML = '<div class="empty"><i class="fas fa-box-open"></i><h3>এখনো কোনো প্রোডাক্ট নেই</h3><p style="margin-bottom: 20px;">প্রথম প্রোডাক্ট যোগ করুন</p><button class="btn-p" onclick="switchTab(\'add\')"><i class="fas fa-plus"></i> Add Product</button></div>';
+            return;
+        }
+        let html = '';
+        products.forEach(p => {
+            const price = (typeof p.price === 'number') ? '৳ ' + p.price : (p.price || 'Coming Soon');
+            const img = extractUrl(p.image) || 'https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png';
+            const cc = Array.isArray(p.colors) ? p.colors.length : 0;
+            const sc = Array.isArray(p.sizes) ? p.sizes.length : 0;
+            const imgCount = Array.isArray(p.images) ? p.images.length : 1;
+            const hasVideo = p.video && p.video.length > 5;
+            const sizeText = sc > 0 ? sc + ' sizes' : 'no size';
+            let stockBadge = '';
+            if (p.stock !== undefined && p.stock !== null) {
+                const stockNum = parseInt(p.stock) || 0;
+                if (stockNum === 0) {
+                    stockBadge = '<span class="stock-badge outofstock"><i class="fas fa-times-circle"></i> Out of Stock</span>';
+                } else if (stockNum <= 5) {
+                    stockBadge = '<span class="stock-badge lowstock"><i class="fas fa-exclamation-triangle"></i> Low Stock: ' + stockNum + '</span>';
                 } else {
-                    const snap = await getDocs(collection(db, 'products'));
-                    let maxId = 0;
-                    snap.forEach(d => { const v = parseInt(d.data().id) || 0; if (v > maxId) maxId = v; });
-                    data.id = maxId + 1;
-                    data.createdAt = new Date().toISOString();
-                    await addDoc(collection(db, 'products'), data);
-                    showMsg('form-msg', '✅ নতুন প্রোডাক্ট যোগ হয়েছে!', 'ok');
-                    setTimeout(() => {
-                        resetForm();
-                        switchTab('products');
-                        loadStats();
-                    }, 1000);
+                    stockBadge = '<span class="stock-badge instock"><i class="fas fa-check-circle"></i> In Stock: ' + stockNum + '</span>';
                 }
-            } catch (err) {
-                console.error(err);
-                showMsg('form-msg', '❌ সেভ করা যায়নি: ' + (err.message || ''), 'bad');
+            }
+            let videoTag = hasVideo ? ' • 🎥 video' : '';
+            html += `<div class="pcard">
+                <img src="${img}" class="pimg" onerror="this.src='https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png'">
+                <div class="pinfo">
+                    <div class="pname">${p.name || 'Unnamed'}</div>
+                    <div class="pmeta">${p.category || ''} • ${sizeText} • ${cc} colors • 📸 ${imgCount} image${imgCount !== 1 ? 's' : ''}${videoTag}</div>
+                    ${stockBadge}
+                    <div class="pprice">${price}</div>
+                    <div class="pacts">
+                        <button class="abtn edit" onclick="editProduct('${p.docId}')"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="abtn del" onclick="deleteProduct('${p.docId}', '${(p.name || '').replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i> Delete</button>
+                    </div>
+                </div>
+            </div>`;
+        });
+        c.innerHTML = html;
+    };
+
+    window.deleteProduct = async (docId, name) => {
+        if (!confirm('মুছে ফেলতে চান: "' + name + '"?')) return;
+        try {
+            await deleteDoc(doc(db, 'products', docId));
+            alert('✅ মুছে ফেলা হয়েছে।');
+            loadProducts();
+            loadStats();
+        } catch (err) {
+            alert('❌ ' + (err.message || ''));
+        }
+    };
+
+    // ============================================
+    // EDIT PRODUCT
+    // ============================================
+    window.editProduct = (docId) => {
+        const p = products.find(x => x.docId === docId);
+        if (!p) { alert('প্রোডাক্ট পাওয়া যায়নি'); return; }
+        const btn = document.getElementById('submit-btn');
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Update';
+        }
+        document.getElementById('p-form').reset();
+        document.getElementById('edit-id').value = '';
+        document.getElementById('p-name').value = '';
+        document.getElementById('p-cat').value = '';
+        document.getElementById('p-price').value = '';
+        document.getElementById('p-stock').value = '1';
+        document.getElementById('p-image').value = '';
+        document.getElementById('p-video').value = '';
+        document.getElementById('p-badge').value = '';
+        document.getElementById('p-desc').value = '';
+        document.getElementById('colors').innerHTML = '';
+        document.getElementById('additional-images').innerHTML = '';
+        document.getElementById('size-box').innerHTML = '';
+        document.getElementById('form-msg').classList.remove('show');
+        editingId = null;
+        selectedSizes = [];
+        editingId = docId;
+        document.getElementById('edit-id').value = docId;
+        document.getElementById('p-name').value = p.name || '';
+        document.getElementById('p-cat').value = p.category || '';
+        document.getElementById('p-price').value = p.price || '';
+        document.getElementById('p-stock').value = (p.stock !== undefined && p.stock !== null) ? p.stock : 1;
+        document.getElementById('p-image').value = p.image || '';
+        document.getElementById('p-video').value = p.video || '';
+        document.getElementById('p-badge').value = p.badge || '';
+        document.getElementById('p-desc').value = p.fullDescription || '';
+        selectedSizes = Array.isArray(p.sizes) ? p.sizes.slice() : [];
+        onCategoryChange();
+        const cc = document.getElementById('colors');
+        cc.innerHTML = '';
+        if (Array.isArray(p.colors) && p.colors.length > 0) {
+            p.colors.forEach(col => addColor(col.name || '', col.image || ''));
+        } else {
+            addColor();
+        }
+        const ai = document.getElementById('additional-images');
+        ai.innerHTML = '';
+        if (Array.isArray(p.images) && p.images.length > 1) {
+            p.images.slice(1).forEach(imgUrl => addAdditionalImage(extractUrl(imgUrl) || imgUrl));
+        } else {
+            addAdditionalImage();
+        }
+        document.getElementById('form-title').innerHTML = '<i class="fas fa-edit"></i> Edit Product';
+        document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Update';
+        switchTab('add');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // ============================================
+    // SUBMIT PRODUCT
+    // ============================================
+    window.submitProduct = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('submit-btn');
+        if (btn.disabled) return;
+        const orig = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        try {
+            const name = document.getElementById('p-name').value.trim();
+            const category = document.getElementById('p-cat').value;
+            const priceRaw = document.getElementById('p-price').value.trim();
+            const stockRaw = document.getElementById('p-stock').value.trim();
+            const image = document.getElementById('p-image').value.trim();
+            const videoUrl = document.getElementById('p-video') ? document.getElementById('p-video').value.trim() : '';
+            const badge = document.getElementById('p-badge').value;
+            const desc = document.getElementById('p-desc').value.trim();
+            const editId = document.getElementById('edit-id').value;
+            if (!name || !category || !priceRaw || !image || !desc || stockRaw === '') {
+                showMsg('form-msg', '⚠️ সব ফিল্ড পূরণ করুন।', 'bad');
                 btn.disabled = false;
                 btn.innerHTML = orig;
+                return;
             }
-        };
+            let price;
+            if (priceRaw.toLowerCase().includes('coming')) price = 'Coming Soon';
+            else {
+                const p = parseInt(priceRaw.replace(/[^0-9]/g, ''));
+                price = isNaN(p) ? 'Coming Soon' : p;
+            }
+            const stock = parseInt(stockRaw) || 0;
+            let sizes = [];
+            if (category === 'Burqa Collection' || category === 'Abaya Collection') {
+                sizes = selectedSizes.slice();
+                if (sizes.length === 0) {
+                    showMsg('form-msg', '⚠️ অন্তত একটি Size সিলেক্ট করুন।', 'bad');
+                    btn.disabled = false;
+                    btn.innerHTML = orig;
+                    return;
+                }
+            }
+            const colors = [];
+            document.querySelectorAll('#colors .crow').forEach(row => {
+                const n = row.querySelector('.cname').value.trim();
+                const i = row.querySelector('.cimg').value.trim();
+                if (n && i) colors.push({ name: n, image: extractUrl(i) || i });
+            });
+            if (colors.length === 0) {
+                showMsg('form-msg', '⚠️ অন্তত একটি Color যোগ করুন।', 'bad');
+                btn.disabled = false;
+                btn.innerHTML = orig;
+                return;
+            }
+            const additionalImages = [];
+            document.querySelectorAll('#additional-images .crow-img').forEach(row => {
+                const urlInput = row.querySelector('.aimg');
+                if (urlInput) {
+                    const cleanUrl = extractUrl(urlInput.value.trim()) || urlInput.value.trim();
+                    if (cleanUrl && cleanUrl.length > 5) additionalImages.push(cleanUrl);
+                }
+            });
+            const cleanImg = extractUrl(image) || image;
+            const allImages = [cleanImg, ...additionalImages];
+            const uniqueImages = [...new Set(allImages)];
+            const data = {
+                name, category, price, stock: stock, image: cleanImg,
+                video: videoUrl || null, badge: badge || null,
+                badgeText: badge ? badge.toUpperCase() : null,
+                sizes: sizes, colors: colors, images: uniqueImages,
+                fullDescription: desc, updatedAt: new Date().toISOString()
+            };
+            if (editId) {
+                await updateDoc(doc(db, 'products', editId), data);
+                showMsg('form-msg', '✅ আপডেট হয়েছে!', 'ok');
+                setTimeout(() => { resetForm(); switchTab('products'); loadStats(); }, 1000);
+            } else {
+                const snap = await getDocs(collection(db, 'products'));
+                let maxId = 0;
+                snap.forEach(d => { const v = parseInt(d.data().id) || 0; if (v > maxId) maxId = v; });
+                data.id = maxId + 1;
+                data.createdAt = new Date().toISOString();
+                await addDoc(collection(db, 'products'), data);
+                showMsg('form-msg', '✅ নতুন প্রোডাক্ট যোগ হয়েছে!', 'ok');
+                setTimeout(() => { resetForm(); switchTab('products'); loadStats(); }, 1000);
+            }
+        } catch (err) {
+            console.error(err);
+            showMsg('form-msg', '❌ সেভ করা যায়নি: ' + (err.message || ''), 'bad');
+            btn.disabled = false;
+            btn.innerHTML = orig;
+        }
+    };
 
         // ============================================
         // ORDERS
@@ -1185,21 +1152,18 @@
             let filtered = orders;
             if (orderFilter === 'pending') filtered = orders.filter(o => o.status !== 'completed');
             else if (orderFilter === 'completed') filtered = orders.filter(o => o.status === 'completed');
-
             if (filtered.length === 0) {
                 const emptyMsg = orderFilter === 'all' ? 'এখনো কোনো অর্ডার নেই' :
                                 orderFilter === 'pending' ? 'কোনো Pending অর্ডার নেই' : 'কোনো Completed অর্ডার নেই';
                 c.innerHTML = '<div class="empty"><i class="fas fa-shopping-bag"></i><h3>' + emptyMsg + '</h3></div>';
                 return;
             }
-
             let html = '';
             filtered.forEach(o => {
                 const st = (o.status === 'completed') ? 'completed' : 'pending';
                 const stTxt = (st === 'completed') ? '✅ Completed' : '⏳ Pending';
                 const dStr = o.date || o.createdAt || '';
                 const niceDate = dStr ? new Date(dStr).toLocaleString('en-GB') : '—';
-
                 let ph = '';
                 if (Array.isArray(o.products)) {
                     o.products.forEach(p => {
@@ -1211,15 +1175,12 @@
                         ph += `<li>${p.name || 'Product'}${ms} — ${priceStr} × ${p.quantity || 1}</li>`;
                     });
                 }
-
                 const phoneClean = (o.phone || '').replace(/[^0-9]/g, '');
                 const waLink = phoneClean ? 'https://wa.me/88' + (phoneClean.startsWith('0') ? phoneClean.substring(1) : phoneClean) : '#';
-
                 let couponLine = '';
                 if (o.couponCode) {
                     couponLine = '<div style="color: #22c55e; font-weight: 700;"><strong>🎟️ Coupon:</strong> ' + o.couponCode + ' (-৳' + (o.discountAmount || 0) + ')</div>';
                 }
-
                 html += `<div class="ocard">
                     <div class="ohead">
                         <div class="oid">📦 ${o.orderId || 'N/A'}</div>
@@ -1322,11 +1283,9 @@
                 c.innerHTML = '<div class="empty"><i class="fas fa-star"></i><h3>এখনো কোনো Review নেই</h3><p style="margin-top: 8px; font-size: 13px;">কাস্টমাররা রিভিউ দিলে এখানে দেখা যাবে।</p></div>';
                 return;
             }
-
             let totalRating = 0;
             reviews.forEach(r => totalRating += (parseInt(r.rating) || 0));
             const avg = (totalRating / reviews.length).toFixed(1);
-
             let html = `<div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 18px; display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
                 <div style="text-align: center; min-width: 90px;">
                     <div style="font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 800; color: var(--gold); line-height: 1;">${avg}</div>
@@ -1340,15 +1299,12 @@
                     </div>
                 </div>
             </div>`;
-
             html += '<div style="display: flex; flex-direction: column; gap: 12px;">';
-
             reviews.forEach(r => {
                 const prodName = getProductNameById(r.productId);
                 const rt = parseInt(r.rating) || 0;
                 const dStr = r.date || r.createdAt || '';
                 const niceDate = dStr ? new Date(dStr).toLocaleString('en-GB') : '—';
-
                 html += `<div class="ocard" style="padding: 15px;">
                     <div class="ohead" style="margin-bottom: 8px;">
                         <div style="flex: 1; min-width: 0;">
@@ -1369,7 +1325,6 @@
                     </div>
                 </div>`;
             });
-
             html += '</div>';
             c.innerHTML = html;
         };
@@ -1411,19 +1366,16 @@
             const c = document.getElementById('newsletter-container');
             const totalEl = document.getElementById('news-total-count');
             if (totalEl) totalEl.textContent = newsletterList.length;
-
             let filtered = newsletterList;
             if (newsSearchQuery.trim()) {
                 const q = newsSearchQuery.toLowerCase().trim();
                 filtered = newsletterList.filter(n => (n.email || '').toLowerCase().includes(q));
             }
-
             if (filtered.length === 0) {
                 const emptyMsg = newsSearchQuery.trim() ? 'কোনো ইমেইল পাওয়া যায়নি: "' + newsSearchQuery + '"' : 'এখনো কোনো সাবস্ক্রাইবার নেই';
                 c.innerHTML = '<div class="empty"><i class="fas fa-envelope-open-text"></i><h3>' + emptyMsg + '</h3></div>';
                 return;
             }
-
             let html = '';
             filtered.forEach((n) => {
                 const email = n.email || '(no email)';
@@ -1431,7 +1383,6 @@
                 const dStr = n.date || n.createdAt || '';
                 const niceDate = dStr ? new Date(dStr).toLocaleString('en-GB') : '—';
                 const isToday = dStr ? (new Date(dStr).toDateString() === new Date().toDateString()) : false;
-
                 html += `<div class="news-card">
                     <div class="news-card-left">
                         <div class="news-avatar">${initial}</div>
@@ -1542,16 +1493,13 @@
         window.renderCoupons = () => {
             const c = document.getElementById('coupons-container');
             const countEl = document.getElementById('coupon-total-count');
-
             let activeCount = 0;
             coupons.forEach(co => { if (getCouponStatus(co) === 'active') activeCount++; });
             if (countEl) countEl.textContent = activeCount;
-
             let filtered = coupons;
             if (couponFilter !== 'all') {
                 filtered = coupons.filter(co => getCouponStatus(co) === couponFilter);
             }
-
             if (filtered.length === 0) {
                 const emptyMsg = couponFilter === 'all' ? 'এখনো কোনো কুপন নেই' :
                                 couponFilter === 'active' ? 'কোনো Active কুপন নেই' :
@@ -1561,20 +1509,16 @@
                     '</div>';
                 return;
             }
-
             let html = '';
             filtered.forEach(co => {
                 const st = getCouponStatus(co);
                 let stTxt = 'Active';
                 if (st === 'inactive') stTxt = 'Inactive';
                 else if (st === 'expired') stTxt = 'Expired';
-
                 let discountBadge = '';
                 if (co.type === 'percentage') discountBadge = co.value + '% OFF';
                 else discountBadge = '৳' + co.value + ' OFF';
-
                 const couponClass = st === 'inactive' ? 'inactive' : (st === 'expired' ? 'expired' : '');
-
                 html += `<div class="coupon-card ${couponClass}">
                     <div class="coupon-top">
                         <div class="coupon-code-big">${co.code || 'NOCODE'}</div>
@@ -1671,7 +1615,6 @@
             const orig = btn.innerHTML;
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-
             try {
                 const code = document.getElementById('c-code').value.trim().toUpperCase();
                 const type = document.getElementById('c-type').value;
@@ -1681,28 +1624,24 @@
                 const description = document.getElementById('c-desc').value.trim();
                 const active = document.getElementById('c-active').checked;
                 const editId = document.getElementById('c-edit-id').value;
-
                 if (!code || !type || !value || !expiry) {
                     showMsg('coupon-form-msg', '⚠️ সব প্রয়োজনীয় ফিল্ড পূরণ করুন।', 'bad');
                     btn.disabled = false;
                     btn.innerHTML = orig;
                     return;
                 }
-
                 if (!/^[A-Z0-9]+$/.test(code)) {
                     showMsg('coupon-form-msg', '⚠️ কুপন কোডে শুধু ইংরেজি বড় হাতের অক্ষর ও সংখ্যা ব্যবহার করুন।', 'bad');
                     btn.disabled = false;
                     btn.innerHTML = orig;
                     return;
                 }
-
                 if (type === 'percentage' && (value < 1 || value > 100)) {
                     showMsg('coupon-form-msg', '⚠️ Percentage 1-100 এর মধ্যে হতে হবে।', 'bad');
                     btn.disabled = false;
                     btn.innerHTML = orig;
                     return;
                 }
-
                 const dupCheck = coupons.find(x => x.code === code && x.docId !== editId);
                 if (dupCheck) {
                     showMsg('coupon-form-msg', '⚠️ এই কোড দিয়ে ইতিমধ্যে একটি কুপন আছে।', 'bad');
@@ -1710,13 +1649,11 @@
                     btn.innerHTML = orig;
                     return;
                 }
-
                 const data = {
                     code: code, type: type, value: value, minOrder: minOrder,
                     expiry: expiry, description: description, active: active,
                     updatedAt: new Date().toISOString()
                 };
-
                 if (editId) {
                     await updateDoc(doc(db, 'coupons', editId), data);
                     showMsg('coupon-form-msg', '✅ কুপন আপডেট হয়েছে!', 'ok');
@@ -1758,7 +1695,7 @@
         };
 
         // ============================================
-        // 🎨 BANNERS (NEW)
+        // BANNERS
         // ============================================
         window.loadBanners = async () => {
             const c = document.getElementById('banners-container');
@@ -1786,28 +1723,23 @@
             const c = document.getElementById('banners-container');
             const countEl = document.getElementById('banner-total-count');
             if (!c) return;
-
             let activeCount = 0;
             banners.forEach(b => { if (b.active !== false) activeCount++; });
             if (countEl) countEl.textContent = activeCount;
-
             if (banners.length === 0) {
                 c.innerHTML = '<div class="empty"><i class="fas fa-images"></i><h3>এখনো কোনো Banner নেই</h3><p style="margin-top: 8px; font-size: 13px;">"Add Banner" বাটনে ক্লিক করে প্রথম ব্যানার তৈরি করুন।</p><button class="btn-p" onclick="openBannerModal()" style="margin-top: 15px;"><i class="fas fa-plus"></i> Add Banner</button></div>';
                 return;
             }
-
             let html = '';
             banners.forEach(b => {
                 const img = extractUrl(b.image) || b.image || '';
                 const isActive = b.active !== false;
-
                 let linkText = '<span style="color: var(--muted);">কোনো link নেই</span>';
                 if (b.link && b.linkType) {
                     if (b.linkType === 'category') linkText = '📁 ' + b.link.replace('category:', '');
                     else if (b.linkType === 'tab') linkText = '📄 ' + b.link.replace('tab:', '');
                     else if (b.linkType === 'external') linkText = '🌐 ' + (b.link.length > 40 ? b.link.substring(0, 40) + '...' : b.link);
                 }
-
                 html += `<div class="coupon-card ${isActive ? '' : 'inactive'}" style="padding: 15px;">
                     <div style="display: grid; grid-template-columns: 140px 1fr; gap: 15px; align-items: start;">
                         <div style="width: 140px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; border: 1px solid var(--border);">
@@ -1843,7 +1775,6 @@
             document.getElementById('b-external-group').style.display = (type === 'external') ? 'block' : 'none';
         };
 
-        // Live image preview for banner
         document.addEventListener('input', function(e) {
             if (e.target && e.target.id === 'b-image') {
                 const url = extractUrl(e.target.value.trim()) || e.target.value.trim();
@@ -1904,8 +1835,6 @@
             document.getElementById('b-active').checked = b.active !== false;
             document.getElementById('b-submit-btn').innerHTML = '<i class="fas fa-save"></i> Update Banner';
             document.getElementById('banner-form-msg').classList.remove('show');
-
-            // Preview
             const imgUrl = extractUrl(b.image) || b.image || '';
             const preview = document.getElementById('b-preview');
             if (imgUrl && imgUrl.startsWith('http')) {
@@ -1913,7 +1842,6 @@
             } else {
                 preview.innerHTML = '<span style="color: var(--muted); font-size: 12px;">ছবি দেখতে URL দিন</span>';
             }
-
             onBannerLinkTypeChange();
             document.getElementById('banner-modal').classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -1924,7 +1852,6 @@
             const orig = btn.innerHTML;
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-
             try {
                 const imageRaw = document.getElementById('b-image').value.trim();
                 const title = document.getElementById('b-title').value.trim();
@@ -1932,14 +1859,12 @@
                 const order = parseInt(document.getElementById('b-order').value) || 1;
                 const active = document.getElementById('b-active').checked;
                 const editId = document.getElementById('b-edit-id').value;
-
                 if (!imageRaw) {
                     showMsg('banner-form-msg', '⚠️ Banner Image URL দিন।', 'bad');
                     btn.disabled = false;
                     btn.innerHTML = orig;
                     return;
                 }
-
                 const cleanImg = extractUrl(imageRaw) || imageRaw;
                 if (!cleanImg || !cleanImg.startsWith('http')) {
                     showMsg('banner-form-msg', '⚠️ সঠিক Image URL দিন।', 'bad');
@@ -1947,7 +1872,6 @@
                     btn.innerHTML = orig;
                     return;
                 }
-
                 let link = '';
                 if (linkType === 'category') {
                     link = 'category:' + document.getElementById('b-category-value').value;
@@ -1963,17 +1887,11 @@
                     }
                     link = ext;
                 }
-
                 const data = {
-                    image: cleanImg,
-                    title: title || '',
-                    link: link,
-                    linkType: linkType,
-                    order: order,
-                    active: active,
+                    image: cleanImg, title: title || '', link: link,
+                    linkType: linkType, order: order, active: active,
                     updatedAt: new Date().toISOString()
                 };
-
                 if (editId) {
                     await updateDoc(doc(db, 'banners', editId), data);
                     showMsg('banner-form-msg', '✅ Banner আপডেট হয়েছে!', 'ok');
@@ -2012,6 +1930,240 @@
                 alert('✅ Banner মুছে ফেলা হয়েছে।');
                 loadBanners();
             } catch (err) { alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি')); }
+        };
+
+        // ============================================
+        // 📄 PAGES EDITOR
+        // ============================================
+        let pagesCache = {};
+        let currentEditingPage = 'about';
+
+        const DEFAULT_PAGES = {
+            'about': `<h2 style="text-align: center; margin-bottom: 25px;">🌸 আমাদের সম্পর্কে | About Us</h2>
+<h3 style="color: var(--gold-color); font-size: 18px; margin-bottom: 10px;">স্বাগতম Burqa Bazaar and Boutiques-এ</h3>
+<p style="margin-bottom: 15px;"><strong>Burqa Bazaar and Boutiques</strong> হলো শালীনতা, সৌন্দর্য ও আধুনিক রুচির সমন্বয়ে গড়ে ওঠা একটি ফ্যাশন ব্র্যান্ড। নারীদের জন্য মানসম্মত ও আকর্ষণীয় <strong>হিজাব, বোরকা ও আবায়া</strong> সংগ্রহ সহজলভ্য করাই আমাদের প্রধান লক্ষ্য।</p>
+<p style="margin-bottom: 20px;">আমরা বিশ্বাস করি, শালীন পোশাক শুধু একটি পোশাক নয়—এটি ব্যক্তিত্ব, রুচি ও আত্মবিশ্বাস প্রকাশের একটি সুন্দর মাধ্যম।</p>
+<h3 style="color: var(--gold-color); font-size: 18px; margin-bottom: 10px;">✨ আমাদের কালেকশন</h3>
+<ul style="padding-left: 20px; margin-bottom: 20px; line-height: 1.8;">
+<li>🌷 Hijab Collection</li>
+<li>🖤 Burqa Collection</li>
+<li>🤍 Abaya Collection</li>
+</ul>
+<h3 style="color: var(--gold-color); font-size: 18px; margin-bottom: 10px;">🤝 কেন Burqa Bazaar and Boutiques?</h3>
+<ul style="padding-left: 20px; margin-bottom: 20px; line-height: 1.8;">
+<li>✔️ আকর্ষণীয় ও মার্জিত ডিজাইন</li>
+<li>✔️ বিভিন্ন রঙ ও স্টাইলের কালেকশন</li>
+<li>✔️ মানসম্মত পণ্যের প্রতি গুরুত্ব</li>
+<li>✔️ সহজ ও আন্তরিক যোগাযোগ ব্যবস্থা</li>
+</ul>
+<div class="policy-footer">
+<p style="font-weight: bold; color: var(--gold-color); font-size: 16px; margin-bottom: 10px;">Burqa Bazaar and Boutiques</p>
+<p style="font-weight: 600; font-size: 14px;">Modesty in Every Look.<br>Elegance in Every Detail.</p>
+</div>`,
+
+            'privacy': `<h2 style="text-align: center; margin-bottom: 25px;">🔒 Privacy Policy | গোপনীয়তা নীতি</h2>
+<p style="margin-bottom: 15px;"><strong>Burqa Bazaar and Boutiques</strong>-এ আপনার গোপনীয়তা ও ব্যক্তিগত তথ্যের নিরাপত্তাকে আমরা গুরুত্ব দিই।</p>
+<h3 style="color: var(--gold-color); font-size: 18px; margin-top: 20px; margin-bottom: 10px;">১. আমরা যে তথ্য সংগ্রহ করতে পারি</h3>
+<ul style="padding-left: 20px; margin-bottom: 15px; line-height: 1.8;">
+<li>• নাম</li>
+<li>• মোবাইল নম্বর</li>
+<li>• ই-মেইল ঠিকানা</li>
+<li>• শহর ও জেলার তথ্য</li>
+<li>• থানা/উপজেলা</li>
+<li>• সম্পূর্ণ ডেলিভারি ঠিকানা</li>
+</ul>
+<h3 style="color: var(--gold-color); font-size: 18px; margin-top: 20px; margin-bottom: 10px;">২. আপনার তথ্য কীভাবে ব্যবহার করা হয়</h3>
+<ul style="padding-left: 20px; margin-bottom: 15px; line-height: 1.8;">
+<li>• আপনার অর্ডার গ্রহণ ও নিশ্চিত করতে</li>
+<li>• পণ্য ডেলিভারি সম্পন্ন করতে</li>
+<li>• অর্ডার সংক্রান্ত যোগাযোগ করতে</li>
+<li>• পেমেন্ট যাচাই করতে</li>
+</ul>
+<h3 style="color: var(--gold-color); font-size: 18px; margin-top: 20px; margin-bottom: 10px;">৩. পেমেন্ট সংক্রান্ত তথ্য</h3>
+<p style="margin-bottom: 15px;">আপনার সম্পূর্ণ ব্যাংক কার্ড, PIN, OTP, bKash PIN বা Nagad PIN আমাদের কাছে পাঠানোর প্রয়োজন নেই।</p>
+<div class="policy-footer">
+<p style="font-weight: bold; color: var(--gold-color); font-size: 16px; margin-bottom: 10px;">Burqa Bazaar and Boutiques</p>
+<p style="font-weight: 600; font-size: 14px;">Modesty in Every Look.<br>Elegance in Every Detail.</p>
+</div>`,
+
+            'terms': `<h2 style="text-align: center; margin-bottom: 25px;">📜 Terms & Conditions | শর্তাবলি</h2>
+<p style="margin-bottom: 15px;"><strong>Burqa Bazaar and Boutiques</strong> ওয়েবসাইটে আপনাকে স্বাগতম।</p>
+<h3 style="color: var(--gold-color); font-size: 18px; margin-top: 20px; margin-bottom: 10px;">১. সাধারণ শর্তাবলি</h3>
+<p style="margin-bottom: 15px;">ওয়েবসাইটের পণ্য, ছবি, বিবরণ, মূল্য, অফার ও অন্যান্য তথ্য পরিবর্তনের অধিকার আমাদের রয়েছে।</p>
+<h3 style="color: var(--gold-color); font-size: 18px; margin-top: 20px; margin-bottom: 10px;">২. পণ্যের তথ্য ও ছবি</h3>
+<p style="margin-bottom: 15px;">বিভিন্ন মোবাইল বা কম্পিউটারের Display Settings-এর কারণে ছবির রঙ এবং বাস্তব পণ্যের রঙে সামান্য পার্থক্য হতে পারে।</p>
+<h3 style="color: var(--gold-color); font-size: 18px; margin-top: 20px; margin-bottom: 10px;">৩. পণ্যের মূল্য</h3>
+<p style="margin-bottom: 15px;">ওয়েবসাইটে প্রদর্শিত পণ্যের মূল্য সময়ের সঙ্গে পরিবর্তিত হতে পারে।</p>
+<h3 style="color: var(--gold-color); font-size: 18px; margin-top: 20px; margin-bottom: 10px;">৪. অর্ডার করার নিয়ম</h3>
+<p style="margin-bottom: 15px;">অর্ডার করার সময় সঠিক নাম, সচল মোবাইল নম্বর, সঠিক জেলা ও থানা এবং সম্পূর্ণ ডেলিভারি ঠিকানা দিতে হবে।</p>
+<h3 style="color: var(--gold-color); font-size: 18px; margin-top: 20px; margin-bottom: 10px;">৫. পেমেন্ট</h3>
+<p style="margin-bottom: 15px;">আমরা Cash on Delivery (COD), bKash ও Nagad পেমেন্ট গ্রহণ করি।</p>
+<div class="policy-footer">
+<p style="font-weight: bold; color: var(--gold-color); font-size: 16px; margin-bottom: 10px;">Burqa Bazaar and Boutiques</p>
+<p style="font-weight: 600; font-size: 14px;">Modesty in Every Look.<br>Elegance in Every Detail.</p>
+</div>`,
+
+            'return-policy': `<h2 style="text-align: center; margin-bottom: 25px;">🔄 Return & Exchange Policy</h2>
+<p style="margin-bottom: 15px;">পণ্য হাতে পাওয়ার <strong>৪৮ ঘণ্টার মধ্যে</strong> Return বা Exchange-এর জন্য যোগাযোগ করতে হবে।</p>
+<h3 style="color: var(--gold-color); font-size: 18px; margin-top: 20px; margin-bottom: 10px;">কোন ক্ষেত্রে Exchange করা যাবে?</h3>
+<ul style="padding-left: 20px; margin-bottom: 15px; line-height: 1.8;">
+<li>• ভুল পণ্য পাঠানো হলে</li>
+<li>• ভুল Size পাঠানো হলে</li>
+<li>• ডেলিভারির সময় পণ্য ক্ষতিগ্রস্ত হলে</li>
+<li>• Manufacturing Defect থাকলে</li>
+</ul>
+<h3 style="color: var(--gold-color); font-size: 18px; margin-top: 20px; margin-bottom: 10px;">কোন ক্ষেত্রে গ্রহণযোগ্য নয়?</h3>
+<ul style="padding-left: 20px; margin-bottom: 15px; line-height: 1.8; color: #d9534f;">
+<li>❌ পণ্য ব্যবহার করা হলে</li>
+<li>❌ পণ্য ধোয়া হলে</li>
+<li>❌ ৪৮ ঘণ্টার পর যোগাযোগ করলে</li>
+</ul>
+<div class="policy-footer">
+<p style="font-weight: bold; color: var(--gold-color); font-size: 16px; margin-bottom: 10px;">Burqa Bazaar and Boutiques</p>
+<p style="font-weight: 600; font-size: 14px;">Modesty in Every Look.<br>Elegance in Every Detail.</p>
+</div>`,
+
+            'contact': `<h2 style="text-align: center; margin-bottom: 25px;">📞 Contact Us | যোগাযোগ করুন</h2>
+<p style="margin-bottom: 15px; text-align: center;">আপনার পছন্দের <strong>Hijab, Burqa ও Abaya</strong> সম্পর্কে জানতে আমাদের সঙ্গে যোগাযোগ করুন।</p>
+<p style="text-align: center; margin-top: 20px; line-height: 2;">
+📞 <strong>Phone:</strong> +880 1832-140613<br>
+💬 <strong>WhatsApp:</strong> +880 1832-140613<br>
+📧 <strong>Email:</strong> burqabazaarandboutiques@gmail.com<br>
+📍 <strong>Address:</strong> ফেনী সওদাগর পট্টি, সওদাগর টাওয়ার, ২য় তলা, দোকান নং ০৩
+</p>
+<div class="policy-footer">
+<h3 style="color: var(--gold-color); font-size: 18px; margin-bottom: 10px; text-align: center; padding-left: 0;">🌸 আপনার সন্তুষ্টিই আমাদের অগ্রাধিকার</h3>
+<p style="font-weight: bold; color: var(--gold-color); font-size: 16px; margin-bottom: 8px;">Burqa Bazaar and Boutiques</p>
+<p style="font-weight: 600; font-size: 14px; line-height: 1.6;">প্রতিটি লুকে শালীনতা,<br>প্রতিটি ডিজাইনে সৌন্দর্য।</p>
+</div>`,
+
+            'track-order': `<h2 style="text-align: center; margin-bottom: 25px;">📦 Tracking Order | অর্ডার ট্র্যাক করুন</h2>
+<p style="margin-bottom: 20px; text-align: center;">আপনার Tracking Number / CN Number ব্যবহার করে পার্সেলের বর্তমান অবস্থান জানুন।</p>
+<div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px;">
+<div class="info-card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+<div>
+<h4 style="margin: 0 0 5px 0; font-size: 16px; padding-left: 0;">Sundarban Courier</h4>
+<p style="margin: 0; font-size: 13px; color: var(--text-muted);">Tracking / CN Number দিয়ে ট্র্যাক করুন।</p>
+</div>
+<a href="https://customer.sundarbancourierltd.com/tracking" target="_blank" style="background: var(--gold-color); color: #000; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 14px;">Track Now</a>
+</div>
+<div class="info-card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+<div>
+<h4 style="margin: 0 0 5px 0; font-size: 16px; padding-left: 0;">Pathao Courier</h4>
+<p style="margin: 0; font-size: 13px; color: var(--text-muted);">Tracking Number দিয়ে পার্সেলের স্ট্যাটাস দেখুন।</p>
+</div>
+<a href="https://pathao.com/courier/" target="_blank" style="background: var(--gold-color); color: #000; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 14px;">Track Now</a>
+</div>
+<div class="info-card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+<div>
+<h4 style="margin: 0 0 5px 0; font-size: 16px; padding-left: 0;">SteadFast Courier</h4>
+<p style="margin: 0; font-size: 13px; color: var(--text-muted);">Tracking Number দিয়ে পার্সেল ট্র্যাক করুন।</p>
+</div>
+<a href="https://www.steadfast.com.bd/tracking" target="_blank" style="background: var(--gold-color); color: #000; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 14px;">Track Now</a>
+</div>
+</div>
+<div class="policy-footer">
+<h3 style="color: var(--gold-color); font-size: 18px; margin-bottom: 10px; text-align: center; padding-left: 0;">🛍️ Burqa Bazaar and Boutiques</h3>
+<p style="font-weight: 600; font-size: 14px; line-height: 1.6;">Modesty in Every Look.<br>Elegance in Every Detail.</p>
+</div>`
+        };
+
+        const PAGE_NAMES = {
+            'about': 'About Us',
+            'privacy': 'Privacy Policy',
+            'terms': 'Terms & Conditions',
+            'return-policy': 'Return Policy',
+            'contact': 'Contact Us',
+            'track-order': 'Track Order'
+        };
+
+        window.loadPages = async function() {
+            try {
+                const snap = await getDocs(collection(db, 'pages'));
+                pagesCache = {};
+                snap.forEach(d => {
+                    const data = d.data();
+                    pagesCache[d.id] = data.html || '';
+                });
+                console.log('📄 Pages loaded:', Object.keys(pagesCache).length);
+            } catch (err) {
+                console.error('Pages load error:', err);
+            }
+        };
+
+        window.switchPage = function(pageId) {
+            currentEditingPage = pageId;
+            document.querySelectorAll('#page-filter button').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-page') === pageId);
+            });
+            document.getElementById('page-editor-title').innerHTML = '<i class="fas fa-edit"></i> Editing: ' + (PAGE_NAMES[pageId] || pageId);
+            const html = pagesCache[pageId] || DEFAULT_PAGES[pageId] || '';
+            document.getElementById('page-html-editor').value = html;
+            document.getElementById('page-editor-status').innerHTML = pagesCache[pageId] ? '<span style="color: var(--ok);">✅ Firebase-এ সেভ আছে</span>' : '<span style="color: var(--muted);">📝 Default content দেখাচ্ছে</span>';
+            document.getElementById('page-form-msg').classList.remove('show');
+        };
+
+        window.savePage = async function() {
+            const btn = document.getElementById('page-save-btn');
+            const orig = btn.innerHTML;
+            const html = document.getElementById('page-html-editor').value;
+            if (!html.trim()) {
+                showMsg('page-form-msg', '⚠️ HTML content খালি রাখা যাবে না।', 'bad');
+                return;
+            }
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            try {
+                const pageId = currentEditingPage;
+                await setDoc(doc(db, 'pages', pageId), {
+                    pageId: pageId,
+                    pageName: PAGE_NAMES[pageId] || pageId,
+                    html: html,
+                    updatedAt: new Date().toISOString()
+                }, { merge: true });
+                pagesCache[pageId] = html;
+                showMsg('page-form-msg', '✅ ' + (PAGE_NAMES[pageId] || pageId) + ' আপডেট হয়েছে!', 'ok');
+                document.getElementById('page-editor-status').innerHTML = '<span style="color: var(--ok);">✅ Firebase-এ সেভ আছে</span>';
+            } catch (err) {
+                console.error(err);
+                showMsg('page-form-msg', '❌ সেভ করা যায়নি: ' + (err.message || ''), 'bad');
+            }
+            btn.disabled = false;
+            btn.innerHTML = orig;
+        };
+
+        window.resetPageToDefault = function() {
+            if (!confirm('Default content এ ফিরে যেতে চান? আপনার বর্তমান HTML মুছে যাবে।')) return;
+            const html = DEFAULT_PAGES[currentEditingPage] || '';
+            document.getElementById('page-html-editor').value = html;
+            showMsg('page-form-msg', 'ℹ️ Default content লোড হয়েছে। Save করলে Firebase-এ যাবে।', 'ok');
+        };
+
+        window.previewPage = function() {
+            const html = document.getElementById('page-html-editor').value;
+            const newWindow = window.open('', '_blank');
+            newWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Preview: ${PAGE_NAMES[currentEditingPage]}</title>
+                    <style>
+                        body { background: #0b0b0d; color: #f3f3f6; font-family: 'Poppins', sans-serif; padding: 30px 20px; line-height: 1.8; max-width: 900px; margin: 0 auto; }
+                        h2 { color: #dfb15b; font-family: 'Playfair Display', serif; border-bottom: 2px solid rgba(223,177,91,.2); padding-bottom: 12px; margin-bottom: 25px; font-size: 24px; text-align: center; }
+                        h3 { color: #dfb15b; font-size: 18px; margin-top: 20px; margin-bottom: 10px; }
+                        p { margin-bottom: 15px; }
+                        ul { padding-left: 20px; margin-bottom: 15px; }
+                        li { margin-bottom: 5px; }
+                        strong { color: #dfb15b; }
+                        a { color: #dfb15b; }
+                        .policy-footer { text-align: center; margin-top: 35px; padding: 25px 20px; background: linear-gradient(135deg, rgba(223,177,91,.05), transparent); border-top: 1px dashed rgba(223,177,91,.3); border-bottom: 1px dashed rgba(223,177,91,.3); border-radius: 10px; }
+                        .info-card { background: linear-gradient(135deg, rgba(223,177,91,.08), rgba(223,177,91,.03)); border: 1px solid rgba(223,177,91,.2); border-left: 4px solid #dfb15b; padding: 18px 20px; border-radius: 10px; margin: 15px 0; }
+                    </style>
+                </head>
+                <body>${html}</body>
+                </html>
+            `);
+            newWindow.document.close();
         };
 
         // ============================================
