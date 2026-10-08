@@ -206,6 +206,103 @@
 
         .review-stars-row { color: #ffb800; font-size: 14px; }
 
+        /* Dashboard Top Products */
+        .top-product-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 8px;
+            border-bottom: 1px solid var(--border);
+        }
+        .top-product-row:last-child { border-bottom: none; }
+        .top-product-rank {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+            flex-shrink: 0;
+            font-family: 'Playfair Display', serif;
+        }
+        .top-product-rank.rank-1 { background: linear-gradient(135deg, #ffd700, #b8860b); color: #000; box-shadow: 0 0 12px rgba(255,215,0,.5); }
+        .top-product-rank.rank-2 { background: linear-gradient(135deg, #c0c0c0, #808080); color: #000; }
+        .top-product-rank.rank-3 { background: linear-gradient(135deg, #cd7f32, #8b4513); color: #fff; }
+        .top-product-rank.rank-other { background: rgba(223,177,91,.15); color: var(--gold); border: 1px solid var(--gold); }
+        .top-product-img { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; background: #000; border: 1px solid var(--border); flex-shrink: 0; }
+        .top-product-info { flex: 1; min-width: 0; }
+        .top-product-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .top-product-meta { font-size: 11px; color: var(--muted); }
+        .top-product-meta strong { color: var(--gold); }
+        .top-product-sales { text-align: right; flex-shrink: 0; }
+        .top-product-sales .count { font-size: 16px; font-weight: 800; color: var(--gold); line-height: 1; font-family: 'Playfair Display', serif; }
+        .top-product-sales .unit { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+
+        /* Weekly Chart */
+        .weekly-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            gap: 8px;
+            height: 180px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .weekly-bar-wrap {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            height: 100%;
+            gap: 6px;
+            min-width: 0;
+        }
+        .weekly-bar {
+            width: 100%;
+            max-width: 42px;
+            background: linear-gradient(180deg, var(--gold), #9c7526);
+            border-radius: 6px 6px 0 0;
+            min-height: 4px;
+            transition: all 0.5s ease;
+            position: relative;
+        }
+        .weekly-bar:hover {
+            background: linear-gradient(180deg, #ffd700, var(--gold));
+            box-shadow: 0 0 15px rgba(223,177,91,.5);
+        }
+        .weekly-bar-value {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--gold);
+            margin-bottom: 3px;
+        }
+        .weekly-bar-label {
+            font-size: 10px;
+            color: var(--muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .3px;
+        }
+        .weekly-bar-label.today {
+            color: var(--gold);
+            font-weight: 800;
+        }
+        .weekly-summary {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 15px;
+            margin-top: 15px;
+            border-top: 1px dashed var(--border);
+            font-size: 13px;
+            color: var(--muted);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .weekly-summary strong { color: var(--gold); font-weight: 800; }
+
         @media (max-width: 500px) {
             .head { padding: 12px 15px; }
             .head h1 { font-size: 14px; }
@@ -216,6 +313,9 @@
             .news-count-big { font-size: 32px; }
             .coupon-code-big { font-size: 18px; }
             .coupon-count-big { font-size: 32px; }
+            .weekly-chart { height: 140px; }
+            .weekly-bar-value { font-size: 9px; }
+            .weekly-bar-label { font-size: 9px; }
         }
     </style>
 </head>
@@ -275,14 +375,43 @@
             <div class="section active" id="sec-dashboard">
                 <div class="stats">
                     <div class="stat"><i class="fas fa-box"></i><div class="val" id="st-products">0</div><div class="lbl">Products</div></div>
-                    <div class="stat"><i class="fas fa-shopping-bag"></i><div class="val" id="st-orders">0</div><div class="lbl">Orders</div></div>
+                    <div class="stat"><i class="fas fa-shopping-bag"></i><div class="val" id="st-orders">0</div><div class="lbl">Total Orders</div></div>
                     <div class="stat"><i class="fas fa-clock"></i><div class="val" id="st-pending">0</div><div class="lbl">Pending</div></div>
                     <div class="stat"><i class="fas fa-check-circle"></i><div class="val" id="st-completed">0</div><div class="lbl">Completed</div></div>
                 </div>
-                <div class="shead"><h2><i class="fas fa-info-circle"></i> Welcome</h2></div>
-                <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 25px;">
-                    <h3 style="color: var(--gold); margin-bottom: 12px; font-family: 'Playfair Display', serif;">স্বাগতম Admin Panel-এ! 🎉</h3>
-                    <p style="color: var(--muted); font-size: 14px; line-height: 1.8;">এই প্যানেল থেকে প্রোডাক্ট, অর্ডার, রিভিউ, নিউজলেটার, কুপন, <strong>Banner</strong> এবং <strong>Pages</strong> সবকিছু ম্যানেজ করতে পারবেন।</p>
+
+                <div class="shead"><h2><i class="fas fa-chart-line"></i> Sales Summary</h2></div>
+                <div class="stats" style="margin-bottom: 25px;">
+                    <div class="stat" style="background: linear-gradient(135deg, rgba(34,197,94,.15), rgba(34,197,94,.03)); border-color: rgba(34,197,94,.4);">
+                        <i class="fas fa-sun" style="color: #22c55e;"></i>
+                        <div class="val" id="st-today-revenue" style="color: #22c55e;">৳0</div>
+                        <div class="lbl">Today's Revenue</div>
+                    </div>
+                    <div class="stat" style="background: linear-gradient(135deg, rgba(59,130,246,.15), rgba(59,130,246,.03)); border-color: rgba(59,130,246,.4);">
+                        <i class="fas fa-calendar-alt" style="color: #3b82f6;"></i>
+                        <div class="val" id="st-month-revenue" style="color: #3b82f6;">৳0</div>
+                        <div class="lbl">This Month</div>
+                    </div>
+                    <div class="stat" style="background: linear-gradient(135deg, rgba(223,177,91,.15), rgba(223,177,91,.03)); border-color: rgba(223,177,91,.4);">
+                        <i class="fas fa-coins"></i>
+                        <div class="val" id="st-total-revenue">৳0</div>
+                        <div class="lbl">Total Revenue</div>
+                    </div>
+                    <div class="stat" style="background: linear-gradient(135deg, rgba(255,0,127,.15), rgba(121,40,202,.05)); border-color: rgba(255,0,127,.4);">
+                        <i class="fas fa-shopping-cart" style="color: #ff007f;"></i>
+                        <div class="val" id="st-today-orders" style="color: #ff007f;">0</div>
+                        <div class="lbl">Today's Orders</div>
+                    </div>
+                </div>
+
+                <div class="shead"><h2><i class="fas fa-trophy"></i> Top 5 Best-Selling Products</h2></div>
+                <div id="top-products-container" style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 15px; margin-bottom: 25px;">
+                    <div class="loading" style="padding: 30px;"><i class="fas fa-spinner"></i><p>Loading...</p></div>
+                </div>
+
+                <div class="shead"><h2><i class="fas fa-chart-bar"></i> Last 7 Days Sales</h2></div>
+                <div id="weekly-chart-container" style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 25px;">
+                    <div class="loading" style="padding: 30px;"><i class="fas fa-spinner"></i><p>Loading chart...</p></div>
                 </div>
             </div>
 
@@ -795,6 +924,7 @@
         else if (name === 'banners') loadBanners();
         else if (name === 'pages') { loadPages().then(() => switchPage(currentEditingPage || 'about')); }
         else if (name === 'add' && !editingId) resetForm();
+        else if (name === 'dashboard') loadStats();
     };
 
     window.showMsg = (id, text, type) => {
@@ -806,30 +936,166 @@
     };
 
     // ============================================
-    // STATS
+    // STATS (with Dashboard)
     // ============================================
     window.loadStats = async () => {
         try {
             const pSnap = await getDocs(collection(db, 'products'));
             document.getElementById('st-products').textContent = pSnap.size;
+
             try {
                 const oSnap = await getDocs(collection(db, 'orders'));
                 let pend = 0, comp = 0;
+                let todayRevenue = 0;
+                let monthRevenue = 0;
+                let totalRevenue = 0;
+                let todayOrders = 0;
+
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const todayStr = today.toDateString();
+
+                const thisMonth = new Date();
+                thisMonth.setDate(1);
+                thisMonth.setHours(0, 0, 0, 0);
+
+                const productSales = {};
+                const weeklyData = {};
+                for (let i = 6; i >= 0; i--) {
+                    const d = new Date();
+                    d.setDate(d.getDate() - i);
+                    d.setHours(0, 0, 0, 0);
+                    weeklyData[d.toDateString()] = { revenue: 0, orders: 0, date: d };
+                }
+
                 oSnap.forEach(d => {
                     const data = d.data();
+                    const amount = parseInt(data.totalAmount) || 0;
+                    const orderDate = new Date(data.date || data.createdAt || 0);
+
                     if (data.status === 'completed') comp++;
                     else pend++;
+
+                    totalRevenue += amount;
+
+                    if (orderDate.toDateString() === todayStr) {
+                        todayRevenue += amount;
+                        todayOrders++;
+                    }
+                    if (orderDate >= thisMonth) {
+                        monthRevenue += amount;
+                    }
+
+                    if (weeklyData[orderDate.toDateString()]) {
+                        weeklyData[orderDate.toDateString()].revenue += amount;
+                        weeklyData[orderDate.toDateString()].orders++;
+                    }
+
+                    if (Array.isArray(data.products)) {
+                        data.products.forEach(p => {
+                            const pid = p.id;
+                            if (!productSales[pid]) {
+                                productSales[pid] = { id: pid, name: p.name || 'Unknown', qty: 0, revenue: 0 };
+                            }
+                            const qty = parseInt(p.quantity) || 1;
+                            productSales[pid].qty += qty;
+                            if (typeof p.price === 'number') {
+                                productSales[pid].revenue += p.price * qty;
+                            }
+                        });
+                    }
                 });
+
                 document.getElementById('st-orders').textContent = oSnap.size;
                 document.getElementById('st-pending').textContent = pend;
                 document.getElementById('st-completed').textContent = comp;
+
+                document.getElementById('st-today-revenue').textContent = '৳' + todayRevenue.toLocaleString();
+                document.getElementById('st-month-revenue').textContent = '৳' + monthRevenue.toLocaleString();
+                document.getElementById('st-total-revenue').textContent = '৳' + totalRevenue.toLocaleString();
+                document.getElementById('st-today-orders').textContent = todayOrders;
+
+                const sortedProducts = Object.values(productSales)
+                    .sort((a, b) => b.qty - a.qty)
+                    .slice(0, 5);
+                renderTopProducts(sortedProducts, pSnap);
+
+                renderWeeklyChart(Object.values(weeklyData));
+
             } catch (e) {
-                document.getElementById('st-orders').textContent = '0';
-                document.getElementById('st-pending').textContent = '0';
-                document.getElementById('st-completed').textContent = '0';
+                console.error('Stats error:', e);
             }
         } catch (err) { console.error(err); }
     };
+
+    function renderTopProducts(topProducts, pSnap) {
+        const c = document.getElementById('top-products-container');
+        if (!c) return;
+        if (topProducts.length === 0) {
+            c.innerHTML = '<div style="text-align: center; padding: 30px; color: var(--muted);"><i class="fas fa-box-open" style="font-size: 40px; color: var(--gold); opacity: .4; display: block; margin-bottom: 15px;"></i><p>এখনো কোনো sales হয়নি।</p></div>';
+            return;
+        }
+
+        const productImages = {};
+        pSnap.forEach(d => {
+            const data = d.data();
+            productImages[parseInt(data.id)] = data.image || '';
+        });
+
+        let html = '';
+        topProducts.forEach((p, idx) => {
+            const rankClass = idx < 3 ? `rank-${idx + 1}` : 'rank-other';
+            const img = extractUrl(productImages[parseInt(p.id)]) || 'https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png';
+            html += `<div class="top-product-row">
+                <div class="top-product-rank ${rankClass}">${idx + 1}</div>
+                <img src="${img}" class="top-product-img" onerror="this.src='https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png'">
+                <div class="top-product-info">
+                    <div class="top-product-name">${p.name}</div>
+                    <div class="top-product-meta">Revenue: <strong>৳${p.revenue.toLocaleString()}</strong></div>
+                </div>
+                <div class="top-product-sales">
+                    <div class="count">${p.qty}</div>
+                    <div class="unit">sold</div>
+                </div>
+            </div>`;
+        });
+        c.innerHTML = html;
+    }
+
+    function renderWeeklyChart(weeklyData) {
+        const c = document.getElementById('weekly-chart-container');
+        if (!c) return;
+
+        const maxRevenue = Math.max(...weeklyData.map(d => d.revenue), 1);
+        const todayStr = new Date().toDateString();
+
+        let html = '<div class="weekly-chart">';
+        weeklyData.forEach(d => {
+            const heightPercent = (d.revenue / maxRevenue) * 100;
+            const barHeight = Math.max(heightPercent, 3);
+            const dayName = d.date.toLocaleDateString('en-GB', { weekday: 'short' });
+            const isToday = d.date.toDateString() === todayStr;
+            const displayRevenue = d.revenue > 0 ? '৳' + (d.revenue >= 1000 ? (d.revenue / 1000).toFixed(1) + 'k' : d.revenue) : '';
+            html += `<div class="weekly-bar-wrap" title="${dayName}: ৳${d.revenue.toLocaleString()} (${d.orders} orders)">
+                ${displayRevenue ? `<div class="weekly-bar-value">${displayRevenue}</div>` : '<div class="weekly-bar-value" style="opacity: 0;">&nbsp;</div>'}
+                <div class="weekly-bar" style="height: ${barHeight}%;"></div>
+                <div class="weekly-bar-label ${isToday ? 'today' : ''}">${dayName}</div>
+            </div>`;
+        });
+        html += '</div>';
+
+        const totalWeek = weeklyData.reduce((sum, d) => sum + d.revenue, 0);
+        const totalWeekOrders = weeklyData.reduce((sum, d) => sum + d.orders, 0);
+        const bestDay = weeklyData.reduce((best, d) => d.revenue > best.revenue ? d : best, weeklyData[0]);
+
+        html += `<div class="weekly-summary">
+            <div>📅 ৭ দিনে মোট: <strong>৳${totalWeek.toLocaleString()}</strong></div>
+            <div>🛒 অর্ডার: <strong>${totalWeekOrders}</strong></div>
+            ${bestDay && bestDay.revenue > 0 ? `<div>🏆 সেরা দিন: <strong>${bestDay.date.toLocaleDateString('en-GB', { weekday: 'long' })}</strong> (৳${bestDay.revenue.toLocaleString()})</div>` : ''}
+        </div>`;
+
+        c.innerHTML = html;
+    }
 
     const extractUrl = (str) => {
         if (!str || typeof str !== 'string') return '';
@@ -1933,7 +2199,7 @@
         };
 
         // ============================================
-        // 📄 PAGES EDITOR
+        // PAGES EDITOR
         // ============================================
         let pagesCache = {};
         let currentEditingPage = 'about';
@@ -1941,21 +2207,8 @@
         const DEFAULT_PAGES = {
             'about': `<h2 style="text-align: center; margin-bottom: 25px;">🌸 আমাদের সম্পর্কে | About Us</h2>
 <h3 style="color: var(--gold-color); font-size: 18px; margin-bottom: 10px;">স্বাগতম Burqa Bazaar and Boutiques-এ</h3>
-<p style="margin-bottom: 15px;"><strong>Burqa Bazaar and Boutiques</strong> হলো শালীনতা, সৌন্দর্য ও আধুনিক রুচির সমন্বয়ে গড়ে ওঠা একটি ফ্যাশন ব্র্যান্ড। নারীদের জন্য মানসম্মত ও আকর্ষণীয় <strong>হিজাব, বোরকা ও আবায়া</strong> সংগ্রহ সহজলভ্য করাই আমাদের প্রধান লক্ষ্য।</p>
+<p style="margin-bottom: 15px;"><strong>Burqa Bazaar and Boutiques</strong> হলো শালীনতা, সৌন্দর্য ও আধুনিক রুচির সমন্বয়ে গড়ে ওঠা একটি ফ্যাশন ব্র্যান্ড।</p>
 <p style="margin-bottom: 20px;">আমরা বিশ্বাস করি, শালীন পোশাক শুধু একটি পোশাক নয়—এটি ব্যক্তিত্ব, রুচি ও আত্মবিশ্বাস প্রকাশের একটি সুন্দর মাধ্যম।</p>
-<h3 style="color: var(--gold-color); font-size: 18px; margin-bottom: 10px;">✨ আমাদের কালেকশন</h3>
-<ul style="padding-left: 20px; margin-bottom: 20px; line-height: 1.8;">
-<li>🌷 Hijab Collection</li>
-<li>🖤 Burqa Collection</li>
-<li>🤍 Abaya Collection</li>
-</ul>
-<h3 style="color: var(--gold-color); font-size: 18px; margin-bottom: 10px;">🤝 কেন Burqa Bazaar and Boutiques?</h3>
-<ul style="padding-left: 20px; margin-bottom: 20px; line-height: 1.8;">
-<li>✔️ আকর্ষণীয় ও মার্জিত ডিজাইন</li>
-<li>✔️ বিভিন্ন রঙ ও স্টাইলের কালেকশন</li>
-<li>✔️ মানসম্মত পণ্যের প্রতি গুরুত্ব</li>
-<li>✔️ সহজ ও আন্তরিক যোগাযোগ ব্যবস্থা</li>
-</ul>
 <div class="policy-footer">
 <p style="font-weight: bold; color: var(--gold-color); font-size: 16px; margin-bottom: 10px;">Burqa Bazaar and Boutiques</p>
 <p style="font-weight: 600; font-size: 14px;">Modesty in Every Look.<br>Elegance in Every Detail.</p>
@@ -1968,19 +2221,8 @@
 <li>• নাম</li>
 <li>• মোবাইল নম্বর</li>
 <li>• ই-মেইল ঠিকানা</li>
-<li>• শহর ও জেলার তথ্য</li>
-<li>• থানা/উপজেলা</li>
 <li>• সম্পূর্ণ ডেলিভারি ঠিকানা</li>
 </ul>
-<h3 style="color: var(--gold-color); font-size: 18px; margin-top: 20px; margin-bottom: 10px;">২. আপনার তথ্য কীভাবে ব্যবহার করা হয়</h3>
-<ul style="padding-left: 20px; margin-bottom: 15px; line-height: 1.8;">
-<li>• আপনার অর্ডার গ্রহণ ও নিশ্চিত করতে</li>
-<li>• পণ্য ডেলিভারি সম্পন্ন করতে</li>
-<li>• অর্ডার সংক্রান্ত যোগাযোগ করতে</li>
-<li>• পেমেন্ট যাচাই করতে</li>
-</ul>
-<h3 style="color: var(--gold-color); font-size: 18px; margin-top: 20px; margin-bottom: 10px;">৩. পেমেন্ট সংক্রান্ত তথ্য</h3>
-<p style="margin-bottom: 15px;">আপনার সম্পূর্ণ ব্যাংক কার্ড, PIN, OTP, bKash PIN বা Nagad PIN আমাদের কাছে পাঠানোর প্রয়োজন নেই।</p>
 <div class="policy-footer">
 <p style="font-weight: bold; color: var(--gold-color); font-size: 16px; margin-bottom: 10px;">Burqa Bazaar and Boutiques</p>
 <p style="font-weight: 600; font-size: 14px;">Modesty in Every Look.<br>Elegance in Every Detail.</p>
@@ -1990,14 +2232,6 @@
 <p style="margin-bottom: 15px;"><strong>Burqa Bazaar and Boutiques</strong> ওয়েবসাইটে আপনাকে স্বাগতম।</p>
 <h3 style="color: var(--gold-color); font-size: 18px; margin-top: 20px; margin-bottom: 10px;">১. সাধারণ শর্তাবলি</h3>
 <p style="margin-bottom: 15px;">ওয়েবসাইটের পণ্য, ছবি, বিবরণ, মূল্য, অফার ও অন্যান্য তথ্য পরিবর্তনের অধিকার আমাদের রয়েছে।</p>
-<h3 style="color: var(--gold-color); font-size: 18px; margin-top: 20px; margin-bottom: 10px;">২. পণ্যের তথ্য ও ছবি</h3>
-<p style="margin-bottom: 15px;">বিভিন্ন মোবাইল বা কম্পিউটারের Display Settings-এর কারণে ছবির রঙ এবং বাস্তব পণ্যের রঙে সামান্য পার্থক্য হতে পারে।</p>
-<h3 style="color: var(--gold-color); font-size: 18px; margin-top: 20px; margin-bottom: 10px;">৩. পণ্যের মূল্য</h3>
-<p style="margin-bottom: 15px;">ওয়েবসাইটে প্রদর্শিত পণ্যের মূল্য সময়ের সঙ্গে পরিবর্তিত হতে পারে।</p>
-<h3 style="color: var(--gold-color); font-size: 18px; margin-top: 20px; margin-bottom: 10px;">৪. অর্ডার করার নিয়ম</h3>
-<p style="margin-bottom: 15px;">অর্ডার করার সময় সঠিক নাম, সচল মোবাইল নম্বর, সঠিক জেলা ও থানা এবং সম্পূর্ণ ডেলিভারি ঠিকানা দিতে হবে।</p>
-<h3 style="color: var(--gold-color); font-size: 18px; margin-top: 20px; margin-bottom: 10px;">৫. পেমেন্ট</h3>
-<p style="margin-bottom: 15px;">আমরা Cash on Delivery (COD), bKash ও Nagad পেমেন্ট গ্রহণ করি।</p>
 <div class="policy-footer">
 <p style="font-weight: bold; color: var(--gold-color); font-size: 16px; margin-bottom: 10px;">Burqa Bazaar and Boutiques</p>
 <p style="font-weight: 600; font-size: 14px;">Modesty in Every Look.<br>Elegance in Every Detail.</p>
@@ -2005,66 +2239,35 @@
 
             'return-policy': `<h2 style="text-align: center; margin-bottom: 25px;">🔄 Return & Exchange Policy</h2>
 <p style="margin-bottom: 15px;">পণ্য হাতে পাওয়ার <strong>৪৮ ঘণ্টার মধ্যে</strong> Return বা Exchange-এর জন্য যোগাযোগ করতে হবে।</p>
-<h3 style="color: var(--gold-color); font-size: 18px; margin-top: 20px; margin-bottom: 10px;">কোন ক্ষেত্রে Exchange করা যাবে?</h3>
-<ul style="padding-left: 20px; margin-bottom: 15px; line-height: 1.8;">
-<li>• ভুল পণ্য পাঠানো হলে</li>
-<li>• ভুল Size পাঠানো হলে</li>
-<li>• ডেলিভারির সময় পণ্য ক্ষতিগ্রস্ত হলে</li>
-<li>• Manufacturing Defect থাকলে</li>
-</ul>
-<h3 style="color: var(--gold-color); font-size: 18px; margin-top: 20px; margin-bottom: 10px;">কোন ক্ষেত্রে গ্রহণযোগ্য নয়?</h3>
-<ul style="padding-left: 20px; margin-bottom: 15px; line-height: 1.8; color: #d9534f;">
-<li>❌ পণ্য ব্যবহার করা হলে</li>
-<li>❌ পণ্য ধোয়া হলে</li>
-<li>❌ ৪৮ ঘণ্টার পর যোগাযোগ করলে</li>
-</ul>
 <div class="policy-footer">
 <p style="font-weight: bold; color: var(--gold-color); font-size: 16px; margin-bottom: 10px;">Burqa Bazaar and Boutiques</p>
 <p style="font-weight: 600; font-size: 14px;">Modesty in Every Look.<br>Elegance in Every Detail.</p>
 </div>`,
 
             'contact': `<h2 style="text-align: center; margin-bottom: 25px;">📞 Contact Us | যোগাযোগ করুন</h2>
-<p style="margin-bottom: 15px; text-align: center;">আপনার পছন্দের <strong>Hijab, Burqa ও Abaya</strong> সম্পর্কে জানতে আমাদের সঙ্গে যোগাযোগ করুন।</p>
+<p style="margin-bottom: 15px; text-align: center;">আমাদের সঙ্গে যোগাযোগ করুন।</p>
 <p style="text-align: center; margin-top: 20px; line-height: 2;">
 📞 <strong>Phone:</strong> +880 1832-140613<br>
 💬 <strong>WhatsApp:</strong> +880 1832-140613<br>
 📧 <strong>Email:</strong> burqabazaarandboutiques@gmail.com<br>
 📍 <strong>Address:</strong> ফেনী সওদাগর পট্টি, সওদাগর টাওয়ার, ২য় তলা, দোকান নং ০৩
-</p>
-<div class="policy-footer">
-<h3 style="color: var(--gold-color); font-size: 18px; margin-bottom: 10px; text-align: center; padding-left: 0;">🌸 আপনার সন্তুষ্টিই আমাদের অগ্রাধিকার</h3>
-<p style="font-weight: bold; color: var(--gold-color); font-size: 16px; margin-bottom: 8px;">Burqa Bazaar and Boutiques</p>
-<p style="font-weight: 600; font-size: 14px; line-height: 1.6;">প্রতিটি লুকে শালীনতা,<br>প্রতিটি ডিজাইনে সৌন্দর্য।</p>
-</div>`,
+</p>`,
 
             'track-order': `<h2 style="text-align: center; margin-bottom: 25px;">📦 Tracking Order | অর্ডার ট্র্যাক করুন</h2>
 <p style="margin-bottom: 20px; text-align: center;">আপনার Tracking Number / CN Number ব্যবহার করে পার্সেলের বর্তমান অবস্থান জানুন।</p>
-<div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px;">
+<div style="display: flex; flex-direction: column; gap: 12px;">
 <div class="info-card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-<div>
-<h4 style="margin: 0 0 5px 0; font-size: 16px; padding-left: 0;">Sundarban Courier</h4>
-<p style="margin: 0; font-size: 13px; color: var(--text-muted);">Tracking / CN Number দিয়ে ট্র্যাক করুন।</p>
-</div>
+<div><h4 style="margin: 0 0 5px 0; font-size: 16px; padding-left: 0;">Sundarban Courier</h4></div>
 <a href="https://customer.sundarbancourierltd.com/tracking" target="_blank" style="background: var(--gold-color); color: #000; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 14px;">Track Now</a>
 </div>
 <div class="info-card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-<div>
-<h4 style="margin: 0 0 5px 0; font-size: 16px; padding-left: 0;">Pathao Courier</h4>
-<p style="margin: 0; font-size: 13px; color: var(--text-muted);">Tracking Number দিয়ে পার্সেলের স্ট্যাটাস দেখুন।</p>
-</div>
+<div><h4 style="margin: 0 0 5px 0; font-size: 16px; padding-left: 0;">Pathao Courier</h4></div>
 <a href="https://pathao.com/courier/" target="_blank" style="background: var(--gold-color); color: #000; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 14px;">Track Now</a>
 </div>
 <div class="info-card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-<div>
-<h4 style="margin: 0 0 5px 0; font-size: 16px; padding-left: 0;">SteadFast Courier</h4>
-<p style="margin: 0; font-size: 13px; color: var(--text-muted);">Tracking Number দিয়ে পার্সেল ট্র্যাক করুন।</p>
-</div>
+<div><h4 style="margin: 0 0 5px 0; font-size: 16px; padding-left: 0;">SteadFast Courier</h4></div>
 <a href="https://www.steadfast.com.bd/tracking" target="_blank" style="background: var(--gold-color); color: #000; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 14px;">Track Now</a>
 </div>
-</div>
-<div class="policy-footer">
-<h3 style="color: var(--gold-color); font-size: 18px; margin-bottom: 10px; text-align: center; padding-left: 0;">🛍️ Burqa Bazaar and Boutiques</h3>
-<p style="font-weight: 600; font-size: 14px; line-height: 1.6;">Modesty in Every Look.<br>Elegance in Every Detail.</p>
 </div>`
         };
 
