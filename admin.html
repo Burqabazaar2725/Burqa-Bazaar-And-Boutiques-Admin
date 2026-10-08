@@ -207,26 +207,9 @@
         .review-stars-row { color: #ffb800; font-size: 14px; }
 
         /* Dashboard Top Products */
-        .top-product-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 8px;
-            border-bottom: 1px solid var(--border);
-        }
+        .top-product-row { display: flex; align-items: center; gap: 12px; padding: 12px 8px; border-bottom: 1px solid var(--border); }
         .top-product-row:last-child { border-bottom: none; }
-        .top-product-rank {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 14px;
-            flex-shrink: 0;
-            font-family: 'Playfair Display', serif;
-        }
+        .top-product-rank { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; flex-shrink: 0; font-family: 'Playfair Display', serif; }
         .top-product-rank.rank-1 { background: linear-gradient(135deg, #ffd700, #b8860b); color: #000; box-shadow: 0 0 12px rgba(255,215,0,.5); }
         .top-product-rank.rank-2 { background: linear-gradient(135deg, #c0c0c0, #808080); color: #000; }
         .top-product-rank.rank-3 { background: linear-gradient(135deg, #cd7f32, #8b4513); color: #fff; }
@@ -241,66 +224,14 @@
         .top-product-sales .unit { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
 
         /* Weekly Chart */
-        .weekly-chart {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-around;
-            gap: 8px;
-            height: 180px;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border);
-        }
-        .weekly-bar-wrap {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-end;
-            height: 100%;
-            gap: 6px;
-            min-width: 0;
-        }
-        .weekly-bar {
-            width: 100%;
-            max-width: 42px;
-            background: linear-gradient(180deg, var(--gold), #9c7526);
-            border-radius: 6px 6px 0 0;
-            min-height: 4px;
-            transition: all 0.5s ease;
-            position: relative;
-        }
-        .weekly-bar:hover {
-            background: linear-gradient(180deg, #ffd700, var(--gold));
-            box-shadow: 0 0 15px rgba(223,177,91,.5);
-        }
-        .weekly-bar-value {
-            font-size: 10px;
-            font-weight: 800;
-            color: var(--gold);
-            margin-bottom: 3px;
-        }
-        .weekly-bar-label {
-            font-size: 10px;
-            color: var(--muted);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: .3px;
-        }
-        .weekly-bar-label.today {
-            color: var(--gold);
-            font-weight: 800;
-        }
-        .weekly-summary {
-            display: flex;
-            justify-content: space-between;
-            padding-top: 15px;
-            margin-top: 15px;
-            border-top: 1px dashed var(--border);
-            font-size: 13px;
-            color: var(--muted);
-            flex-wrap: wrap;
-            gap: 10px;
-        }
+        .weekly-chart { display: flex; align-items: flex-end; justify-content: space-around; gap: 8px; height: 180px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+        .weekly-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 6px; min-width: 0; }
+        .weekly-bar { width: 100%; max-width: 42px; background: linear-gradient(180deg, var(--gold), #9c7526); border-radius: 6px 6px 0 0; min-height: 4px; transition: all 0.5s ease; position: relative; }
+        .weekly-bar:hover { background: linear-gradient(180deg, #ffd700, var(--gold)); box-shadow: 0 0 15px rgba(223,177,91,.5); }
+        .weekly-bar-value { font-size: 10px; font-weight: 800; color: var(--gold); margin-bottom: 3px; }
+        .weekly-bar-label { font-size: 10px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .3px; }
+        .weekly-bar-label.today { color: var(--gold); font-weight: 800; }
+        .weekly-summary { display: flex; justify-content: space-between; padding-top: 15px; margin-top: 15px; border-top: 1px dashed var(--border); font-size: 13px; color: var(--muted); flex-wrap: wrap; gap: 10px; }
         .weekly-summary strong { color: var(--gold); font-weight: 800; }
 
         @media (max-width: 500px) {
@@ -495,11 +426,44 @@
                     <h2><i class="fas fa-shopping-bag"></i> All Orders</h2>
                     <button class="btn-s" onclick="loadOrders()"><i class="fas fa-sync-alt"></i> Refresh</button>
                 </div>
+
+                <!-- Search Box -->
+                <div style="position: relative; margin-bottom: 15px;">
+                    <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gold);"></i>
+                    <input type="text" id="order-search" placeholder="Phone, Order ID, Name বা Address দিয়ে খুঁজুন..." oninput="applyOrderFilters()" style="width: 100%; padding: 13px 40px 13px 45px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-size: 14px; outline: none; font-family: inherit;">
+                    <button id="order-search-clear" onclick="clearOrderSearch()" style="display: none; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--muted); font-size: 16px; cursor: pointer; padding: 5px;"><i class="fas fa-times-circle"></i></button>
+                </div>
+
+                <!-- Date Filter -->
+                <div class="ofilter" id="date-filter" style="margin-bottom: 10px;">
+                    <button class="active" data-date="all" onclick="setDateFilter('all')">📆 All Time</button>
+                    <button data-date="today" onclick="setDateFilter('today')">☀️ Today</button>
+                    <button data-date="week" onclick="setDateFilter('week')">📅 Last 7 Days</button>
+                    <button data-date="month" onclick="setDateFilter('month')">🗓️ This Month</button>
+                    <button data-date="custom" onclick="setDateFilter('custom')">🎯 Custom</button>
+                </div>
+
+                <!-- Custom Date Range -->
+                <div id="custom-date-range" style="display: none; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-bottom: 15px; gap: 10px; flex-wrap: wrap; align-items: center;">
+                    <label style="font-size: 12px; color: var(--muted); font-weight: 600;">From:</label>
+                    <input type="date" id="date-from" onchange="applyOrderFilters()" style="padding: 8px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 13px; outline: none; font-family: inherit;">
+                    <label style="font-size: 12px; color: var(--muted); font-weight: 600;">To:</label>
+                    <input type="date" id="date-to" onchange="applyOrderFilters()" style="padding: 8px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 13px; outline: none; font-family: inherit;">
+                    <button onclick="clearCustomDate()" class="btn-s" style="padding: 8px 14px; font-size: 12px;"><i class="fas fa-times"></i> Clear</button>
+                </div>
+
+                <!-- Status Filter -->
                 <div class="ofilter" id="order-filter">
-                    <button class="active" data-filter="all" onclick="filterOrders('all')">📦 All</button>
+                    <button class="active" data-filter="all" onclick="filterOrders('all')">📦 All Status</button>
                     <button data-filter="pending" onclick="filterOrders('pending')">⏳ Pending</button>
                     <button data-filter="completed" onclick="filterOrders('completed')">✅ Completed</button>
                 </div>
+
+                <!-- Result count -->
+                <div id="order-result-count" style="font-size: 13px; color: var(--muted); margin-bottom: 15px; padding: 10px 15px; background: var(--card); border: 1px solid var(--border); border-radius: 10px;">
+                    <i class="fas fa-info-circle" style="color: var(--gold);"></i> <span id="order-count-text">Loading...</span>
+                </div>
+
                 <div id="orders-container"><div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div></div>
             </div>
 
@@ -797,6 +761,10 @@
     let editingBannerId = null;
     let selectedSizes = [];
     let orderFilter = 'all';
+    let orderSearchQuery = '';
+    let orderDateFilter = 'all';
+    let orderDateFrom = '';
+    let orderDateTo = '';
     let newsSearchQuery = '';
     let couponFilter = 'all';
 
@@ -936,7 +904,7 @@
     };
 
     // ============================================
-    // STATS (with Dashboard)
+    // STATS (Dashboard)
     // ============================================
     window.loadStats = async () => {
         try {
@@ -1019,7 +987,6 @@
                     .sort((a, b) => b.qty - a.qty)
                     .slice(0, 5);
                 renderTopProducts(sortedProducts, pSnap);
-
                 renderWeeklyChart(Object.values(weeklyData));
 
             } catch (e) {
@@ -1035,13 +1002,11 @@
             c.innerHTML = '<div style="text-align: center; padding: 30px; color: var(--muted);"><i class="fas fa-box-open" style="font-size: 40px; color: var(--gold); opacity: .4; display: block; margin-bottom: 15px;"></i><p>এখনো কোনো sales হয়নি।</p></div>';
             return;
         }
-
         const productImages = {};
         pSnap.forEach(d => {
             const data = d.data();
             productImages[parseInt(data.id)] = data.image || '';
         });
-
         let html = '';
         topProducts.forEach((p, idx) => {
             const rankClass = idx < 3 ? `rank-${idx + 1}` : 'rank-other';
@@ -1065,10 +1030,8 @@
     function renderWeeklyChart(weeklyData) {
         const c = document.getElementById('weekly-chart-container');
         if (!c) return;
-
         const maxRevenue = Math.max(...weeklyData.map(d => d.revenue), 1);
         const todayStr = new Date().toDateString();
-
         let html = '<div class="weekly-chart">';
         weeklyData.forEach(d => {
             const heightPercent = (d.revenue / maxRevenue) * 100;
@@ -1083,17 +1046,14 @@
             </div>`;
         });
         html += '</div>';
-
         const totalWeek = weeklyData.reduce((sum, d) => sum + d.revenue, 0);
         const totalWeekOrders = weeklyData.reduce((sum, d) => sum + d.orders, 0);
         const bestDay = weeklyData.reduce((best, d) => d.revenue > best.revenue ? d : best, weeklyData[0]);
-
         html += `<div class="weekly-summary">
             <div>📅 ৭ দিনে মোট: <strong>৳${totalWeek.toLocaleString()}</strong></div>
             <div>🛒 অর্ডার: <strong>${totalWeekOrders}</strong></div>
             ${bestDay && bestDay.revenue > 0 ? `<div>🏆 সেরা দিন: <strong>${bestDay.date.toLocaleDateString('en-GB', { weekday: 'long' })}</strong> (৳${bestDay.revenue.toLocaleString()})</div>` : ''}
         </div>`;
-
         c.innerHTML = html;
     }
 
@@ -1389,7 +1349,7 @@
     };
 
         // ============================================
-        // ORDERS
+        // ORDERS (with Search + Date Filter)
         // ============================================
         window.loadOrders = async () => {
             const c = document.getElementById('orders-container');
@@ -1413,17 +1373,170 @@
             renderOrders();
         };
 
+        window.setDateFilter = (dateFilter) => {
+            orderDateFilter = dateFilter;
+            document.querySelectorAll('#date-filter button').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-date') === dateFilter);
+            });
+            const customRange = document.getElementById('custom-date-range');
+            if (dateFilter === 'custom') {
+                customRange.style.display = 'flex';
+                const today = new Date().toISOString().split('T')[0];
+                if (!orderDateFrom) {
+                    document.getElementById('date-from').value = today;
+                    orderDateFrom = today;
+                }
+                if (!orderDateTo) {
+                    document.getElementById('date-to').value = today;
+                    orderDateTo = today;
+                }
+            } else {
+                customRange.style.display = 'none';
+            }
+            renderOrders();
+        };
+
+        window.clearCustomDate = () => {
+            orderDateFrom = '';
+            orderDateTo = '';
+            document.getElementById('date-from').value = '';
+            document.getElementById('date-to').value = '';
+            renderOrders();
+        };
+
+        window.clearOrderSearch = () => {
+            document.getElementById('order-search').value = '';
+            orderSearchQuery = '';
+            document.getElementById('order-search-clear').style.display = 'none';
+            renderOrders();
+        };
+
+        window.applyOrderFilters = () => {
+            orderSearchQuery = (document.getElementById('order-search').value || '').trim();
+            const clearBtn = document.getElementById('order-search-clear');
+            if (clearBtn) clearBtn.style.display = orderSearchQuery ? 'block' : 'none';
+            
+            if (orderDateFilter === 'custom') {
+                orderDateFrom = document.getElementById('date-from').value;
+                orderDateTo = document.getElementById('date-to').value;
+            }
+            
+            renderOrders();
+        };
+
+        window.resetAllOrderFilters = () => {
+            orderFilter = 'all';
+            orderDateFilter = 'all';
+            orderSearchQuery = '';
+            orderDateFrom = '';
+            orderDateTo = '';
+            
+            document.querySelectorAll('#order-filter button').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-filter') === 'all');
+            });
+            document.querySelectorAll('#date-filter button').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-date') === 'all');
+            });
+            const searchInput = document.getElementById('order-search');
+            if (searchInput) searchInput.value = '';
+            const clearBtn = document.getElementById('order-search-clear');
+            if (clearBtn) clearBtn.style.display = 'none';
+            const customRange = document.getElementById('custom-date-range');
+            if (customRange) customRange.style.display = 'none';
+            
+            renderOrders();
+        };
+
         window.renderOrders = () => {
             const c = document.getElementById('orders-container');
             let filtered = orders;
-            if (orderFilter === 'pending') filtered = orders.filter(o => o.status !== 'completed');
-            else if (orderFilter === 'completed') filtered = orders.filter(o => o.status === 'completed');
+
+            // Status filter
+            if (orderFilter === 'pending') filtered = filtered.filter(o => o.status !== 'completed');
+            else if (orderFilter === 'completed') filtered = filtered.filter(o => o.status === 'completed');
+
+            // Search filter
+            if (orderSearchQuery) {
+                const q = orderSearchQuery.toLowerCase();
+                filtered = filtered.filter(o => {
+                    const searchIn = [
+                        o.orderId || '',
+                        o.phone || '',
+                        o.name || '',
+                        o.address || '',
+                        o.thana || '',
+                        o.city || '',
+                        o.district || '',
+                        o.trxId || '',
+                        o.senderNumber || ''
+                    ].join(' ').toLowerCase();
+                    return searchIn.includes(q);
+                });
+            }
+
+            // Date filter
+            if (orderDateFilter !== 'all') {
+                let fromDate = null;
+                let toDate = null;
+
+                if (orderDateFilter === 'today') {
+                    fromDate = new Date();
+                    fromDate.setHours(0, 0, 0, 0);
+                    toDate = new Date();
+                    toDate.setHours(23, 59, 59, 999);
+                } else if (orderDateFilter === 'week') {
+                    fromDate = new Date();
+                    fromDate.setDate(fromDate.getDate() - 6);
+                    fromDate.setHours(0, 0, 0, 0);
+                    toDate = new Date();
+                    toDate.setHours(23, 59, 59, 999);
+                } else if (orderDateFilter === 'month') {
+                    fromDate = new Date();
+                    fromDate.setDate(1);
+                    fromDate.setHours(0, 0, 0, 0);
+                    toDate = new Date();
+                    toDate.setHours(23, 59, 59, 999);
+                } else if (orderDateFilter === 'custom') {
+                    if (orderDateFrom) {
+                        fromDate = new Date(orderDateFrom);
+                        fromDate.setHours(0, 0, 0, 0);
+                    }
+                    if (orderDateTo) {
+                        toDate = new Date(orderDateTo);
+                        toDate.setHours(23, 59, 59, 999);
+                    }
+                }
+
+                filtered = filtered.filter(o => {
+                    const dStr = o.date || o.createdAt;
+                    if (!dStr) return false;
+                    const oDate = new Date(dStr);
+                    if (fromDate && oDate < fromDate) return false;
+                    if (toDate && oDate > toDate) return false;
+                    return true;
+                });
+            }
+
+            // Update count
+            const countText = document.getElementById('order-count-text');
+            if (countText) {
+                let filterDesc = [];
+                if (orderFilter !== 'all') filterDesc.push(orderFilter);
+                if (orderDateFilter !== 'all') {
+                    const dateNames = { today: 'Today', week: 'Last 7 Days', month: 'This Month', custom: 'Custom Range' };
+                    filterDesc.push(dateNames[orderDateFilter] || orderDateFilter);
+                }
+                if (orderSearchQuery) filterDesc.push('Search: "' + orderSearchQuery + '"');
+                
+                const filterStr = filterDesc.length > 0 ? ' (' + filterDesc.join(' • ') + ')' : '';
+                countText.innerHTML = '<strong style="color: var(--gold);">' + filtered.length + '</strong> টি অর্ডার পাওয়া গেছে' + filterStr;
+            }
+
             if (filtered.length === 0) {
-                const emptyMsg = orderFilter === 'all' ? 'এখনো কোনো অর্ডার নেই' :
-                                orderFilter === 'pending' ? 'কোনো Pending অর্ডার নেই' : 'কোনো Completed অর্ডার নেই';
-                c.innerHTML = '<div class="empty"><i class="fas fa-shopping-bag"></i><h3>' + emptyMsg + '</h3></div>';
+                c.innerHTML = '<div class="empty"><i class="fas fa-search"></i><h3>কোনো অর্ডার পাওয়া যায়নি</h3><p style="margin-top: 8px; font-size: 13px;">ফিল্টার বা সার্চ পরিবর্তন করে দেখুন</p><button class="btn-s" onclick="resetAllOrderFilters()" style="margin-top: 15px;"><i class="fas fa-undo"></i> সব ফিল্টার Clear করুন</button></div>';
                 return;
             }
+
             let html = '';
             filtered.forEach(o => {
                 const st = (o.status === 'completed') ? 'completed' : 'pending';
@@ -2213,62 +2326,20 @@
 <p style="font-weight: bold; color: var(--gold-color); font-size: 16px; margin-bottom: 10px;">Burqa Bazaar and Boutiques</p>
 <p style="font-weight: 600; font-size: 14px;">Modesty in Every Look.<br>Elegance in Every Detail.</p>
 </div>`,
-
             'privacy': `<h2 style="text-align: center; margin-bottom: 25px;">🔒 Privacy Policy | গোপনীয়তা নীতি</h2>
-<p style="margin-bottom: 15px;"><strong>Burqa Bazaar and Boutiques</strong>-এ আপনার গোপনীয়তা ও ব্যক্তিগত তথ্যের নিরাপত্তাকে আমরা গুরুত্ব দিই।</p>
-<h3 style="color: var(--gold-color); font-size: 18px; margin-top: 20px; margin-bottom: 10px;">১. আমরা যে তথ্য সংগ্রহ করতে পারি</h3>
-<ul style="padding-left: 20px; margin-bottom: 15px; line-height: 1.8;">
-<li>• নাম</li>
-<li>• মোবাইল নম্বর</li>
-<li>• ই-মেইল ঠিকানা</li>
-<li>• সম্পূর্ণ ডেলিভারি ঠিকানা</li>
-</ul>
-<div class="policy-footer">
-<p style="font-weight: bold; color: var(--gold-color); font-size: 16px; margin-bottom: 10px;">Burqa Bazaar and Boutiques</p>
-<p style="font-weight: 600; font-size: 14px;">Modesty in Every Look.<br>Elegance in Every Detail.</p>
-</div>`,
-
+<p style="margin-bottom: 15px;"><strong>Burqa Bazaar and Boutiques</strong>-এ আপনার গোপনীয়তা ও ব্যক্তিগত তথ্যের নিরাপত্তাকে আমরা গুরুত্ব দিই।</p>`,
             'terms': `<h2 style="text-align: center; margin-bottom: 25px;">📜 Terms & Conditions | শর্তাবলি</h2>
-<p style="margin-bottom: 15px;"><strong>Burqa Bazaar and Boutiques</strong> ওয়েবসাইটে আপনাকে স্বাগতম।</p>
-<h3 style="color: var(--gold-color); font-size: 18px; margin-top: 20px; margin-bottom: 10px;">১. সাধারণ শর্তাবলি</h3>
-<p style="margin-bottom: 15px;">ওয়েবসাইটের পণ্য, ছবি, বিবরণ, মূল্য, অফার ও অন্যান্য তথ্য পরিবর্তনের অধিকার আমাদের রয়েছে।</p>
-<div class="policy-footer">
-<p style="font-weight: bold; color: var(--gold-color); font-size: 16px; margin-bottom: 10px;">Burqa Bazaar and Boutiques</p>
-<p style="font-weight: 600; font-size: 14px;">Modesty in Every Look.<br>Elegance in Every Detail.</p>
-</div>`,
-
+<p style="margin-bottom: 15px;"><strong>Burqa Bazaar and Boutiques</strong> ওয়েবসাইটে আপনাকে স্বাগতম।</p>`,
             'return-policy': `<h2 style="text-align: center; margin-bottom: 25px;">🔄 Return & Exchange Policy</h2>
-<p style="margin-bottom: 15px;">পণ্য হাতে পাওয়ার <strong>৪৮ ঘণ্টার মধ্যে</strong> Return বা Exchange-এর জন্য যোগাযোগ করতে হবে।</p>
-<div class="policy-footer">
-<p style="font-weight: bold; color: var(--gold-color); font-size: 16px; margin-bottom: 10px;">Burqa Bazaar and Boutiques</p>
-<p style="font-weight: 600; font-size: 14px;">Modesty in Every Look.<br>Elegance in Every Detail.</p>
-</div>`,
-
+<p style="margin-bottom: 15px;">পণ্য হাতে পাওয়ার <strong>৪৮ ঘণ্টার মধ্যে</strong> Return বা Exchange-এর জন্য যোগাযোগ করতে হবে।</p>`,
             'contact': `<h2 style="text-align: center; margin-bottom: 25px;">📞 Contact Us | যোগাযোগ করুন</h2>
-<p style="margin-bottom: 15px; text-align: center;">আমাদের সঙ্গে যোগাযোগ করুন।</p>
-<p style="text-align: center; margin-top: 20px; line-height: 2;">
+<p style="text-align: center; line-height: 2;">
 📞 <strong>Phone:</strong> +880 1832-140613<br>
 💬 <strong>WhatsApp:</strong> +880 1832-140613<br>
-📧 <strong>Email:</strong> burqabazaarandboutiques@gmail.com<br>
-📍 <strong>Address:</strong> ফেনী সওদাগর পট্টি, সওদাগর টাওয়ার, ২য় তলা, দোকান নং ০৩
+📧 <strong>Email:</strong> burqabazaarandboutiques@gmail.com
 </p>`,
-
             'track-order': `<h2 style="text-align: center; margin-bottom: 25px;">📦 Tracking Order | অর্ডার ট্র্যাক করুন</h2>
-<p style="margin-bottom: 20px; text-align: center;">আপনার Tracking Number / CN Number ব্যবহার করে পার্সেলের বর্তমান অবস্থান জানুন।</p>
-<div style="display: flex; flex-direction: column; gap: 12px;">
-<div class="info-card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-<div><h4 style="margin: 0 0 5px 0; font-size: 16px; padding-left: 0;">Sundarban Courier</h4></div>
-<a href="https://customer.sundarbancourierltd.com/tracking" target="_blank" style="background: var(--gold-color); color: #000; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 14px;">Track Now</a>
-</div>
-<div class="info-card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-<div><h4 style="margin: 0 0 5px 0; font-size: 16px; padding-left: 0;">Pathao Courier</h4></div>
-<a href="https://pathao.com/courier/" target="_blank" style="background: var(--gold-color); color: #000; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 14px;">Track Now</a>
-</div>
-<div class="info-card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-<div><h4 style="margin: 0 0 5px 0; font-size: 16px; padding-left: 0;">SteadFast Courier</h4></div>
-<a href="https://www.steadfast.com.bd/tracking" target="_blank" style="background: var(--gold-color); color: #000; padding: 8px 16px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 14px;">Track Now</a>
-</div>
-</div>`
+<p style="margin-bottom: 20px; text-align: center;">আপনার Tracking Number / CN Number ব্যবহার করে পার্সেলের বর্তমান অবস্থান জানুন।</p>`
         };
 
         const PAGE_NAMES = {
