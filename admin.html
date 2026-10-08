@@ -247,7 +247,7 @@
         .size-chart-header-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr auto; gap: 6px; margin-bottom: 8px; padding: 0 2px; }
         .size-chart-header-row span { font-size: 10px; color: var(--muted); font-weight: 700; text-transform: uppercase; text-align: center; }
 
-        /* 🆕 CONTACT ICON BOX */
+        /* CONTACT ICON BOX */
         .contact-icon-box { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 15px; margin-bottom: 12px; }
         .contact-icon-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 10px; }
         .contact-icon-num { width: 28px; height: 28px; border-radius: 50%; background: var(--gold); color: #0b0b0d; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; flex-shrink: 0; }
@@ -639,7 +639,7 @@
                 </div>
             </div>
 
-            <!-- Contact Icons (NEW - Dynamic!) -->
+            <!-- Contact Icons (Dynamic!) -->
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-icons"></i> Contact Icons</h3>
                 <small style="color: var(--muted); font-size: 11px; display: block; margin-bottom: 15px;">
@@ -993,10 +993,10 @@
 
 <script type="module">
     // ============================================
-    // FIREBASE IMPORTS
+    // 🔥 FIREBASE IMPORTS — getDoc FIXED!
     // ============================================
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, addDoc, doc, updateDoc, deleteDoc, setDoc, getDoc, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, addDoc, doc, getDoc, updateDoc, deleteDoc, setDoc, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
     import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
     // ============================================
@@ -2847,7 +2847,6 @@
             document.getElementById('c-logo-url').value = sData.logoUrl || DEFAULT_CONTENT.logoUrl;
             document.getElementById('c-copyright-text').value = sData.copyrightText || DEFAULT_CONTENT.copyrightText;
 
-            // Contact Icons
             const contactIconsList = Array.isArray(sData.contactIcons) && sData.contactIcons.length > 0
                 ? sData.contactIcons
                 : DEFAULT_CONTENT.contactIcons;
@@ -2870,7 +2869,7 @@
         }
     };
 
-    // ========== CONTACT ICONS (NEW!) ==========
+    // ========== CONTACT ICONS ==========
     window.renderContactIcons = function(list) {
         const c = document.getElementById('contact-icons-container');
         if (!c) return;
@@ -3380,7 +3379,6 @@
                 copyrightText: document.getElementById('c-copyright-text').value.trim()
             };
 
-            // Contact Icons
             const contactIcons = [];
             document.querySelectorAll('#contact-icons-container .contact-icon-box').forEach(box => {
                 const label = box.querySelector('.ci-label').value.trim();
@@ -3393,7 +3391,6 @@
             });
             contentData.contactIcons = contactIcons;
 
-            // Payment Methods
             const paymentMethods = [];
             document.querySelectorAll('#payment-methods-container .content-item-box').forEach(box => {
                 const name = box.querySelector('.pm-name').value.trim();
@@ -3407,7 +3404,6 @@
             });
             contentData.paymentMethods = paymentMethods;
 
-            // Couriers
             const couriersList = [];
             document.querySelectorAll('#couriers-container .content-item-box').forEach(box => {
                 const name = box.querySelector('.co-name').value.trim();
@@ -3422,7 +3418,6 @@
 
             await setDoc(doc(db, 'settings', 'store'), contentData, { merge: true });
 
-            // FAQ
             const faqList = [];
             document.querySelectorAll('#faq-container .faq-item-box').forEach((box, idx) => {
                 const cat = box.querySelector('.faq-cat').value;
@@ -3440,7 +3435,6 @@
                 await addDoc(collection(db, 'faq'), f);
             }
 
-            // Size Charts
             const currentCat = currentSizeChartCategory;
             const chartTitle = document.getElementById('size-chart-title-input').value.trim();
             const rows = [];
@@ -3463,7 +3457,6 @@
                 updatedAt: new Date().toISOString()
             }, { merge: true });
 
-            // Home Collections
             const hcList = [];
             document.querySelectorAll('#home-collections-container .content-item-box').forEach(box => {
                 const name = box.querySelector('.hc-name').value.trim();
