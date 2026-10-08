@@ -232,7 +232,6 @@
         .weekly-summary { display: flex; justify-content: space-between; padding-top: 15px; margin-top: 15px; border-top: 1px dashed var(--border); font-size: 13px; color: var(--muted); flex-wrap: wrap; gap: 10px; }
         .weekly-summary strong { color: var(--gold); font-weight: 800; }
 
-        /* CONTENT MANAGER */
         .content-item-box { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 15px; margin-bottom: 12px; position: relative; }
         .content-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .content-item-num { width: 28px; height: 28px; border-radius: 50%; background: var(--gold); color: #0b0b0d; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; }
@@ -247,7 +246,6 @@
         .size-chart-header-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr auto; gap: 6px; margin-bottom: 8px; padding: 0 2px; }
         .size-chart-header-row span { font-size: 10px; color: var(--muted); font-weight: 700; text-transform: uppercase; text-align: center; }
 
-        /* CONTACT ICON BOX */
         .contact-icon-box { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 15px; margin-bottom: 12px; }
         .contact-icon-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 10px; }
         .contact-icon-num { width: 28px; height: 28px; border-radius: 50%; background: var(--gold); color: #0b0b0d; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; flex-shrink: 0; }
@@ -855,6 +853,7 @@
 
     </div>
 </div>
+
 <!-- COUPON FORM MODAL -->
 <div class="coupon-form-modal" id="coupon-modal">
     <div class="coupon-form-box">
@@ -1371,693 +1370,691 @@
         row.innerHTML = `<input type="text" placeholder="Color Name" value="${name || ''}" class="cname"><input type="text" placeholder="Image URL" value="${img || ''}" class="cimg"><button type="button" class="rm" onclick="document.getElementById('${id}').remove()"><i class="fas fa-times"></i></button>`;
         c.appendChild(row);
     };
-</script>
-<script type="module">
-    // ============================================
-    // RESET FORM
-    // ============================================
-    window.resetForm = () => {
-        const btn = document.getElementById('submit-btn');
-        if (btn) {
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-save"></i> Save';
-        }
-        editingId = null;
-        selectedSizes = [];
-        document.getElementById('p-form').reset();
-        document.getElementById('edit-id').value = '';
-        document.getElementById('colors').innerHTML = '';
-        document.getElementById('additional-images').innerHTML = '';
-        document.getElementById('p-video').value = '';
-        document.getElementById('p-stock').value = '1';
-        document.getElementById('form-title').innerHTML = '<i class="fas fa-plus-circle"></i> Add New Product';
-        document.getElementById('form-msg').classList.remove('show');
-        document.getElementById('size-section').style.display = 'none';
-        document.getElementById('size-box').innerHTML = '';
-        addColor();
-        addAdditionalImage();
-    };
 
-    // ============================================
-    // PRODUCTS
-    // ============================================
-    window.loadProducts = async () => {
-        const c = document.getElementById('products-container');
-        c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div>';
-        try {
-            const snap = await getDocs(collection(db, 'products'));
-            products = [];
-            snap.forEach(d => products.push({ docId: d.id, ...d.data() }));
-            products.sort((a, b) => (parseInt(a.id) || 0) - (parseInt(b.id) || 0));
-            renderProducts();
-        } catch (err) {
-            c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3><p>' + (err.message || '') + '</p><button class="btn-s" onclick="loadProducts()" style="margin-top: 15px;">আবার চেষ্টা</button></div>';
-        }
-    };
+// ============================================
+// RESET FORM
+// ============================================
+window.resetForm = () => {
+    const btn = document.getElementById('submit-btn');
+    if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-save"></i> Save';
+    }
+    editingId = null;
+    selectedSizes = [];
+    document.getElementById('p-form').reset();
+    document.getElementById('edit-id').value = '';
+    document.getElementById('colors').innerHTML = '';
+    document.getElementById('additional-images').innerHTML = '';
+    document.getElementById('p-video').value = '';
+    document.getElementById('p-stock').value = '1';
+    document.getElementById('form-title').innerHTML = '<i class="fas fa-plus-circle"></i> Add New Product';
+    document.getElementById('form-msg').classList.remove('show');
+    document.getElementById('size-section').style.display = 'none';
+    document.getElementById('size-box').innerHTML = '';
+    addColor();
+    addAdditionalImage();
+};
 
-    window.renderProducts = () => {
-        const c = document.getElementById('products-container');
-        if (products.length === 0) {
-            c.innerHTML = '<div class="empty"><i class="fas fa-box-open"></i><h3>এখনো কোনো প্রোডাক্ট নেই</h3><p style="margin-bottom: 20px;">প্রথম প্রোডাক্ট যোগ করুন</p><button class="btn-p" onclick="switchTab(\'add\')"><i class="fas fa-plus"></i> Add Product</button></div>';
-            return;
-        }
-        let html = '';
-        products.forEach(p => {
-            const price = (typeof p.price === 'number') ? '৳ ' + p.price : (p.price || 'Coming Soon');
-            const img = extractUrl(p.image) || 'https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png';
-            const cc = Array.isArray(p.colors) ? p.colors.length : 0;
-            const sc = Array.isArray(p.sizes) ? p.sizes.length : 0;
-            const imgCount = Array.isArray(p.images) ? p.images.length : 1;
-            const hasVideo = p.video && p.video.length > 5;
-            const sizeText = sc > 0 ? sc + ' sizes' : 'no size';
-            let stockBadge = '';
-            if (p.stock !== undefined && p.stock !== null) {
-                const stockNum = parseInt(p.stock) || 0;
-                if (stockNum === 0) {
-                    stockBadge = '<span class="stock-badge outofstock"><i class="fas fa-times-circle"></i> Out of Stock</span>';
-                } else if (stockNum <= 5) {
-                    stockBadge = '<span class="stock-badge lowstock"><i class="fas fa-exclamation-triangle"></i> Low Stock: ' + stockNum + '</span>';
-                } else {
-                    stockBadge = '<span class="stock-badge instock"><i class="fas fa-check-circle"></i> In Stock: ' + stockNum + '</span>';
-                }
-            }
-            let videoTag = hasVideo ? ' • 🎥 video' : '';
-            html += `<div class="pcard">
-                <img src="${img}" class="pimg" onerror="this.src='https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png'">
-                <div class="pinfo">
-                    <div class="pname">${p.name || 'Unnamed'}</div>
-                    <div class="pmeta">${p.category || ''} • ${sizeText} • ${cc} colors • 📸 ${imgCount} image${imgCount !== 1 ? 's' : ''}${videoTag}</div>
-                    ${stockBadge}
-                    <div class="pprice">${price}</div>
-                    <div class="pacts">
-                        <button class="abtn edit" onclick="editProduct('${p.docId}')"><i class="fas fa-edit"></i> Edit</button>
-                        <button class="abtn del" onclick="deleteProduct('${p.docId}', '${(p.name || '').replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i> Delete</button>
-                    </div>
-                </div>
-            </div>`;
-        });
-        c.innerHTML = html;
-    };
+// ============================================
+// PRODUCTS
+// ============================================
+window.loadProducts = async () => {
+    const c = document.getElementById('products-container');
+    c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div>';
+    try {
+        const snap = await getDocs(collection(db, 'products'));
+        products = [];
+        snap.forEach(d => products.push({ docId: d.id, ...d.data() }));
+        products.sort((a, b) => (parseInt(a.id) || 0) - (parseInt(b.id) || 0));
+        renderProducts();
+    } catch (err) {
+        c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3><p>' + (err.message || '') + '</p><button class="btn-s" onclick="loadProducts()" style="margin-top: 15px;">আবার চেষ্টা</button></div>';
+    }
+};
 
-    window.deleteProduct = async (docId, name) => {
-        if (!confirm('মুছে ফেলতে চান: "' + name + '"?')) return;
-        try {
-            await deleteDoc(doc(db, 'products', docId));
-            alert('✅ মুছে ফেলা হয়েছে।');
-            loadProducts();
-            loadStats();
-        } catch (err) {
-            alert('❌ ' + (err.message || ''));
-        }
-    };
-
-    window.editProduct = (docId) => {
-        const p = products.find(x => x.docId === docId);
-        if (!p) { alert('প্রোডাক্ট পাওয়া যায়নি'); return; }
-        const btn = document.getElementById('submit-btn');
-        if (btn) {
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-save"></i> Update';
-        }
-        document.getElementById('p-form').reset();
-        document.getElementById('edit-id').value = '';
-        document.getElementById('p-name').value = '';
-        document.getElementById('p-cat').value = '';
-        document.getElementById('p-price').value = '';
-        document.getElementById('p-stock').value = '1';
-        document.getElementById('p-image').value = '';
-        document.getElementById('p-video').value = '';
-        document.getElementById('p-badge').value = '';
-        document.getElementById('p-desc').value = '';
-        document.getElementById('colors').innerHTML = '';
-        document.getElementById('additional-images').innerHTML = '';
-        document.getElementById('size-box').innerHTML = '';
-        document.getElementById('form-msg').classList.remove('show');
-        editingId = null;
-        selectedSizes = [];
-        editingId = docId;
-        document.getElementById('edit-id').value = docId;
-        document.getElementById('p-name').value = p.name || '';
-        document.getElementById('p-cat').value = p.category || '';
-        document.getElementById('p-price').value = p.price || '';
-        document.getElementById('p-stock').value = (p.stock !== undefined && p.stock !== null) ? p.stock : 1;
-        document.getElementById('p-image').value = p.image || '';
-        document.getElementById('p-video').value = p.video || '';
-        document.getElementById('p-badge').value = p.badge || '';
-        document.getElementById('p-desc').value = p.fullDescription || '';
-        selectedSizes = Array.isArray(p.sizes) ? p.sizes.slice() : [];
-        onCategoryChange();
-        const cc = document.getElementById('colors');
-        cc.innerHTML = '';
-        if (Array.isArray(p.colors) && p.colors.length > 0) {
-            p.colors.forEach(col => addColor(col.name || '', col.image || ''));
-        } else {
-            addColor();
-        }
-        const ai = document.getElementById('additional-images');
-        ai.innerHTML = '';
-        if (Array.isArray(p.images) && p.images.length > 1) {
-            p.images.slice(1).forEach(imgUrl => addAdditionalImage(extractUrl(imgUrl) || imgUrl));
-        } else {
-            addAdditionalImage();
-        }
-        document.getElementById('form-title').innerHTML = '<i class="fas fa-edit"></i> Edit Product';
-        document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Update';
-        switchTab('add');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    window.submitProduct = async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('submit-btn');
-        if (btn.disabled) return;
-        const orig = btn.innerHTML;
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-        try {
-            const name = document.getElementById('p-name').value.trim();
-            const category = document.getElementById('p-cat').value;
-            const priceRaw = document.getElementById('p-price').value.trim();
-            const stockRaw = document.getElementById('p-stock').value.trim();
-            const image = document.getElementById('p-image').value.trim();
-            const videoUrl = document.getElementById('p-video') ? document.getElementById('p-video').value.trim() : '';
-            const badge = document.getElementById('p-badge').value;
-            const desc = document.getElementById('p-desc').value.trim();
-            const editId = document.getElementById('edit-id').value;
-            if (!name || !category || !priceRaw || !image || !desc || stockRaw === '') {
-                showMsg('form-msg', '⚠️ সব ফিল্ড পূরণ করুন।', 'bad');
-                btn.disabled = false;
-                btn.innerHTML = orig;
-                return;
-            }
-            let price;
-            if (priceRaw.toLowerCase().includes('coming')) price = 'Coming Soon';
-            else {
-                const p = parseInt(priceRaw.replace(/[^0-9]/g, ''));
-                price = isNaN(p) ? 'Coming Soon' : p;
-            }
-            const stock = parseInt(stockRaw) || 0;
-            let sizes = [];
-            if (category === 'Burqa Collection' || category === 'Abaya Collection') {
-                sizes = selectedSizes.slice();
-                if (sizes.length === 0) {
-                    showMsg('form-msg', '⚠️ অন্তত একটি Size সিলেক্ট করুন।', 'bad');
-                    btn.disabled = false;
-                    btn.innerHTML = orig;
-                    return;
-                }
-            }
-            const colors = [];
-            document.querySelectorAll('#colors .crow').forEach(row => {
-                const n = row.querySelector('.cname').value.trim();
-                const i = row.querySelector('.cimg').value.trim();
-                if (n && i) colors.push({ name: n, image: extractUrl(i) || i });
-            });
-            if (colors.length === 0) {
-                showMsg('form-msg', '⚠️ অন্তত একটি Color যোগ করুন।', 'bad');
-                btn.disabled = false;
-                btn.innerHTML = orig;
-                return;
-            }
-            const additionalImages = [];
-            document.querySelectorAll('#additional-images .crow-img').forEach(row => {
-                const urlInput = row.querySelector('.aimg');
-                if (urlInput) {
-                    const cleanUrl = extractUrl(urlInput.value.trim()) || urlInput.value.trim();
-                    if (cleanUrl && cleanUrl.length > 5) additionalImages.push(cleanUrl);
-                }
-            });
-            const cleanImg = extractUrl(image) || image;
-            const allImages = [cleanImg, ...additionalImages];
-            const uniqueImages = [...new Set(allImages)];
-            const data = {
-                name, category, price, stock: stock, image: cleanImg,
-                video: videoUrl || null, badge: badge || null,
-                badgeText: badge ? badge.toUpperCase() : null,
-                sizes: sizes, colors: colors, images: uniqueImages,
-                fullDescription: desc, updatedAt: new Date().toISOString()
-            };
-            if (editId) {
-                await updateDoc(doc(db, 'products', editId), data);
-                showMsg('form-msg', '✅ আপডেট হয়েছে!', 'ok');
-                setTimeout(() => { resetForm(); switchTab('products'); loadStats(); }, 1000);
+window.renderProducts = () => {
+    const c = document.getElementById('products-container');
+    if (products.length === 0) {
+        c.innerHTML = '<div class="empty"><i class="fas fa-box-open"></i><h3>এখনো কোনো প্রোডাক্ট নেই</h3><p style="margin-bottom: 20px;">প্রথম প্রোডাক্ট যোগ করুন</p><button class="btn-p" onclick="switchTab(\'add\')"><i class="fas fa-plus"></i> Add Product</button></div>';
+        return;
+    }
+    let html = '';
+    products.forEach(p => {
+        const price = (typeof p.price === 'number') ? '৳ ' + p.price : (p.price || 'Coming Soon');
+        const img = extractUrl(p.image) || 'https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png';
+        const cc = Array.isArray(p.colors) ? p.colors.length : 0;
+        const sc = Array.isArray(p.sizes) ? p.sizes.length : 0;
+        const imgCount = Array.isArray(p.images) ? p.images.length : 1;
+        const hasVideo = p.video && p.video.length > 5;
+        const sizeText = sc > 0 ? sc + ' sizes' : 'no size';
+        let stockBadge = '';
+        if (p.stock !== undefined && p.stock !== null) {
+            const stockNum = parseInt(p.stock) || 0;
+            if (stockNum === 0) {
+                stockBadge = '<span class="stock-badge outofstock"><i class="fas fa-times-circle"></i> Out of Stock</span>';
+            } else if (stockNum <= 5) {
+                stockBadge = '<span class="stock-badge lowstock"><i class="fas fa-exclamation-triangle"></i> Low Stock: ' + stockNum + '</span>';
             } else {
-                const snap = await getDocs(collection(db, 'products'));
-                let maxId = 0;
-                snap.forEach(d => { const v = parseInt(d.data().id) || 0; if (v > maxId) maxId = v; });
-                data.id = maxId + 1;
-                data.createdAt = new Date().toISOString();
-                await addDoc(collection(db, 'products'), data);
-                showMsg('form-msg', '✅ নতুন প্রোডাক্ট যোগ হয়েছে!', 'ok');
-                setTimeout(() => { resetForm(); switchTab('products'); loadStats(); }, 1000);
-            }
-        } catch (err) {
-            console.error(err);
-            showMsg('form-msg', '❌ সেভ করা যায়নি: ' + (err.message || ''), 'bad');
-            btn.disabled = false;
-            btn.innerHTML = orig;
-        }
-    };
-
-    // ============================================
-    // ORDERS
-    // ============================================
-    window.loadOrders = async () => {
-        const c = document.getElementById('orders-container');
-        c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div>';
-        try {
-            const snap = await getDocs(collection(db, 'orders'));
-            orders = [];
-            snap.forEach(d => orders.push({ docId: d.id, ...d.data() }));
-            orders.sort((a, b) => new Date(b.date || b.createdAt || 0) - new Date(a.date || a.createdAt || 0));
-            renderOrders();
-        } catch (err) {
-            c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3><p>' + (err.message || '') + '</p></div>';
-        }
-    };
-
-    window.filterOrders = (filter) => {
-        orderFilter = filter;
-        document.querySelectorAll('#order-filter button').forEach(b => {
-            b.classList.toggle('active', b.getAttribute('data-filter') === filter);
-        });
-        renderOrders();
-    };
-
-    window.setDateFilter = (dateFilter) => {
-        orderDateFilter = dateFilter;
-        document.querySelectorAll('#date-filter button').forEach(b => {
-            b.classList.toggle('active', b.getAttribute('data-date') === dateFilter);
-        });
-        const customRange = document.getElementById('custom-date-range');
-        if (dateFilter === 'custom') {
-            customRange.style.display = 'flex';
-            const today = new Date().toISOString().split('T')[0];
-            if (!orderDateFrom) {
-                document.getElementById('date-from').value = today;
-                orderDateFrom = today;
-            }
-            if (!orderDateTo) {
-                document.getElementById('date-to').value = today;
-                orderDateTo = today;
-            }
-        } else {
-            customRange.style.display = 'none';
-        }
-        renderOrders();
-    };
-
-    window.clearCustomDate = () => {
-        orderDateFrom = '';
-        orderDateTo = '';
-        document.getElementById('date-from').value = '';
-        document.getElementById('date-to').value = '';
-        renderOrders();
-    };
-
-    window.clearOrderSearch = () => {
-        document.getElementById('order-search').value = '';
-        orderSearchQuery = '';
-        document.getElementById('order-search-clear').style.display = 'none';
-        renderOrders();
-    };
-
-    window.applyOrderFilters = () => {
-        orderSearchQuery = (document.getElementById('order-search').value || '').trim();
-        const clearBtn = document.getElementById('order-search-clear');
-        if (clearBtn) clearBtn.style.display = orderSearchQuery ? 'block' : 'none';
-        if (orderDateFilter === 'custom') {
-            orderDateFrom = document.getElementById('date-from').value;
-            orderDateTo = document.getElementById('date-to').value;
-        }
-        renderOrders();
-    };
-
-    window.resetAllOrderFilters = () => {
-        orderFilter = 'all';
-        orderDateFilter = 'all';
-        orderSearchQuery = '';
-        orderDateFrom = '';
-        orderDateTo = '';
-        document.querySelectorAll('#order-filter button').forEach(b => {
-            b.classList.toggle('active', b.getAttribute('data-filter') === 'all');
-        });
-        document.querySelectorAll('#date-filter button').forEach(b => {
-            b.classList.toggle('active', b.getAttribute('data-date') === 'all');
-        });
-        const searchInput = document.getElementById('order-search');
-        if (searchInput) searchInput.value = '';
-        const clearBtn = document.getElementById('order-search-clear');
-        if (clearBtn) clearBtn.style.display = 'none';
-        const customRange = document.getElementById('custom-date-range');
-        if (customRange) customRange.style.display = 'none';
-        renderOrders();
-    };
-
-    window.renderOrders = () => {
-        const c = document.getElementById('orders-container');
-        let filtered = orders;
-        if (orderFilter === 'pending') filtered = filtered.filter(o => o.status !== 'completed');
-        else if (orderFilter === 'completed') filtered = filtered.filter(o => o.status === 'completed');
-        if (orderSearchQuery) {
-            const q = orderSearchQuery.toLowerCase();
-            filtered = filtered.filter(o => {
-                const searchIn = [
-                    o.orderId || '', o.phone || '', o.name || '', o.address || '',
-                    o.thana || '', o.city || '', o.district || '', o.trxId || '', o.senderNumber || ''
-                ].join(' ').toLowerCase();
-                return searchIn.includes(q);
-            });
-        }
-        if (orderDateFilter !== 'all') {
-            let fromDate = null, toDate = null;
-            if (orderDateFilter === 'today') {
-                fromDate = new Date(); fromDate.setHours(0, 0, 0, 0);
-                toDate = new Date(); toDate.setHours(23, 59, 59, 999);
-            } else if (orderDateFilter === 'week') {
-                fromDate = new Date(); fromDate.setDate(fromDate.getDate() - 6); fromDate.setHours(0, 0, 0, 0);
-                toDate = new Date(); toDate.setHours(23, 59, 59, 999);
-            } else if (orderDateFilter === 'month') {
-                fromDate = new Date(); fromDate.setDate(1); fromDate.setHours(0, 0, 0, 0);
-                toDate = new Date(); toDate.setHours(23, 59, 59, 999);
-            } else if (orderDateFilter === 'custom') {
-                if (orderDateFrom) { fromDate = new Date(orderDateFrom); fromDate.setHours(0, 0, 0, 0); }
-                if (orderDateTo) { toDate = new Date(orderDateTo); toDate.setHours(23, 59, 59, 999); }
-            }
-            filtered = filtered.filter(o => {
-                const dStr = o.date || o.createdAt;
-                if (!dStr) return false;
-                const oDate = new Date(dStr);
-                if (fromDate && oDate < fromDate) return false;
-                if (toDate && oDate > toDate) return false;
-                return true;
-            });
-        }
-        const countText = document.getElementById('order-count-text');
-        if (countText) {
-            let filterDesc = [];
-            if (orderFilter !== 'all') filterDesc.push(orderFilter);
-            if (orderDateFilter !== 'all') {
-                const dateNames = { today: 'Today', week: 'Last 7 Days', month: 'This Month', custom: 'Custom Range' };
-                filterDesc.push(dateNames[orderDateFilter] || orderDateFilter);
-            }
-            if (orderSearchQuery) filterDesc.push('Search: "' + orderSearchQuery + '"');
-            const filterStr = filterDesc.length > 0 ? ' (' + filterDesc.join(' • ') + ')' : '';
-            countText.innerHTML = '<strong style="color: var(--gold);">' + filtered.length + '</strong> টি অর্ডার পাওয়া গেছে' + filterStr;
-        }
-        if (filtered.length === 0) {
-            c.innerHTML = '<div class="empty"><i class="fas fa-search"></i><h3>কোনো অর্ডার পাওয়া যায়নি</h3><p style="margin-top: 8px; font-size: 13px;">ফিল্টার বা সার্চ পরিবর্তন করে দেখুন</p><button class="btn-s" onclick="resetAllOrderFilters()" style="margin-top: 15px;"><i class="fas fa-undo"></i> সব ফিল্টার Clear করুন</button></div>';
-            return;
-        }
-        let html = '';
-        filtered.forEach(o => {
-            const st = (o.status === 'completed') ? 'completed' : 'pending';
-            const stTxt = (st === 'completed') ? '✅ Completed' : '⏳ Pending';
-            const dStr = o.date || o.createdAt || '';
-            const niceDate = dStr ? new Date(dStr).toLocaleString('en-GB') : '—';
-            let ph = '';
-            if (Array.isArray(o.products)) {
-                o.products.forEach(p => {
-                    const m = [];
-                    if (p.size) m.push('Size: ' + p.size);
-                    if (p.color) m.push('Color: ' + p.color);
-                    const ms = m.length ? ' (' + m.join(', ') + ')' : '';
-                    const priceStr = (typeof p.price === 'number') ? '৳' + p.price : 'TBD';
-                    ph += `<li>${p.name || 'Product'}${ms} — ${priceStr} × ${p.quantity || 1}</li>`;
-                });
-            }
-            const phoneClean = (o.phone || '').replace(/[^0-9]/g, '');
-            const waLink = phoneClean ? 'https://wa.me/88' + (phoneClean.startsWith('0') ? phoneClean.substring(1) : phoneClean) : '#';
-            let couponLine = '';
-            if (o.couponCode) {
-                couponLine = '<div style="color: #22c55e; font-weight: 700;"><strong>🎟️ Coupon:</strong> ' + o.couponCode + ' (-৳' + (o.discountAmount || 0) + ')</div>';
-            }
-            html += `<div class="ocard">
-                <div class="ohead">
-                    <div class="oid">📦 ${o.orderId || 'N/A'}</div>
-                    <div class="ostatus ${st}">${stTxt}</div>
-                </div>
-                <div class="obody">
-                    <div><strong>👤 Name:</strong> ${o.name || '—'}</div>
-                    <div><strong>📞 Phone:</strong> ${o.phone || '—'}</div>
-                    <div><strong>📍 Address:</strong> ${o.address || ''}, ${o.thana || ''}, ${o.city || ''}, ${o.district || ''}</div>
-                    <div><strong>💳 Payment:</strong> ${o.paymentMethod || '—'}</div>
-                    ${o.senderNumber ? '<div><strong>📱 Sender No:</strong> ' + o.senderNumber + '</div>' : ''}
-                    ${o.trxId ? '<div><strong>🔑 TrxID:</strong> ' + o.trxId + '</div>' : ''}
-                    ${couponLine}
-                    ${o.notes ? '<div><strong>📝 Notes:</strong> ' + o.notes + '</div>' : ''}
-                    <div><strong>🕐 Date:</strong> ${niceDate}</div>
-                    ${ph ? '<div style="margin-top: 10px;"><strong>🛍️ Products:</strong></div><ul class="olist">' + ph + '</ul>' : ''}
-                    <div class="ototal">
-                        <span>Subtotal: ৳${o.subtotal || 0}${o.discountAmount ? ' - ৳' + o.discountAmount : ''} | Delivery: ৳${o.deliveryCharge || 0}</span>
-                        <span>💰 Total: ৳${o.totalAmount || 0}</span>
-                    </div>
-                </div>
-                <div class="oactions">
-                    ${st === 'pending'
-                        ? `<button class="btn-complete" onclick="updateOrderStatus('${o.docId}', 'completed')"><i class="fas fa-check-circle"></i> Mark Completed</button>`
-                        : `<button class="btn-pending" onclick="updateOrderStatus('${o.docId}', 'pending')"><i class="fas fa-clock"></i> Mark Pending</button>`
-                    }
-                    <a href="${waLink}" target="_blank" class="btn-complete"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-                    <button class="btn-od" onclick="deleteOrder('${o.docId}', '${(o.orderId || '').replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i> Delete</button>
-                </div>
-            </div>`;
-        });
-        c.innerHTML = html;
-    };
-
-    window.updateOrderStatus = async (docId, newStatus) => {
-        const label = newStatus === 'completed' ? 'Completed' : 'Pending';
-        if (!confirm('অর্ডারটি "' + label + '" হিসেবে মার্ক করতে চান?')) return;
-        try {
-            await updateDoc(doc(db, 'orders', docId), { status: newStatus, statusUpdatedAt: new Date().toISOString() });
-            alert('✅ অর্ডার স্ট্যাটাস "' + label + '" আপডেট হয়েছে!');
-            loadOrders();
-            loadStats();
-        } catch (err) { alert('❌ ' + (err.message || 'আপডেট করা যায়নি')); }
-    };
-
-    window.deleteOrder = async (docId, orderId) => {
-        if (!confirm('অর্ডারটি মুছে ফেলতে চান?\n\n' + orderId)) return;
-        try {
-            await deleteDoc(doc(db, 'orders', docId));
-            alert('✅ অর্ডার মুছে ফেলা হয়েছে।');
-            loadOrders();
-            loadStats();
-        } catch (err) { alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি')); }
-    };
-
-    // ============================================
-    // REVIEWS
-    // ============================================
-    window.loadReviews = async () => {
-        const c = document.getElementById('reviews-container');
-        c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading Reviews...</p></div>';
-        try {
-            const q = query(collection(db, 'reviews'), orderBy('date', 'desc'));
-            const snap = await getDocs(q);
-            reviews = [];
-            snap.forEach(d => reviews.push({ docId: d.id, ...d.data() }));
-            renderReviews();
-        } catch (err) {
-            console.error(err);
-            try {
-                const snap2 = await getDocs(collection(db, 'reviews'));
-                reviews = [];
-                snap2.forEach(d => reviews.push({ docId: d.id, ...d.data() }));
-                reviews.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
-                renderReviews();
-            } catch (err2) {
-                c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3><p>' + (err2.message || '') + '</p></div>';
+                stockBadge = '<span class="stock-badge instock"><i class="fas fa-check-circle"></i> In Stock: ' + stockNum + '</span>';
             }
         }
-    };
-
-    function renderStarsRow(rating) {
-        let html = '';
-        const rt = parseInt(rating) || 0;
-        for (let i = 1; i <= 5; i++) {
-            if (i <= rt) html += '<i class="fas fa-star"></i>';
-            else html += '<i class="far fa-star"></i>';
-        }
-        return html;
-    }
-
-    function getProductNameById(pid) {
-        const p = products.find(x => parseInt(x.id) === parseInt(pid));
-        return p ? p.name : ('Product #' + pid);
-    }
-
-    window.renderReviews = () => {
-        const c = document.getElementById('reviews-container');
-        if (reviews.length === 0) {
-            c.innerHTML = '<div class="empty"><i class="fas fa-star"></i><h3>এখনো কোনো Review নেই</h3><p style="margin-top: 8px; font-size: 13px;">কাস্টমাররা রিভিউ দিলে এখানে দেখা যাবে।</p></div>';
-            return;
-        }
-        let totalRating = 0;
-        reviews.forEach(r => totalRating += (parseInt(r.rating) || 0));
-        const avg = (totalRating / reviews.length).toFixed(1);
-        let html = `<div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 18px; display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
-            <div style="text-align: center; min-width: 90px;">
-                <div style="font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 800; color: var(--gold); line-height: 1;">${avg}</div>
-                <div class="review-stars-row" style="margin-top: 4px;">${renderStarsRow(Math.round(parseFloat(avg)))}</div>
-                <div style="font-size: 11px; color: var(--muted); margin-top: 4px;">${reviews.length} reviews</div>
-            </div>
-            <div style="flex: 1; min-width: 200px;">
-                <div style="font-size: 13px; color: var(--muted); line-height: 1.8;">
-                    মোট <strong style="color: var(--gold);">${reviews.length}</strong>টি কাস্টমার রিভিউ পাওয়া গেছে।<br>
-                    এভারেজ রেটিং: <strong style="color: var(--gold);">${avg} / 5</strong>
+        let videoTag = hasVideo ? ' • 🎥 video' : '';
+        html += `<div class="pcard">
+            <img src="${img}" class="pimg" onerror="this.src='https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png'">
+            <div class="pinfo">
+                <div class="pname">${p.name || 'Unnamed'}</div>
+                <div class="pmeta">${p.category || ''} • ${sizeText} • ${cc} colors • 📸 ${imgCount} image${imgCount !== 1 ? 's' : ''}${videoTag}</div>
+                ${stockBadge}
+                <div class="pprice">${price}</div>
+                <div class="pacts">
+                    <button class="abtn edit" onclick="editProduct('${p.docId}')"><i class="fas fa-edit"></i> Edit</button>
+                    <button class="abtn del" onclick="deleteProduct('${p.docId}', '${(p.name || '').replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i> Delete</button>
                 </div>
             </div>
         </div>`;
-        html += '<div style="display: flex; flex-direction: column; gap: 12px;">';
-        reviews.forEach(r => {
-            const prodName = getProductNameById(r.productId);
-            const rt = parseInt(r.rating) || 0;
-            const dStr = r.date || r.createdAt || '';
-            const niceDate = dStr ? new Date(dStr).toLocaleString('en-GB') : '—';
-            html += `<div class="ocard" style="padding: 15px;">
-                <div class="ohead" style="margin-bottom: 8px;">
-                    <div style="flex: 1; min-width: 0;">
-                        <div style="font-family: 'Playfair Display', serif; color: var(--gold); font-size: 13px; font-weight: 700;">🛍️ ${prodName}</div>
-                        <div style="font-size: 11px; color: var(--muted); margin-top: 2px;">Product ID: ${r.productId}</div>
-                    </div>
-                    <div class="review-stars-row">${renderStarsRow(rt)}</div>
-                </div>
-                <div style="background: var(--bg); border-radius: 8px; padding: 12px; margin-top: 8px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
-                        <div style="font-weight: 700; color: var(--text); font-size: 14px;">👤 ${r.name || 'Anonymous'}</div>
-                        <div style="font-size: 11px; color: var(--muted);">${niceDate}</div>
-                    </div>
-                    <div style="font-size: 13px; color: var(--muted); line-height: 1.7;">${r.text || '(no comment)'}</div>
-                </div>
-                <div class="oactions" style="margin-top: 10px;">
-                    <button class="btn-od" onclick="deleteReview('${r.docId}', '${(r.name || '').replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i> Delete Review</button>
-                </div>
-            </div>`;
-        });
-        html += '</div>';
-        c.innerHTML = html;
-    };
+    });
+    c.innerHTML = html;
+};
 
-    window.deleteReview = async (docId, name) => {
-        if (!confirm('রিভিউটি মুছে ফেলতে চান? গ্রাহক: "' + name + '"')) return;
-        try {
-            await deleteDoc(doc(db, 'reviews', docId));
-            alert('✅ রিভিউ মুছে ফেলা হয়েছে।');
-            loadReviews();
-        } catch (err) { alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি')); }
-    };
+window.deleteProduct = async (docId, name) => {
+    if (!confirm('মুছে ফেলতে চান: "' + name + '"?')) return;
+    try {
+        await deleteDoc(doc(db, 'products', docId));
+        alert('✅ মুছে ফেলা হয়েছে।');
+        loadProducts();
+        loadStats();
+    } catch (err) {
+        alert('❌ ' + (err.message || ''));
+    }
+};
 
-    // ============================================
-    // NEWSLETTER
-    // ============================================
-    window.loadNewsletter = async () => {
-        const c = document.getElementById('newsletter-container');
-        c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading Subscribers...</p></div>';
-        try {
-            let snap;
-            try {
-                const q = query(collection(db, 'newsletter'), orderBy('date', 'desc'));
-                snap = await getDocs(q);
-            } catch (orderErr) {
-                snap = await getDocs(collection(db, 'newsletter'));
-            }
-            newsletterList = [];
-            snap.forEach(d => newsletterList.push({ docId: d.id, ...d.data() }));
-            newsletterList.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
-            renderNewsletter();
-        } catch (err) {
-            console.error(err);
-            c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3><p>' + (err.message || '') + '</p></div>';
-        }
-    };
+window.editProduct = (docId) => {
+    const p = products.find(x => x.docId === docId);
+    if (!p) { alert('প্রোডাক্ট পাওয়া যায়নি'); return; }
+    const btn = document.getElementById('submit-btn');
+    if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-save"></i> Update';
+    }
+    document.getElementById('p-form').reset();
+    document.getElementById('edit-id').value = '';
+    document.getElementById('p-name').value = '';
+    document.getElementById('p-cat').value = '';
+    document.getElementById('p-price').value = '';
+    document.getElementById('p-stock').value = '1';
+    document.getElementById('p-image').value = '';
+    document.getElementById('p-video').value = '';
+    document.getElementById('p-badge').value = '';
+    document.getElementById('p-desc').value = '';
+    document.getElementById('colors').innerHTML = '';
+    document.getElementById('additional-images').innerHTML = '';
+    document.getElementById('size-box').innerHTML = '';
+    document.getElementById('form-msg').classList.remove('show');
+    editingId = null;
+    selectedSizes = [];
+    editingId = docId;
+    document.getElementById('edit-id').value = docId;
+    document.getElementById('p-name').value = p.name || '';
+    document.getElementById('p-cat').value = p.category || '';
+    document.getElementById('p-price').value = p.price || '';
+    document.getElementById('p-stock').value = (p.stock !== undefined && p.stock !== null) ? p.stock : 1;
+    document.getElementById('p-image').value = p.image || '';
+    document.getElementById('p-video').value = p.video || '';
+    document.getElementById('p-badge').value = p.badge || '';
+    document.getElementById('p-desc').value = p.fullDescription || '';
+    selectedSizes = Array.isArray(p.sizes) ? p.sizes.slice() : [];
+    onCategoryChange();
+    const cc = document.getElementById('colors');
+    cc.innerHTML = '';
+    if (Array.isArray(p.colors) && p.colors.length > 0) {
+        p.colors.forEach(col => addColor(col.name || '', col.image || ''));
+    } else {
+        addColor();
+    }
+    const ai = document.getElementById('additional-images');
+    ai.innerHTML = '';
+    if (Array.isArray(p.images) && p.images.length > 1) {
+        p.images.slice(1).forEach(imgUrl => addAdditionalImage(extractUrl(imgUrl) || imgUrl));
+    } else {
+        addAdditionalImage();
+    }
+    document.getElementById('form-title').innerHTML = '<i class="fas fa-edit"></i> Edit Product';
+    document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Update';
+    switchTab('add');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+};
 
-    window.renderNewsletter = () => {
-        const c = document.getElementById('newsletter-container');
-        const totalEl = document.getElementById('news-total-count');
-        if (totalEl) totalEl.textContent = newsletterList.length;
-        let filtered = newsletterList;
-        if (newsSearchQuery.trim()) {
-            const q = newsSearchQuery.toLowerCase().trim();
-            filtered = newsletterList.filter(n => (n.email || '').toLowerCase().includes(q));
-        }
-        if (filtered.length === 0) {
-            const emptyMsg = newsSearchQuery.trim() ? 'কোনো ইমেইল পাওয়া যায়নি: "' + newsSearchQuery + '"' : 'এখনো কোনো সাবস্ক্রাইবার নেই';
-            c.innerHTML = '<div class="empty"><i class="fas fa-envelope-open-text"></i><h3>' + emptyMsg + '</h3></div>';
+window.submitProduct = async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn');
+    if (btn.disabled) return;
+    const orig = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+    try {
+        const name = document.getElementById('p-name').value.trim();
+        const category = document.getElementById('p-cat').value;
+        const priceRaw = document.getElementById('p-price').value.trim();
+        const stockRaw = document.getElementById('p-stock').value.trim();
+        const image = document.getElementById('p-image').value.trim();
+        const videoUrl = document.getElementById('p-video') ? document.getElementById('p-video').value.trim() : '';
+        const badge = document.getElementById('p-badge').value;
+        const desc = document.getElementById('p-desc').value.trim();
+        const editId = document.getElementById('edit-id').value;
+        if (!name || !category || !priceRaw || !image || !desc || stockRaw === '') {
+            showMsg('form-msg', '⚠️ সব ফিল্ড পূরণ করুন।', 'bad');
+            btn.disabled = false;
+            btn.innerHTML = orig;
             return;
         }
-        let html = '';
-        filtered.forEach((n) => {
-            const email = n.email || '(no email)';
-            const initial = email.charAt(0).toUpperCase();
-            const dStr = n.date || n.createdAt || '';
-            const niceDate = dStr ? new Date(dStr).toLocaleString('en-GB') : '—';
-            const isToday = dStr ? (new Date(dStr).toDateString() === new Date().toDateString()) : false;
-            html += `<div class="news-card">
-                <div class="news-card-left">
-                    <div class="news-avatar">${initial}</div>
-                    <div class="news-info">
-                        <div class="news-email">${email}</div>
-                        <div class="news-meta">
-                            <span><i class="fas fa-clock"></i> ${niceDate}</span>
-                            ${isToday ? '<span class="badge-new">🆕 NEW</span>' : ''}
-                        </div>
+        let price;
+        if (priceRaw.toLowerCase().includes('coming')) price = 'Coming Soon';
+        else {
+            const p = parseInt(priceRaw.replace(/[^0-9]/g, ''));
+            price = isNaN(p) ? 'Coming Soon' : p;
+        }
+        const stock = parseInt(stockRaw) || 0;
+        let sizes = [];
+        if (category === 'Burqa Collection' || category === 'Abaya Collection') {
+            sizes = selectedSizes.slice();
+            if (sizes.length === 0) {
+                showMsg('form-msg', '⚠️ অন্তত একটি Size সিলেক্ট করুন।', 'bad');
+                btn.disabled = false;
+                btn.innerHTML = orig;
+                return;
+            }
+        }
+        const colors = [];
+        document.querySelectorAll('#colors .crow').forEach(row => {
+            const n = row.querySelector('.cname').value.trim();
+            const i = row.querySelector('.cimg').value.trim();
+            if (n && i) colors.push({ name: n, image: extractUrl(i) || i });
+        });
+        if (colors.length === 0) {
+            showMsg('form-msg', '⚠️ অন্তত একটি Color যোগ করুন।', 'bad');
+            btn.disabled = false;
+            btn.innerHTML = orig;
+            return;
+        }
+        const additionalImages = [];
+        document.querySelectorAll('#additional-images .crow-img').forEach(row => {
+            const urlInput = row.querySelector('.aimg');
+            if (urlInput) {
+                const cleanUrl = extractUrl(urlInput.value.trim()) || urlInput.value.trim();
+                if (cleanUrl && cleanUrl.length > 5) additionalImages.push(cleanUrl);
+            }
+        });
+        const cleanImg = extractUrl(image) || image;
+        const allImages = [cleanImg, ...additionalImages];
+        const uniqueImages = [...new Set(allImages)];
+        const data = {
+            name, category, price, stock: stock, image: cleanImg,
+            video: videoUrl || null, badge: badge || null,
+            badgeText: badge ? badge.toUpperCase() : null,
+            sizes: sizes, colors: colors, images: uniqueImages,
+            fullDescription: desc, updatedAt: new Date().toISOString()
+        };
+        if (editId) {
+            await updateDoc(doc(db, 'products', editId), data);
+            showMsg('form-msg', '✅ আপডেট হয়েছে!', 'ok');
+            setTimeout(() => { resetForm(); switchTab('products'); loadStats(); }, 1000);
+        } else {
+            const snap = await getDocs(collection(db, 'products'));
+            let maxId = 0;
+            snap.forEach(d => { const v = parseInt(d.data().id) || 0; if (v > maxId) maxId = v; });
+            data.id = maxId + 1;
+            data.createdAt = new Date().toISOString();
+            await addDoc(collection(db, 'products'), data);
+            showMsg('form-msg', '✅ নতুন প্রোডাক্ট যোগ হয়েছে!', 'ok');
+            setTimeout(() => { resetForm(); switchTab('products'); loadStats(); }, 1000);
+        }
+    } catch (err) {
+        console.error(err);
+        showMsg('form-msg', '❌ সেভ করা যায়নি: ' + (err.message || ''), 'bad');
+        btn.disabled = false;
+        btn.innerHTML = orig;
+    }
+};
+
+// ============================================
+// ORDERS
+// ============================================
+window.loadOrders = async () => {
+    const c = document.getElementById('orders-container');
+    c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div>';
+    try {
+        const snap = await getDocs(collection(db, 'orders'));
+        orders = [];
+        snap.forEach(d => orders.push({ docId: d.id, ...d.data() }));
+        orders.sort((a, b) => new Date(b.date || b.createdAt || 0) - new Date(a.date || a.createdAt || 0));
+        renderOrders();
+    } catch (err) {
+        c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3><p>' + (err.message || '') + '</p></div>';
+    }
+};
+
+window.filterOrders = (filter) => {
+    orderFilter = filter;
+    document.querySelectorAll('#order-filter button').forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-filter') === filter);
+    });
+    renderOrders();
+};
+
+window.setDateFilter = (dateFilter) => {
+    orderDateFilter = dateFilter;
+    document.querySelectorAll('#date-filter button').forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-date') === dateFilter);
+    });
+    const customRange = document.getElementById('custom-date-range');
+    if (dateFilter === 'custom') {
+        customRange.style.display = 'flex';
+        const today = new Date().toISOString().split('T')[0];
+        if (!orderDateFrom) {
+            document.getElementById('date-from').value = today;
+            orderDateFrom = today;
+        }
+        if (!orderDateTo) {
+            document.getElementById('date-to').value = today;
+            orderDateTo = today;
+        }
+    } else {
+        customRange.style.display = 'none';
+    }
+    renderOrders();
+};
+
+window.clearCustomDate = () => {
+    orderDateFrom = '';
+    orderDateTo = '';
+    document.getElementById('date-from').value = '';
+    document.getElementById('date-to').value = '';
+    renderOrders();
+};
+
+window.clearOrderSearch = () => {
+    document.getElementById('order-search').value = '';
+    orderSearchQuery = '';
+    document.getElementById('order-search-clear').style.display = 'none';
+    renderOrders();
+};
+
+window.applyOrderFilters = () => {
+    orderSearchQuery = (document.getElementById('order-search').value || '').trim();
+    const clearBtn = document.getElementById('order-search-clear');
+    if (clearBtn) clearBtn.style.display = orderSearchQuery ? 'block' : 'none';
+    if (orderDateFilter === 'custom') {
+        orderDateFrom = document.getElementById('date-from').value;
+        orderDateTo = document.getElementById('date-to').value;
+    }
+    renderOrders();
+};
+
+window.resetAllOrderFilters = () => {
+    orderFilter = 'all';
+    orderDateFilter = 'all';
+    orderSearchQuery = '';
+    orderDateFrom = '';
+    orderDateTo = '';
+    document.querySelectorAll('#order-filter button').forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-filter') === 'all');
+    });
+    document.querySelectorAll('#date-filter button').forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-date') === 'all');
+    });
+    const searchInput = document.getElementById('order-search');
+    if (searchInput) searchInput.value = '';
+    const clearBtn = document.getElementById('order-search-clear');
+    if (clearBtn) clearBtn.style.display = 'none';
+    const customRange = document.getElementById('custom-date-range');
+    if (customRange) customRange.style.display = 'none';
+    renderOrders();
+};
+
+window.renderOrders = () => {
+    const c = document.getElementById('orders-container');
+    let filtered = orders;
+    if (orderFilter === 'pending') filtered = filtered.filter(o => o.status !== 'completed');
+    else if (orderFilter === 'completed') filtered = filtered.filter(o => o.status === 'completed');
+    if (orderSearchQuery) {
+        const q = orderSearchQuery.toLowerCase();
+        filtered = filtered.filter(o => {
+            const searchIn = [
+                o.orderId || '', o.phone || '', o.name || '', o.address || '',
+                o.thana || '', o.city || '', o.district || '', o.trxId || '', o.senderNumber || ''
+            ].join(' ').toLowerCase();
+            return searchIn.includes(q);
+        });
+    }
+    if (orderDateFilter !== 'all') {
+        let fromDate = null, toDate = null;
+        if (orderDateFilter === 'today') {
+            fromDate = new Date(); fromDate.setHours(0, 0, 0, 0);
+            toDate = new Date(); toDate.setHours(23, 59, 59, 999);
+        } else if (orderDateFilter === 'week') {
+            fromDate = new Date(); fromDate.setDate(fromDate.getDate() - 6); fromDate.setHours(0, 0, 0, 0);
+            toDate = new Date(); toDate.setHours(23, 59, 59, 999);
+        } else if (orderDateFilter === 'month') {
+            fromDate = new Date(); fromDate.setDate(1); fromDate.setHours(0, 0, 0, 0);
+            toDate = new Date(); toDate.setHours(23, 59, 59, 999);
+        } else if (orderDateFilter === 'custom') {
+            if (orderDateFrom) { fromDate = new Date(orderDateFrom); fromDate.setHours(0, 0, 0, 0); }
+            if (orderDateTo) { toDate = new Date(orderDateTo); toDate.setHours(23, 59, 59, 999); }
+        }
+        filtered = filtered.filter(o => {
+            const dStr = o.date || o.createdAt;
+            if (!dStr) return false;
+            const oDate = new Date(dStr);
+            if (fromDate && oDate < fromDate) return false;
+            if (toDate && oDate > toDate) return false;
+            return true;
+        });
+    }
+    const countText = document.getElementById('order-count-text');
+    if (countText) {
+        let filterDesc = [];
+        if (orderFilter !== 'all') filterDesc.push(orderFilter);
+        if (orderDateFilter !== 'all') {
+            const dateNames = { today: 'Today', week: 'Last 7 Days', month: 'This Month', custom: 'Custom Range' };
+            filterDesc.push(dateNames[orderDateFilter] || orderDateFilter);
+        }
+        if (orderSearchQuery) filterDesc.push('Search: "' + orderSearchQuery + '"');
+        const filterStr = filterDesc.length > 0 ? ' (' + filterDesc.join(' • ') + ')' : '';
+        countText.innerHTML = '<strong style="color: var(--gold);">' + filtered.length + '</strong> টি অর্ডার পাওয়া গেছে' + filterStr;
+    }
+    if (filtered.length === 0) {
+        c.innerHTML = '<div class="empty"><i class="fas fa-search"></i><h3>কোনো অর্ডার পাওয়া যায়নি</h3><p style="margin-top: 8px; font-size: 13px;">ফিল্টার বা সার্চ পরিবর্তন করে দেখুন</p><button class="btn-s" onclick="resetAllOrderFilters()" style="margin-top: 15px;"><i class="fas fa-undo"></i> সব ফিল্টার Clear করুন</button></div>';
+        return;
+    }
+    let html = '';
+    filtered.forEach(o => {
+        const st = (o.status === 'completed') ? 'completed' : 'pending';
+        const stTxt = (st === 'completed') ? '✅ Completed' : '⏳ Pending';
+        const dStr = o.date || o.createdAt || '';
+        const niceDate = dStr ? new Date(dStr).toLocaleString('en-GB') : '—';
+        let ph = '';
+        if (Array.isArray(o.products)) {
+            o.products.forEach(p => {
+                const m = [];
+                if (p.size) m.push('Size: ' + p.size);
+                if (p.color) m.push('Color: ' + p.color);
+                const ms = m.length ? ' (' + m.join(', ') + ')' : '';
+                const priceStr = (typeof p.price === 'number') ? '৳' + p.price : 'TBD';
+                ph += `<li>${p.name || 'Product'}${ms} — ${priceStr} × ${p.quantity || 1}</li>`;
+            });
+        }
+        const phoneClean = (o.phone || '').replace(/[^0-9]/g, '');
+        const waLink = phoneClean ? 'https://wa.me/88' + (phoneClean.startsWith('0') ? phoneClean.substring(1) : phoneClean) : '#';
+        let couponLine = '';
+        if (o.couponCode) {
+            couponLine = '<div style="color: #22c55e; font-weight: 700;"><strong>🎟️ Coupon:</strong> ' + o.couponCode + ' (-৳' + (o.discountAmount || 0) + ')</div>';
+        }
+        html += `<div class="ocard">
+            <div class="ohead">
+                <div class="oid">📦 ${o.orderId || 'N/A'}</div>
+                <div class="ostatus ${st}">${stTxt}</div>
+            </div>
+            <div class="obody">
+                <div><strong>👤 Name:</strong> ${o.name || '—'}</div>
+                <div><strong>📞 Phone:</strong> ${o.phone || '—'}</div>
+                <div><strong>📍 Address:</strong> ${o.address || ''}, ${o.thana || ''}, ${o.city || ''}, ${o.district || ''}</div>
+                <div><strong>💳 Payment:</strong> ${o.paymentMethod || '—'}</div>
+                ${o.senderNumber ? '<div><strong>📱 Sender No:</strong> ' + o.senderNumber + '</div>' : ''}
+                ${o.trxId ? '<div><strong>🔑 TrxID:</strong> ' + o.trxId + '</div>' : ''}
+                ${couponLine}
+                ${o.notes ? '<div><strong>📝 Notes:</strong> ' + o.notes + '</div>' : ''}
+                <div><strong>🕐 Date:</strong> ${niceDate}</div>
+                ${ph ? '<div style="margin-top: 10px;"><strong>🛍️ Products:</strong></div><ul class="olist">' + ph + '</ul>' : ''}
+                <div class="ototal">
+                    <span>Subtotal: ৳${o.subtotal || 0}${o.discountAmount ? ' - ৳' + o.discountAmount : ''} | Delivery: ৳${o.deliveryCharge || 0}</span>
+                    <span>💰 Total: ৳${o.totalAmount || 0}</span>
+                </div>
+            </div>
+            <div class="oactions">
+                ${st === 'pending'
+                    ? `<button class="btn-complete" onclick="updateOrderStatus('${o.docId}', 'completed')"><i class="fas fa-check-circle"></i> Mark Completed</button>`
+                    : `<button class="btn-pending" onclick="updateOrderStatus('${o.docId}', 'pending')"><i class="fas fa-clock"></i> Mark Pending</button>`
+                }
+                <a href="${waLink}" target="_blank" class="btn-complete"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                <button class="btn-od" onclick="deleteOrder('${o.docId}', '${(o.orderId || '').replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i> Delete</button>
+            </div>
+        </div>`;
+    });
+    c.innerHTML = html;
+};
+
+window.updateOrderStatus = async (docId, newStatus) => {
+    const label = newStatus === 'completed' ? 'Completed' : 'Pending';
+    if (!confirm('অর্ডারটি "' + label + '" হিসেবে মার্ক করতে চান?')) return;
+    try {
+        await updateDoc(doc(db, 'orders', docId), { status: newStatus, statusUpdatedAt: new Date().toISOString() });
+        alert('✅ অর্ডার স্ট্যাটাস "' + label + '" আপডেট হয়েছে!');
+        loadOrders();
+        loadStats();
+    } catch (err) { alert('❌ ' + (err.message || 'আপডেট করা যায়নি')); }
+};
+
+window.deleteOrder = async (docId, orderId) => {
+    if (!confirm('অর্ডারটি মুছে ফেলতে চান?\n\n' + orderId)) return;
+    try {
+        await deleteDoc(doc(db, 'orders', docId));
+        alert('✅ অর্ডার মুছে ফেলা হয়েছে।');
+        loadOrders();
+        loadStats();
+    } catch (err) { alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি')); }
+};
+
+// ============================================
+// REVIEWS
+// ============================================
+window.loadReviews = async () => {
+    const c = document.getElementById('reviews-container');
+    c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading Reviews...</p></div>';
+    try {
+        const q = query(collection(db, 'reviews'), orderBy('date', 'desc'));
+        const snap = await getDocs(q);
+        reviews = [];
+        snap.forEach(d => reviews.push({ docId: d.id, ...d.data() }));
+        renderReviews();
+    } catch (err) {
+        console.error(err);
+        try {
+            const snap2 = await getDocs(collection(db, 'reviews'));
+            reviews = [];
+            snap2.forEach(d => reviews.push({ docId: d.id, ...d.data() }));
+            reviews.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+            renderReviews();
+        } catch (err2) {
+            c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3><p>' + (err2.message || '') + '</p></div>';
+        }
+    }
+};
+
+function renderStarsRow(rating) {
+    let html = '';
+    const rt = parseInt(rating) || 0;
+    for (let i = 1; i <= 5; i++) {
+        if (i <= rt) html += '<i class="fas fa-star"></i>';
+        else html += '<i class="far fa-star"></i>';
+    }
+    return html;
+}
+
+function getProductNameById(pid) {
+    const p = products.find(x => parseInt(x.id) === parseInt(pid));
+    return p ? p.name : ('Product #' + pid);
+}
+
+window.renderReviews = () => {
+    const c = document.getElementById('reviews-container');
+    if (reviews.length === 0) {
+        c.innerHTML = '<div class="empty"><i class="fas fa-star"></i><h3>এখনো কোনো Review নেই</h3><p style="margin-top: 8px; font-size: 13px;">কাস্টমাররা রিভিউ দিলে এখানে দেখা যাবে।</p></div>';
+        return;
+    }
+    let totalRating = 0;
+    reviews.forEach(r => totalRating += (parseInt(r.rating) || 0));
+    const avg = (totalRating / reviews.length).toFixed(1);
+    let html = `<div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 18px; display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+        <div style="text-align: center; min-width: 90px;">
+            <div style="font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 800; color: var(--gold); line-height: 1;">${avg}</div>
+            <div class="review-stars-row" style="margin-top: 4px;">${renderStarsRow(Math.round(parseFloat(avg)))}</div>
+            <div style="font-size: 11px; color: var(--muted); margin-top: 4px;">${reviews.length} reviews</div>
+        </div>
+        <div style="flex: 1; min-width: 200px;">
+            <div style="font-size: 13px; color: var(--muted); line-height: 1.8;">
+                মোট <strong style="color: var(--gold);">${reviews.length}</strong>টি কাস্টমার রিভিউ পাওয়া গেছে।<br>
+                এভারেজ রেটিং: <strong style="color: var(--gold);">${avg} / 5</strong>
+            </div>
+        </div>
+    </div>`;
+    html += '<div style="display: flex; flex-direction: column; gap: 12px;">';
+    reviews.forEach(r => {
+        const prodName = getProductNameById(r.productId);
+        const rt = parseInt(r.rating) || 0;
+        const dStr = r.date || r.createdAt || '';
+        const niceDate = dStr ? new Date(dStr).toLocaleString('en-GB') : '—';
+        html += `<div class="ocard" style="padding: 15px;">
+            <div class="ohead" style="margin-bottom: 8px;">
+                <div style="flex: 1; min-width: 0;">
+                    <div style="font-family: 'Playfair Display', serif; color: var(--gold); font-size: 13px; font-weight: 700;">🛍️ ${prodName}</div>
+                    <div style="font-size: 11px; color: var(--muted); margin-top: 2px;">Product ID: ${r.productId}</div>
+                </div>
+                <div class="review-stars-row">${renderStarsRow(rt)}</div>
+            </div>
+            <div style="background: var(--bg); border-radius: 8px; padding: 12px; margin-top: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                    <div style="font-weight: 700; color: var(--text); font-size: 14px;">👤 ${r.name || 'Anonymous'}</div>
+                    <div style="font-size: 11px; color: var(--muted);">${niceDate}</div>
+                </div>
+                <div style="font-size: 13px; color: var(--muted); line-height: 1.7;">${r.text || '(no comment)'}</div>
+            </div>
+            <div class="oactions" style="margin-top: 10px;">
+                <button class="btn-od" onclick="deleteReview('${r.docId}', '${(r.name || '').replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i> Delete Review</button>
+            </div>
+        </div>`;
+    });
+    html += '</div>';
+    c.innerHTML = html;
+};
+
+window.deleteReview = async (docId, name) => {
+    if (!confirm('রিভিউটি মুছে ফেলতে চান? গ্রাহক: "' + name + '"')) return;
+    try {
+        await deleteDoc(doc(db, 'reviews', docId));
+        alert('✅ রিভিউ মুছে ফেলা হয়েছে।');
+        loadReviews();
+    } catch (err) { alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি')); }
+};
+
+// ============================================
+// NEWSLETTER
+// ============================================
+window.loadNewsletter = async () => {
+    const c = document.getElementById('newsletter-container');
+    c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading Subscribers...</p></div>';
+    try {
+        let snap;
+        try {
+            const q = query(collection(db, 'newsletter'), orderBy('date', 'desc'));
+            snap = await getDocs(q);
+        } catch (orderErr) {
+            snap = await getDocs(collection(db, 'newsletter'));
+        }
+        newsletterList = [];
+        snap.forEach(d => newsletterList.push({ docId: d.id, ...d.data() }));
+        newsletterList.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+        renderNewsletter();
+    } catch (err) {
+        console.error(err);
+        c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3><p>' + (err.message || '') + '</p></div>';
+    }
+};
+
+window.renderNewsletter = () => {
+    const c = document.getElementById('newsletter-container');
+    const totalEl = document.getElementById('news-total-count');
+    if (totalEl) totalEl.textContent = newsletterList.length;
+    let filtered = newsletterList;
+    if (newsSearchQuery.trim()) {
+        const q = newsSearchQuery.toLowerCase().trim();
+        filtered = newsletterList.filter(n => (n.email || '').toLowerCase().includes(q));
+    }
+    if (filtered.length === 0) {
+        const emptyMsg = newsSearchQuery.trim() ? 'কোনো ইমেইল পাওয়া যায়নি: "' + newsSearchQuery + '"' : 'এখনো কোনো সাবস্ক্রাইবার নেই';
+        c.innerHTML = '<div class="empty"><i class="fas fa-envelope-open-text"></i><h3>' + emptyMsg + '</h3></div>';
+        return;
+    }
+    let html = '';
+    filtered.forEach((n) => {
+        const email = n.email || '(no email)';
+        const initial = email.charAt(0).toUpperCase();
+        const dStr = n.date || n.createdAt || '';
+        const niceDate = dStr ? new Date(dStr).toLocaleString('en-GB') : '—';
+        const isToday = dStr ? (new Date(dStr).toDateString() === new Date().toDateString()) : false;
+        html += `<div class="news-card">
+            <div class="news-card-left">
+                <div class="news-avatar">${initial}</div>
+                <div class="news-info">
+                    <div class="news-email">${email}</div>
+                    <div class="news-meta">
+                        <span><i class="fas fa-clock"></i> ${niceDate}</span>
+                        ${isToday ? '<span class="badge-new">🆕 NEW</span>' : ''}
                     </div>
                 </div>
-                <div class="news-actions">
-                    <button class="news-btn-copy" onclick="copyNewsEmail('${email.replace(/'/g, "\\'")}')"><i class="fas fa-copy"></i> Copy</button>
-                    <button class="abtn del" onclick="deleteNewsletter('${n.docId}', '${email.replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i></button>
-                </div>
-            </div>`;
-        });
-        c.innerHTML = html;
-    };
+            </div>
+            <div class="news-actions">
+                <button class="news-btn-copy" onclick="copyNewsEmail('${email.replace(/'/g, "\\'")}')"><i class="fas fa-copy"></i> Copy</button>
+                <button class="abtn del" onclick="deleteNewsletter('${n.docId}', '${email.replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i></button>
+            </div>
+        </div>`;
+    });
+    c.innerHTML = html;
+};
 
-    window.filterNewsletter = () => {
-        const input = document.getElementById('news-search');
-        newsSearchQuery = input ? input.value : '';
-        renderNewsletter();
-    };
-    window.copyNewsEmail = (email) => {
-        navigator.clipboard.writeText(email).then(() => { alert('✅ ইমেইল কপি হয়েছে:\n' + email); }).catch(() => alert('❌ কপি করা যায়নি।'));
-    };
-    window.copyAllEmails = () => {
-        if (newsletterList.length === 0) { alert('⚠️ কোনো ইমেইল নেই।'); return; }
-        const allEmails = newsletterList.map(n => n.email).filter(e => e).join(', ');
-        navigator.clipboard.writeText(allEmails).then(() => { alert('✅ সব ইমেইল কপি হয়েছে (' + newsletterList.length + 'টি)'); }).catch(() => alert('❌ কপি করা যায়নি।'));
-    };
-    window.exportNewsletterCSV = () => {
-        if (newsletterList.length === 0) { alert('⚠️ Export করার জন্য কোনো ইমেইল নেই।'); return; }
-        let csv = 'Email,Date\n';
-        newsletterList.forEach(n => {
-            const email = (n.email || '').replace(/"/g, '""');
-            const dStr = n.date || n.createdAt || '';
-            const niceDate = dStr ? new Date(dStr).toLocaleString('en-GB').replace(/,/g, ' ') : '';
-            csv += `"${email}","${niceDate}"\n`;
-        });
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        const today = new Date().toISOString().split('T')[0];
-        link.href = url;
-        link.download = 'newsletter_subscribers_' + today + '.csv';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-        alert('✅ CSV ডাউনলোড শুরু হয়েছে (' + newsletterList.length + 'টি)');
-    };
-    window.deleteNewsletter = async (docId, email) => {
-        if (!confirm('মুছে ফেলতে চান?\n\n' + email)) return;
-        try {
-            await deleteDoc(doc(db, 'newsletter', docId));
-            alert('✅ সাবস্ক্রাইবার মুছে ফেলা হয়েছে।');
-            loadNewsletter();
-        } catch (err) { alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি')); }
-    };
-</script>
-<script type="module">
+window.filterNewsletter = () => {
+    const input = document.getElementById('news-search');
+    newsSearchQuery = input ? input.value : '';
+    renderNewsletter();
+};
+window.copyNewsEmail = (email) => {
+    navigator.clipboard.writeText(email).then(() => { alert('✅ ইমেইল কপি হয়েছে:\n' + email); }).catch(() => alert('❌ কপি করা যায়নি।'));
+};
+window.copyAllEmails = () => {
+    if (newsletterList.length === 0) { alert('⚠️ কোনো ইমেইল নেই।'); return; }
+    const allEmails = newsletterList.map(n => n.email).filter(e => e).join(', ');
+    navigator.clipboard.writeText(allEmails).then(() => { alert('✅ সব ইমেইল কপি হয়েছে (' + newsletterList.length + 'টি)'); }).catch(() => alert('❌ কপি করা যায়নি।'));
+};
+window.exportNewsletterCSV = () => {
+    if (newsletterList.length === 0) { alert('⚠️ Export করার জন্য কোনো ইমেইল নেই।'); return; }
+    let csv = 'Email,Date\n';
+    newsletterList.forEach(n => {
+        const email = (n.email || '').replace(/"/g, '""');
+        const dStr = n.date || n.createdAt || '';
+        const niceDate = dStr ? new Date(dStr).toLocaleString('en-GB').replace(/,/g, ' ') : '';
+        csv += `"${email}","${niceDate}"\n`;
+    });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    const today = new Date().toISOString().split('T')[0];
+    link.href = url;
+    link.download = 'newsletter_subscribers_' + today + '.csv';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    alert('✅ CSV ডাউনলোড শুরু হয়েছে (' + newsletterList.length + 'টি)');
+};
+window.deleteNewsletter = async (docId, email) => {
+    if (!confirm('মুছে ফেলতে চান?\n\n' + email)) return;
+    try {
+        await deleteDoc(doc(db, 'newsletter', docId));
+        alert('✅ সাবস্ক্রাইবার মুছে ফেলা হয়েছে।');
+        loadNewsletter();
+    } catch (err) { alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি')); }
+};
+
     // ============================================
     // COUPONS
     // ============================================
