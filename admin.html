@@ -649,20 +649,24 @@
                 </button>
             </div>
 
-            <!-- Payment Methods -->
+            <!-- Payment Methods (🆕 Updated with Instruction Type + Number!) -->
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-credit-card"></i> Payment Methods</h3>
-                <small style="color: var(--muted); font-size: 11px; display: block; margin-bottom: 15px;">Checkout পেজে এই পেমেন্ট মেথডগুলো দেখানো হবে</small>
+                <small style="color: var(--muted); font-size: 11px; display: block; margin-bottom: 15px;">
+                    💡 Checkout পেজে এই পেমেন্ট মেথডগুলো দেখানো হবে। <strong>Instruction Type</strong> select করলে Website এ সেই মেথড select করার সময় নির্দেশিকা দেখাবে।
+                </small>
                 <div id="payment-methods-container"></div>
                 <button type="button" class="btn-s" onclick="addPaymentMethod()" style="margin-top: 10px; width: 100%; justify-content: center;">
                     <i class="fas fa-plus"></i> Add Payment Method
                 </button>
             </div>
 
-            <!-- Track Order Couriers -->
+            <!-- Track Order Couriers (🆕 Updated with Logo!) -->
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-truck"></i> Track Order Couriers</h3>
-                <small style="color: var(--muted); font-size: 11px; display: block; margin-bottom: 15px;">Track Order পেজে এই courier গুলো দেখানো হবে</small>
+                <small style="color: var(--muted); font-size: 11px; display: block; margin-bottom: 15px;">
+                    💡 Track Order পেজে এই courier গুলো দেখানো হবে। <strong>Logo URL</strong> দিলে Website এ card এ logo দেখা যাবে।
+                </small>
                 <div id="couriers-container"></div>
                 <button type="button" class="btn-s" onclick="addCourier()" style="margin-top: 10px; width: 100%; justify-content: center;">
                     <i class="fas fa-plus"></i> Add Courier
@@ -853,7 +857,6 @@
 
     </div>
 </div>
-
 <!-- COUPON FORM MODAL -->
 <div class="coupon-form-modal" id="coupon-modal">
     <div class="coupon-form-box">
@@ -992,7 +995,7 @@
 
 <script type="module">
     // ============================================
-    // 🔥 FIREBASE IMPORTS — getDoc FIXED!
+    // FIREBASE IMPORTS
     // ============================================
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
     import { getFirestore, collection, getDocs, addDoc, doc, getDoc, updateDoc, deleteDoc, setDoc, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
@@ -2799,14 +2802,14 @@ window.deleteNewsletter = async (docId, email) => {
             { label: 'ADDRESS', iconUrl: 'https://i.ibb.co/HDZcK1v1/8210.png', linkUrl: '', enabled: true }
         ],
         paymentMethods: [
-            { name: 'Cash on Delivery', label: 'Cash on Delivery (COD)', iconUrl: 'https://i.ibb.co/wNdmjHM2/images-1.png', value: 'Cash on Delivery', enabled: true },
-            { name: 'bKash', label: 'bKash', iconUrl: 'https://i.ibb.co/rGn4KLgk/images.png', value: 'Bkash', enabled: true },
-            { name: 'Nagad', label: 'Nagad', iconUrl: 'https://i.ibb.co/RpnrLg8f/images-1.jpg', value: 'Nagad', enabled: true }
+            { name: 'Cash on Delivery', label: 'Cash on Delivery (COD)', iconUrl: 'https://i.ibb.co/wNdmjHM2/images-1.png', value: 'Cash on Delivery', instructionType: 'cod', instructionNumber: '01832140613', enabled: true },
+            { name: 'bKash', label: 'bKash', iconUrl: 'https://i.ibb.co/rGn4KLgk/images.png', value: 'Bkash', instructionType: 'bkash', instructionNumber: '01832140613', enabled: true },
+            { name: 'Nagad', label: 'Nagad', iconUrl: 'https://i.ibb.co/RpnrLg8f/images-1.jpg', value: 'Nagad', instructionType: 'nagad', instructionNumber: '01832140613', enabled: true }
         ],
         couriers: [
-            { name: 'Sundarban Courier', description: 'Tracking / CN Number দিয়ে ট্র্যাক করুন।', url: 'https://customer.sundarbancourierltd.com/tracking', enabled: true },
-            { name: 'Pathao Courier', description: 'Tracking Number দিয়ে পার্সেলের স্ট্যাটাস দেখুন।', url: 'https://pathao.com/courier/', enabled: true },
-            { name: 'SteadFast Courier', description: 'Tracking Number দিয়ে পার্সেল ট্র্যাক করুন।', url: 'https://www.steadfast.com.bd/tracking', enabled: true }
+            { name: 'Sundarban Courier', description: 'Tracking / CN Number দিয়ে ট্র্যাক করুন।', url: 'https://customer.sundarbancourierltd.com/tracking', logoUrl: '', enabled: true },
+            { name: 'Pathao Courier', description: 'Tracking Number দিয়ে পার্সেলের স্ট্যাটাস দেখুন।', url: 'https://pathao.com/courier/', logoUrl: '', enabled: true },
+            { name: 'SteadFast Courier', description: 'Tracking Number দিয়ে পার্সেল ট্র্যাক করুন।', url: 'https://www.steadfast.com.bd/tracking', logoUrl: '', enabled: true }
         ]
     };
 
@@ -2974,7 +2977,7 @@ window.deleteNewsletter = async (docId, email) => {
         });
     };
 
-    // ========== PAYMENT METHODS ==========
+    // ========== PAYMENT METHODS (🆕 Updated with Instruction!) ==========
     window.renderPaymentMethods = function(list) {
         const c = document.getElementById('payment-methods-container');
         if (!c) return;
@@ -3005,6 +3008,21 @@ window.deleteNewsletter = async (docId, email) => {
                 <div class="fgroup">
                     <label>Icon URL</label>
                     <input type="text" class="pm-icon" value="${(pm.iconUrl || '').replace(/"/g, '&quot;')}" placeholder="https://i.ibb.co/...">
+                </div>
+                <div class="fgroup">
+                    <label>🎯 Instruction Type (Website এ কী দেখাবে)</label>
+                    <select class="pm-instruction-type">
+                        <option value="none" ${pm.instructionType === 'none' || !pm.instructionType ? 'selected' : ''}>❌ কিছুই না (শুধু logo + label)</option>
+                        <option value="cod" ${pm.instructionType === 'cod' ? 'selected' : ''}>💰 Cash on Delivery (Delivery charge advance)</option>
+                        <option value="bkash" ${pm.instructionType === 'bkash' ? 'selected' : ''}>💳 bKash (Send Money + TrxID)</option>
+                        <option value="nagad" ${pm.instructionType === 'nagad' ? 'selected' : ''}>💰 Nagad (Send Money + TrxID)</option>
+                    </select>
+                    <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">Website এ payment method select করলে এই instruction box দেখাবে</small>
+                </div>
+                <div class="fgroup">
+                    <label>📞 Instruction Number (bKash/Nagad number)</label>
+                    <input type="text" class="pm-instruction-number" value="${(pm.instructionNumber || '').replace(/"/g, '&quot;')}" placeholder="01832140613">
+                    <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">bKash/Nagad এর জন্য — customer এই number এ Send Money করবে</small>
                 </div>
                 <div class="fgroup" style="display: flex; align-items: center; gap: 10px;">
                     <label style="flex: 1;">Enabled</label>
@@ -3046,6 +3064,21 @@ window.deleteNewsletter = async (docId, email) => {
                 <label>Icon URL</label>
                 <input type="text" class="pm-icon" placeholder="https://i.ibb.co/...">
             </div>
+            <div class="fgroup">
+                <label>🎯 Instruction Type (Website এ কী দেখাবে)</label>
+                <select class="pm-instruction-type">
+                    <option value="none" selected>❌ কিছুই না (শুধু logo + label)</option>
+                    <option value="cod">💰 Cash on Delivery (Delivery charge advance)</option>
+                    <option value="bkash">💳 bKash (Send Money + TrxID)</option>
+                    <option value="nagad">💰 Nagad (Send Money + TrxID)</option>
+                </select>
+                <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">Website এ payment method select করলে এই instruction box দেখাবে</small>
+            </div>
+            <div class="fgroup">
+                <label>📞 Instruction Number (bKash/Nagad number)</label>
+                <input type="text" class="pm-instruction-number" placeholder="01832140613">
+                <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">bKash/Nagad এর জন্য — customer এই number এ Send Money করবে</small>
+            </div>
             <div class="fgroup" style="display: flex; align-items: center; gap: 10px;">
                 <label style="flex: 1;">Enabled</label>
                 <label class="toggle-switch">
@@ -3057,7 +3090,7 @@ window.deleteNewsletter = async (docId, email) => {
         c.appendChild(box);
     };
 
-    // ========== COURIERS ==========
+    // ========== COURIERS (🆕 Updated with Logo!) ==========
     window.renderCouriers = function(list) {
         const c = document.getElementById('couriers-container');
         if (!c) return;
@@ -3084,6 +3117,11 @@ window.deleteNewsletter = async (docId, email) => {
                 <div class="fgroup">
                     <label>Tracking URL</label>
                     <input type="text" class="co-url" value="${(co.url || '').replace(/"/g, '&quot;')}" placeholder="https://...">
+                </div>
+                <div class="fgroup">
+                    <label>🖼️ Logo/Icon URL (ঐচ্ছিক)</label>
+                    <input type="text" class="co-logo" value="${(co.logoUrl || '').replace(/"/g, '&quot;')}" placeholder="https://i.ibb.co/xxxxx/logo.png">
+                    <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">Courier এর logo/image — Website এ card এ show হবে</small>
                 </div>
                 <div class="fgroup" style="display: flex; align-items: center; gap: 10px;">
                     <label style="flex: 1;">Enabled</label>
@@ -3120,6 +3158,11 @@ window.deleteNewsletter = async (docId, email) => {
             <div class="fgroup">
                 <label>Tracking URL</label>
                 <input type="text" class="co-url" placeholder="https://...">
+            </div>
+            <div class="fgroup">
+                <label>🖼️ Logo/Icon URL (ঐচ্ছিক)</label>
+                <input type="text" class="co-logo" placeholder="https://i.ibb.co/xxxxx/logo.png">
+                <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">Courier এর logo/image — Website এ card এ show হবে</small>
             </div>
             <div class="fgroup" style="display: flex; align-items: center; gap: 10px;">
                 <label style="flex: 1;">Enabled</label>
@@ -3394,9 +3437,11 @@ window.deleteNewsletter = async (docId, email) => {
                 const label = box.querySelector('.pm-label').value.trim();
                 const value = box.querySelector('.pm-value').value.trim();
                 const iconUrl = box.querySelector('.pm-icon').value.trim();
+                const instructionType = box.querySelector('.pm-instruction-type') ? box.querySelector('.pm-instruction-type').value : 'none';
+                const instructionNumber = box.querySelector('.pm-instruction-number') ? box.querySelector('.pm-instruction-number').value.trim() : '';
                 const enabled = box.querySelector('.pm-enabled').checked;
                 if (name && value) {
-                    paymentMethods.push({ name, label: label || name, value, iconUrl, enabled });
+                    paymentMethods.push({ name, label: label || name, value, iconUrl, instructionType, instructionNumber, enabled });
                 }
             });
             contentData.paymentMethods = paymentMethods;
@@ -3406,9 +3451,10 @@ window.deleteNewsletter = async (docId, email) => {
                 const name = box.querySelector('.co-name').value.trim();
                 const description = box.querySelector('.co-desc').value.trim();
                 const url = box.querySelector('.co-url').value.trim();
+                const logoUrl = box.querySelector('.co-logo') ? box.querySelector('.co-logo').value.trim() : '';
                 const enabled = box.querySelector('.co-enabled').checked;
                 if (name && url) {
-                    couriersList.push({ name, description, url, enabled });
+                    couriersList.push({ name, description, url, logoUrl, enabled });
                 }
             });
             contentData.couriers = couriersList;
