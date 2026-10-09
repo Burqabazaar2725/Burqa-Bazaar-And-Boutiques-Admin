@@ -637,7 +637,7 @@
                 </div>
             </div>
 
-            <!-- Contact Icons (Dynamic!) -->
+            <!-- Contact Icons -->
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-icons"></i> Contact Icons</h3>
                 <small style="color: var(--muted); font-size: 11px; display: block; margin-bottom: 15px;">
@@ -649,11 +649,11 @@
                 </button>
             </div>
 
-            <!-- Payment Methods (🆕 Updated with Instruction Type + Number!) -->
+            <!-- Payment Methods -->
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-credit-card"></i> Payment Methods</h3>
                 <small style="color: var(--muted); font-size: 11px; display: block; margin-bottom: 15px;">
-                    💡 Checkout পেজে এই পেমেন্ট মেথডগুলো দেখানো হবে। <strong>Instruction Type</strong> select করলে Website এ সেই মেথড select করার সময় নির্দেশিকা দেখাবে।
+                    💡 Checkout পেজে এই পেমেন্ট মেথডগুলো দেখানো হবে। <strong>Instruction Type</strong> select করলে Website এ সেই মেথড select করার সময় নির্দেশিকা দেখাবে। <strong>Upay, Rocket, SureCash, Bank</strong> — সব সাপোর্টেড।
                 </small>
                 <div id="payment-methods-container"></div>
                 <button type="button" class="btn-s" onclick="addPaymentMethod()" style="margin-top: 10px; width: 100%; justify-content: center;">
@@ -661,7 +661,7 @@
                 </button>
             </div>
 
-            <!-- Track Order Couriers (🆕 Updated with Logo!) -->
+            <!-- Track Order Couriers -->
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                 <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-truck"></i> Track Order Couriers</h3>
                 <small style="color: var(--muted); font-size: 11px; display: block; margin-bottom: 15px;">
@@ -2802,9 +2802,9 @@ window.deleteNewsletter = async (docId, email) => {
             { label: 'ADDRESS', iconUrl: 'https://i.ibb.co/HDZcK1v1/8210.png', linkUrl: '', enabled: true }
         ],
         paymentMethods: [
-            { name: 'Cash on Delivery', label: 'Cash on Delivery (COD)', iconUrl: 'https://i.ibb.co/wNdmjHM2/images-1.png', value: 'Cash on Delivery', instructionType: 'cod', instructionNumber: '01832140613', enabled: true },
-            { name: 'bKash', label: 'bKash', iconUrl: 'https://i.ibb.co/rGn4KLgk/images.png', value: 'Bkash', instructionType: 'bkash', instructionNumber: '01832140613', enabled: true },
-            { name: 'Nagad', label: 'Nagad', iconUrl: 'https://i.ibb.co/RpnrLg8f/images-1.jpg', value: 'Nagad', instructionType: 'nagad', instructionNumber: '01832140613', enabled: true }
+            { name: 'Cash on Delivery', label: 'Cash on Delivery (COD)', iconUrl: 'https://i.ibb.co/wNdmjHM2/images-1.png', value: 'Cash on Delivery', instructionType: 'cod', instructionNumber: '01832140613', customInstruction: '', enabled: true },
+            { name: 'bKash', label: 'bKash', iconUrl: 'https://i.ibb.co/rGn4KLgk/images.png', value: 'Bkash', instructionType: 'bkash', instructionNumber: '01832140613', customInstruction: '', enabled: true },
+            { name: 'Nagad', label: 'Nagad', iconUrl: 'https://i.ibb.co/RpnrLg8f/images-1.jpg', value: 'Nagad', instructionType: 'nagad', instructionNumber: '01832140613', customInstruction: '', enabled: true }
         ],
         couriers: [
             { name: 'Sundarban Courier', description: 'Tracking / CN Number দিয়ে ট্র্যাক করুন।', url: 'https://customer.sundarbancourierltd.com/tracking', logoUrl: '', enabled: true },
@@ -2977,7 +2977,7 @@ window.deleteNewsletter = async (docId, email) => {
         });
     };
 
-    // ========== PAYMENT METHODS (🆕 Updated with Instruction!) ==========
+    // ========== 🆕 PAYMENT METHODS (৯টা Instruction Type!) ==========
     window.renderPaymentMethods = function(list) {
         const c = document.getElementById('payment-methods-container');
         if (!c) return;
@@ -2986,6 +2986,7 @@ window.deleteNewsletter = async (docId, email) => {
         list.forEach((pm, idx) => {
             const box = document.createElement('div');
             box.className = 'content-item-box';
+            const hasCustomInstr = pm.instructionType === 'custom';
             box.innerHTML = `
                 <div class="content-item-header">
                     <div class="content-item-num">${idx + 1}</div>
@@ -2995,15 +2996,15 @@ window.deleteNewsletter = async (docId, email) => {
                 </div>
                 <div class="fgroup">
                     <label>Method Name</label>
-                    <input type="text" class="pm-name" value="${(pm.name || '').replace(/"/g, '&quot;')}" placeholder="bKash">
+                    <input type="text" class="pm-name" value="${(pm.name || '').replace(/"/g, '&quot;')}" placeholder="bKash / Upay / Rocket">
                 </div>
                 <div class="fgroup">
                     <label>Display Label</label>
-                    <input type="text" class="pm-label" value="${(pm.label || '').replace(/"/g, '&quot;')}" placeholder="bKash">
+                    <input type="text" class="pm-label" value="${(pm.label || '').replace(/"/g, '&quot;')}" placeholder="bKash / Upay / Rocket">
                 </div>
                 <div class="fgroup">
                     <label>Value (used in code)</label>
-                    <input type="text" class="pm-value" value="${(pm.value || '').replace(/"/g, '&quot;')}" placeholder="Bkash">
+                    <input type="text" class="pm-value" value="${(pm.value || '').replace(/"/g, '&quot;')}" placeholder="Bkash / Upay">
                 </div>
                 <div class="fgroup">
                     <label>Icon URL</label>
@@ -3011,18 +3012,28 @@ window.deleteNewsletter = async (docId, email) => {
                 </div>
                 <div class="fgroup">
                     <label>🎯 Instruction Type (Website এ কী দেখাবে)</label>
-                    <select class="pm-instruction-type">
+                    <select class="pm-instruction-type" onchange="onPaymentInstructionChange(this)">
                         <option value="none" ${pm.instructionType === 'none' || !pm.instructionType ? 'selected' : ''}>❌ কিছুই না (শুধু logo + label)</option>
                         <option value="cod" ${pm.instructionType === 'cod' ? 'selected' : ''}>💰 Cash on Delivery (Delivery charge advance)</option>
                         <option value="bkash" ${pm.instructionType === 'bkash' ? 'selected' : ''}>💳 bKash (Send Money + TrxID)</option>
                         <option value="nagad" ${pm.instructionType === 'nagad' ? 'selected' : ''}>💰 Nagad (Send Money + TrxID)</option>
+                        <option value="upay" ${pm.instructionType === 'upay' ? 'selected' : ''}>💳 Upay (Send Money + TrxID)</option>
+                        <option value="rocket" ${pm.instructionType === 'rocket' ? 'selected' : ''}>💰 Rocket (Send Money + TrxID)</option>
+                        <option value="surecash" ${pm.instructionType === 'surecash' ? 'selected' : ''}>💰 SureCash (Send Money + TrxID)</option>
+                        <option value="bank" ${pm.instructionType === 'bank' ? 'selected' : ''}>🏦 Bank Transfer</option>
+                        <option value="custom" ${pm.instructionType === 'custom' ? 'selected' : ''}>📝 Custom Instruction</option>
                     </select>
                     <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">Website এ payment method select করলে এই instruction box দেখাবে</small>
                 </div>
-                <div class="fgroup">
-                    <label>📞 Instruction Number (bKash/Nagad number)</label>
+                <div class="fgroup pm-number-field" style="${hasCustomInstr ? 'display:none;' : 'display:block;'}">
+                    <label>📞 Instruction Number (bKash/Upay/Nagad/Rocket number)</label>
                     <input type="text" class="pm-instruction-number" value="${(pm.instructionNumber || '').replace(/"/g, '&quot;')}" placeholder="01832140613">
-                    <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">bKash/Nagad এর জন্য — customer এই number এ Send Money করবে</small>
+                    <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">Customer এই number এ Send Money করবে</small>
+                </div>
+                <div class="fgroup pm-custom-field" style="${hasCustomInstr ? 'display:block;' : 'display:none;'}">
+                    <label>📝 Custom Instruction Text (HTML allowed)</label>
+                    <textarea class="pm-custom-instruction" rows="3" placeholder="যেমন: আমাদের Upay নম্বরে Send Money করুন। Send Money করার পর নিচে আপনার নম্বর ও TrxID দিন।">${pm.customInstruction || ''}</textarea>
+                    <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">এই text Website এ দেখাবে</small>
                 </div>
                 <div class="fgroup" style="display: flex; align-items: center; gap: 10px;">
                     <label style="flex: 1;">Enabled</label>
@@ -3034,6 +3045,23 @@ window.deleteNewsletter = async (docId, email) => {
             `;
             c.appendChild(box);
         });
+    };
+
+    window.onPaymentInstructionChange = function(selectEl) {
+        const box = selectEl.closest('.content-item-box');
+        const numberField = box.querySelector('.pm-number-field');
+        const customField = box.querySelector('.pm-custom-field');
+        const type = selectEl.value;
+        if (type === 'custom') {
+            numberField.style.display = 'none';
+            customField.style.display = 'block';
+        } else if (type === 'none') {
+            numberField.style.display = 'none';
+            customField.style.display = 'none';
+        } else {
+            numberField.style.display = 'block';
+            customField.style.display = 'none';
+        }
     };
 
     window.addPaymentMethod = function() {
@@ -3050,15 +3078,15 @@ window.deleteNewsletter = async (docId, email) => {
             </div>
             <div class="fgroup">
                 <label>Method Name</label>
-                <input type="text" class="pm-name" placeholder="bKash">
+                <input type="text" class="pm-name" placeholder="bKash / Upay / Rocket">
             </div>
             <div class="fgroup">
                 <label>Display Label</label>
-                <input type="text" class="pm-label" placeholder="bKash">
+                <input type="text" class="pm-label" placeholder="bKash / Upay / Rocket">
             </div>
             <div class="fgroup">
                 <label>Value (used in code)</label>
-                <input type="text" class="pm-value" placeholder="Bkash">
+                <input type="text" class="pm-value" placeholder="Bkash / Upay">
             </div>
             <div class="fgroup">
                 <label>Icon URL</label>
@@ -3066,18 +3094,28 @@ window.deleteNewsletter = async (docId, email) => {
             </div>
             <div class="fgroup">
                 <label>🎯 Instruction Type (Website এ কী দেখাবে)</label>
-                <select class="pm-instruction-type">
+                <select class="pm-instruction-type" onchange="onPaymentInstructionChange(this)">
                     <option value="none" selected>❌ কিছুই না (শুধু logo + label)</option>
                     <option value="cod">💰 Cash on Delivery (Delivery charge advance)</option>
                     <option value="bkash">💳 bKash (Send Money + TrxID)</option>
                     <option value="nagad">💰 Nagad (Send Money + TrxID)</option>
+                    <option value="upay">💳 Upay (Send Money + TrxID)</option>
+                    <option value="rocket">💰 Rocket (Send Money + TrxID)</option>
+                    <option value="surecash">💰 SureCash (Send Money + TrxID)</option>
+                    <option value="bank">🏦 Bank Transfer</option>
+                    <option value="custom">📝 Custom Instruction</option>
                 </select>
                 <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">Website এ payment method select করলে এই instruction box দেখাবে</small>
             </div>
-            <div class="fgroup">
-                <label>📞 Instruction Number (bKash/Nagad number)</label>
+            <div class="fgroup pm-number-field" style="display:none;">
+                <label>📞 Instruction Number (bKash/Upay/Nagad/Rocket number)</label>
                 <input type="text" class="pm-instruction-number" placeholder="01832140613">
-                <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">bKash/Nagad এর জন্য — customer এই number এ Send Money করবে</small>
+                <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">Customer এই number এ Send Money করবে</small>
+            </div>
+            <div class="fgroup pm-custom-field" style="display:none;">
+                <label>📝 Custom Instruction Text (HTML allowed)</label>
+                <textarea class="pm-custom-instruction" rows="3" placeholder="যেমন: আমাদের Upay নম্বরে Send Money করুন। Send Money করার পর নিচে আপনার নম্বর ও TrxID দিন।"></textarea>
+                <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">এই text Website এ দেখাবে</small>
             </div>
             <div class="fgroup" style="display: flex; align-items: center; gap: 10px;">
                 <label style="flex: 1;">Enabled</label>
@@ -3090,7 +3128,7 @@ window.deleteNewsletter = async (docId, email) => {
         c.appendChild(box);
     };
 
-    // ========== COURIERS (🆕 Updated with Logo!) ==========
+    // ========== 🆕 COURIERS (Logo URL সহ!) ==========
     window.renderCouriers = function(list) {
         const c = document.getElementById('couriers-container');
         if (!c) return;
@@ -3439,9 +3477,10 @@ window.deleteNewsletter = async (docId, email) => {
                 const iconUrl = box.querySelector('.pm-icon').value.trim();
                 const instructionType = box.querySelector('.pm-instruction-type') ? box.querySelector('.pm-instruction-type').value : 'none';
                 const instructionNumber = box.querySelector('.pm-instruction-number') ? box.querySelector('.pm-instruction-number').value.trim() : '';
+                const customInstruction = box.querySelector('.pm-custom-instruction') ? box.querySelector('.pm-custom-instruction').value.trim() : '';
                 const enabled = box.querySelector('.pm-enabled').checked;
                 if (name && value) {
-                    paymentMethods.push({ name, label: label || name, value, iconUrl, instructionType, instructionNumber, enabled });
+                    paymentMethods.push({ name, label: label || name, value, iconUrl, instructionType, instructionNumber, customInstruction, enabled });
                 }
             });
             contentData.paymentMethods = paymentMethods;
