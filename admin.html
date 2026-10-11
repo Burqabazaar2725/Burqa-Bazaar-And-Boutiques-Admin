@@ -11,17 +11,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- ============================================ -->
+    <!-- 📱 PWA SETUP -->
+    <!-- ============================================ -->
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#dfb15b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="BB Admin">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png">
+
     <script type="module">
-        // ============================================
-        // FIREBASE IMPORTS
-        // ============================================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, doc, getDoc, updateDoc, deleteDoc, setDoc, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
 
-        // ============================================
-        // FIREBASE CONFIG
-        // ============================================
         const firebaseConfig = {
             apiKey: "AIzaSyBz6nILSzcvSofF9iyPt-h3ffseEXTwgnA",
             authDomain: "burqa-bazaar-boutiques.firebaseapp.com",
@@ -35,40 +40,24 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // ============================================
-        // ⚡⚡⚡ ULTRA FAST CACHE SYSTEM ⚡⚡⚡
-        // ============================================
+        // ⚡ FAST CACHE SYSTEM
         const FAST_CACHE = {
-            products: 'bq_fast_products_v1',
-            orders: 'bq_fast_orders_v1',
-            reviews: 'bq_fast_reviews_v1',
-            newsletter: 'bq_fast_newsletter_v1',
-            coupons: 'bq_fast_coupons_v1',
-            banners: 'bq_fast_banners_v1',
-            pages: 'bq_fast_pages_v1',
-            faq: 'bq_fast_faq_v1',
-            sizeCharts: 'bq_fast_sizeCharts_v1',
-            homeCollections: 'bq_fast_homeCollections_v1',
-            settings: 'bq_fast_settings_v1',
-            stats: 'bq_fast_stats_v1',
+            products: 'bq_fast_products_v1', orders: 'bq_fast_orders_v1',
+            reviews: 'bq_fast_reviews_v1', newsletter: 'bq_fast_newsletter_v1',
+            coupons: 'bq_fast_coupons_v1', banners: 'bq_fast_banners_v1',
+            pages: 'bq_fast_pages_v1', faq: 'bq_fast_faq_v1',
+            sizeCharts: 'bq_fast_sizeCharts_v1', homeCollections: 'bq_fast_homeCollections_v1',
+            settings: 'bq_fast_settings_v1', stats: 'bq_fast_stats_v1',
             contentSettings: 'bq_fast_content_v1'
         };
 
         function fastGet(key) {
-            try {
-                const raw = localStorage.getItem(key);
-                if (!raw) return null;
-                return JSON.parse(raw).data;
-            } catch(e) { return null; }
+            try { const raw = localStorage.getItem(key); if (!raw) return null; return JSON.parse(raw).data; } catch(e) { return null; }
         }
-
         function fastSet(key, data) {
             try { localStorage.setItem(key, JSON.stringify({ data, t: Date.now() })); } catch(e) {}
         }
-
-        function fastClear(key) {
-            try { localStorage.removeItem(key); } catch(e) {}
-        }
+        function fastClear(key) { try { localStorage.removeItem(key); } catch(e) {} }
 
         async function preloadEverything() {
             console.log('⚡ PRELOADING...');
@@ -87,7 +76,6 @@
                     getDoc(doc(db, 'settings', 'store')).catch(e => null)
                 ]);
                 const [pS, oS, rS, nS, cS, bS, pgS, fS, szS, hcS, setS] = results;
-                
                 if (pS) { const arr = []; pS.forEach(d => arr.push({ docId: d.id, ...d.data() })); arr.sort((a,b) => (parseInt(a.id)||0)-(parseInt(b.id)||0)); fastSet(FAST_CACHE.products, arr); }
                 if (oS) { const arr = []; oS.forEach(d => arr.push({ docId: d.id, ...d.data() })); arr.sort((a,b) => new Date(b.date||b.createdAt||0)-new Date(a.date||a.createdAt||0)); fastSet(FAST_CACHE.orders, arr); }
                 if (rS) { const arr = []; rS.forEach(d => arr.push({ docId: d.id, ...d.data() })); fastSet(FAST_CACHE.reviews, arr); }
@@ -98,39 +86,21 @@
                 if (fS) { const arr = []; fS.forEach(d => arr.push({ docId: d.id, ...d.data() })); fastSet(FAST_CACHE.faq, arr); }
                 if (szS) { const obj = {}; szS.forEach(d => { obj[d.id] = d.data(); }); fastSet(FAST_CACHE.sizeCharts, obj); }
                 if (hcS) { const arr = []; hcS.forEach(d => arr.push({ docId: d.id, ...d.data() })); fastSet(FAST_CACHE.homeCollections, arr); }
-                if (setS && setS.exists()) { fastSet(FAST_CACHE.settings, setS.data()); }
+                if (setS && setS.exists()) fastSet(FAST_CACHE.settings, setS.data());
                 console.log('✅ PRELOAD complete');
             } catch(e) { console.error('Preload error:', e); }
         }
 
-        // ============================================
-        // GLOBAL STATE
-        // ============================================
-        let products = [];
-        let orders = [];
-        let reviews = [];
-        let newsletterList = [];
-        let coupons = [];
-        let banners = [];
-        let editingId = null;
-        let editingCouponId = null;
-        let editingBannerId = null;
+        let products = [], orders = [], reviews = [], newsletterList = [], coupons = [], banners = [];
+        let editingId = null, editingCouponId = null, editingBannerId = null;
         let selectedSizes = [];
-        let orderFilter = 'all';
-        let orderSearchQuery = '';
-        let orderDateFilter = 'all';
-        let orderDateFrom = '';
-        let orderDateTo = '';
-        let newsSearchQuery = '';
-        let couponFilter = 'all';
+        let orderFilter = 'all', orderSearchQuery = '', orderDateFilter = 'all', orderDateFrom = '', orderDateTo = '';
+        let newsSearchQuery = '', couponFilter = 'all';
         let contentCache = {};
         let currentSizeChartCategory = 'default';
         let allSizeCharts = {};
         const ALL_SIZES = ["50", "52", "54", "56"];
 
-        // ============================================
-        // URL EXTRACTOR
-        // ============================================
         window.extractUrl = function(str) {
             if (!str || typeof str !== 'string') return '';
             const t = str.trim();
@@ -140,9 +110,6 @@
             return '';
         };
 
-        // ============================================
-        // CATEGORY / SIZE
-        // ============================================
         window.onCategoryChange = function() {
             const cat = document.getElementById('p-cat').value;
             const sizeSection = document.getElementById('size-section');
@@ -184,9 +151,6 @@
             renderSizeButtons();
         };
 
-        // ============================================
-        // AUTH
-        // ============================================
         window.doLogin = async (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value.trim();
@@ -226,15 +190,8 @@
                 loginScreen.style.display = 'none';
                 admin.classList.add('active');
                 document.getElementById('user-badge').textContent = user.email;
-                
-                // ⚡ INSTANT: Cache থেকে সব দেখাও
                 instantLoadFromCache();
-                
-                // ⚡ BACKGROUND: Firebase refresh
-                preloadEverything().then(() => {
-                    instantLoadFromCache();
-                    console.log('✅ All refreshed');
-                });
+                preloadEverything().then(() => { instantLoadFromCache(); console.log('✅ All refreshed'); });
             } else {
                 loginScreen.style.display = 'flex';
                 admin.classList.remove('active');
@@ -244,37 +201,22 @@
             }
         });
 
-        // ============================================
-        // ⚡ INSTANT LOAD FROM CACHE
-        // ============================================
         function instantLoadFromCache() {
             const t0 = performance.now();
-            
             const cachedProducts = fastGet(FAST_CACHE.products);
             const cachedOrders = fastGet(FAST_CACHE.orders);
-            
-            if (cachedProducts) { products = cachedProducts; }
-            if (cachedOrders) { orders = cachedOrders; }
-            
-            // Dashboard stats
+            if (cachedProducts) products = cachedProducts;
+            if (cachedOrders) orders = cachedOrders;
             const cachedStats = fastGet(FAST_CACHE.stats);
-            if (cachedStats) {
-                applyStatsToUI(cachedStats, cachedProducts || [], cachedOrders || []);
-            } else if (cachedProducts || cachedOrders) {
-                recalcStatsFromCache();
-            } else {
-                // No cache — load fresh
-                loadStats();
-            }
-            
-            // Current tab render
+            if (cachedStats) applyStatsToUI(cachedStats, cachedProducts || [], cachedOrders || []);
+            else if (cachedProducts || cachedOrders) recalcStatsFromCache();
+            else loadStats();
             const activeTab = document.querySelector('.tab.active');
             if (activeTab) {
                 const tabName = activeTab.getAttribute('data-tab');
                 if (tabName === 'products' && cachedProducts) renderProducts();
                 else if (tabName === 'orders' && cachedOrders) renderOrders();
             }
-            
             const t1 = performance.now();
             console.log(`⚡ Instant load: ${(t1 - t0).toFixed(2)}ms`);
         }
@@ -298,16 +240,12 @@
             try {
                 const productsList = fastGet(FAST_CACHE.products) || [];
                 const ordersList = fastGet(FAST_CACHE.orders) || [];
-                let pending = 0, completed = 0;
-                let todayRevenue = 0, monthRevenue = 0, totalRevenue = 0, todayOrders = 0;
+                let pending = 0, completed = 0, todayRevenue = 0, monthRevenue = 0, totalRevenue = 0, todayOrders = 0;
                 const todayStr = new Date().toDateString();
                 const thisMonth = new Date(); thisMonth.setDate(1); thisMonth.setHours(0, 0, 0, 0);
                 const productSales = {};
                 const weeklyData = {};
-                for (let i = 6; i >= 0; i--) {
-                    const d = new Date(); d.setDate(d.getDate() - i); d.setHours(0, 0, 0, 0);
-                    weeklyData[d.toDateString()] = { revenue: 0, orders: 0, date: d };
-                }
+                for (let i = 6; i >= 0; i--) { const d = new Date(); d.setDate(d.getDate() - i); d.setHours(0, 0, 0, 0); weeklyData[d.toDateString()] = { revenue: 0, orders: 0, date: d }; }
                 ordersList.forEach(o => {
                     const amount = parseInt(o.totalAmount) || 0;
                     const orderDate = new Date(o.date || o.createdAt || 0);
@@ -315,18 +253,8 @@
                     totalRevenue += amount;
                     if (orderDate.toDateString() === todayStr) { todayRevenue += amount; todayOrders++; }
                     if (orderDate >= thisMonth) monthRevenue += amount;
-                    if (weeklyData[orderDate.toDateString()]) {
-                        weeklyData[orderDate.toDateString()].revenue += amount;
-                        weeklyData[orderDate.toDateString()].orders++;
-                    }
-                    if (Array.isArray(o.products)) {
-                        o.products.forEach(p => {
-                            if (!productSales[p.id]) productSales[p.id] = { id: p.id, name: p.name || 'Unknown', qty: 0, revenue: 0 };
-                            const qty = parseInt(p.quantity) || 1;
-                            productSales[p.id].qty += qty;
-                            if (typeof p.price === 'number') productSales[p.id].revenue += p.price * qty;
-                        });
-                    }
+                    if (weeklyData[orderDate.toDateString()]) { weeklyData[orderDate.toDateString()].revenue += amount; weeklyData[orderDate.toDateString()].orders++; }
+                    if (Array.isArray(o.products)) o.products.forEach(p => { if (!productSales[p.id]) productSales[p.id] = { id: p.id, name: p.name || 'Unknown', qty: 0, revenue: 0 }; const qty = parseInt(p.quantity) || 1; productSales[p.id].qty += qty; if (typeof p.price === 'number') productSales[p.id].revenue += p.price * qty; });
                 });
                 document.getElementById('st-products').textContent = productsList.length;
                 document.getElementById('st-orders').textContent = ordersList.length;
@@ -345,10 +273,7 @@
         function renderTopProductsFromCache(topProducts) {
             const c = document.getElementById('top-products-container');
             if (!c) return;
-            if (topProducts.length === 0) {
-                c.innerHTML = '<div style="text-align: center; padding: 30px; color: var(--muted);"><i class="fas fa-box-open" style="font-size: 40px; color: var(--gold); opacity: .4; display: block; margin-bottom: 15px;"></i><p>এখনো কোনো sales হয়নি।</p></div>';
-                return;
-            }
+            if (topProducts.length === 0) { c.innerHTML = '<div style="text-align: center; padding: 30px; color: var(--muted);"><i class="fas fa-box-open" style="font-size: 40px; color: var(--gold); opacity: .4; display: block; margin-bottom: 15px;"></i><p>এখনো কোনো sales হয়নি।</p></div>'; return; }
             const productsList = fastGet(FAST_CACHE.products) || [];
             const productImages = {};
             productsList.forEach(p => { productImages[parseInt(p.id)] = p.image || ''; });
@@ -383,9 +308,6 @@
             c.innerHTML = html;
         }
 
-        // ============================================
-        // TAB SWITCH
-        // ============================================
         window.switchTab = (name) => {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -393,7 +315,6 @@
             const sec = document.getElementById('sec-' + name);
             if (tab) tab.classList.add('active');
             if (sec) sec.classList.add('active');
-            
             if (name === 'products') loadProducts();
             else if (name === 'orders') loadOrders();
             else if (name === 'reviews') loadReviews();
@@ -415,46 +336,25 @@
             if (type === 'ok') setTimeout(() => el.classList.remove('show'), 4000);
         };
 
-        // ============================================
-        // ⚡ FAST STATS LOAD
-        // ============================================
         window.loadStats = async () => {
-            // Cache instant
             const cachedP = fastGet(FAST_CACHE.products);
             const cachedO = fastGet(FAST_CACHE.orders);
             if (cachedP || cachedO) recalcStatsFromCache();
-            
             try {
                 const [pSnap, oSnap] = await Promise.all([
                     getDocs(collection(db, 'products')).catch(e => null),
                     getDocs(collection(db, 'orders')).catch(e => null)
                 ]);
                 if (!pSnap && !oSnap) return;
-                
                 let productsArr = [], ordersArr = [];
-                if (pSnap) {
-                    pSnap.forEach(d => productsArr.push({ docId: d.id, ...d.data() }));
-                    productsArr.sort((a, b) => (parseInt(a.id) || 0) - (parseInt(b.id) || 0));
-                    fastSet(FAST_CACHE.products, productsArr);
-                    products = productsArr;
-                }
-                if (oSnap) {
-                    oSnap.forEach(d => ordersArr.push({ docId: d.id, ...d.data() }));
-                    ordersArr.sort((a, b) => new Date(b.date || b.createdAt || 0) - new Date(a.date || a.createdAt || 0));
-                    fastSet(FAST_CACHE.orders, ordersArr);
-                    orders = ordersArr;
-                }
-                
-                let pend = 0, comp = 0;
-                let todayRevenue = 0, monthRevenue = 0, totalRevenue = 0, todayOrders = 0;
+                if (pSnap) { pSnap.forEach(d => productsArr.push({ docId: d.id, ...d.data() })); productsArr.sort((a, b) => (parseInt(a.id) || 0) - (parseInt(b.id) || 0)); fastSet(FAST_CACHE.products, productsArr); products = productsArr; }
+                if (oSnap) { oSnap.forEach(d => ordersArr.push({ docId: d.id, ...d.data() })); ordersArr.sort((a, b) => new Date(b.date || b.createdAt || 0) - new Date(a.date || a.createdAt || 0)); fastSet(FAST_CACHE.orders, ordersArr); orders = ordersArr; }
+                let pend = 0, comp = 0, todayRevenue = 0, monthRevenue = 0, totalRevenue = 0, todayOrders = 0;
                 const todayStr = new Date().toDateString();
                 const thisMonth = new Date(); thisMonth.setDate(1); thisMonth.setHours(0, 0, 0, 0);
                 const productSales = {};
                 const weeklyData = {};
-                for (let i = 6; i >= 0; i--) {
-                    const d = new Date(); d.setDate(d.getDate() - i); d.setHours(0, 0, 0, 0);
-                    weeklyData[d.toDateString()] = { revenue: 0, orders: 0, date: d };
-                }
+                for (let i = 6; i >= 0; i--) { const d = new Date(); d.setDate(d.getDate() - i); d.setHours(0, 0, 0, 0); weeklyData[d.toDateString()] = { revenue: 0, orders: 0, date: d }; }
                 ordersArr.forEach(o => {
                     const amount = parseInt(o.totalAmount) || 0;
                     const orderDate = new Date(o.date || o.createdAt || 0);
@@ -462,18 +362,8 @@
                     totalRevenue += amount;
                     if (orderDate.toDateString() === todayStr) { todayRevenue += amount; todayOrders++; }
                     if (orderDate >= thisMonth) monthRevenue += amount;
-                    if (weeklyData[orderDate.toDateString()]) {
-                        weeklyData[orderDate.toDateString()].revenue += amount;
-                        weeklyData[orderDate.toDateString()].orders++;
-                    }
-                    if (Array.isArray(o.products)) {
-                        o.products.forEach(p => {
-                            if (!productSales[p.id]) productSales[p.id] = { id: p.id, name: p.name || 'Unknown', qty: 0, revenue: 0 };
-                            const qty = parseInt(p.quantity) || 1;
-                            productSales[p.id].qty += qty;
-                            if (typeof p.price === 'number') productSales[p.id].revenue += p.price * qty;
-                        });
-                    }
+                    if (weeklyData[orderDate.toDateString()]) { weeklyData[orderDate.toDateString()].revenue += amount; weeklyData[orderDate.toDateString()].orders++; }
+                    if (Array.isArray(o.products)) o.products.forEach(p => { if (!productSales[p.id]) productSales[p.id] = { id: p.id, name: p.name || 'Unknown', qty: 0, revenue: 0 }; const qty = parseInt(p.quantity) || 1; productSales[p.id].qty += qty; if (typeof p.price === 'number') productSales[p.id].revenue += p.price * qty; });
                 });
                 const statsData = { pending: pend, completed: comp, todayRevenue, monthRevenue, totalRevenue, todayOrders, topProducts: Object.values(productSales).sort((a, b) => b.qty - a.qty).slice(0, 5), weeklyData: Object.values(weeklyData) };
                 fastSet(FAST_CACHE.stats, statsData);
@@ -482,49 +372,6 @@
             } catch (err) { console.error('Stats:', err); }
         };
 
-        function renderTopProducts(topProducts, pSnap) {
-            const c = document.getElementById('top-products-container');
-            if (!c) return;
-            if (topProducts.length === 0) {
-                c.innerHTML = '<div style="text-align: center; padding: 30px; color: var(--muted);"><i class="fas fa-box-open" style="font-size: 40px; color: var(--gold); opacity: .4; display: block; margin-bottom: 15px;"></i><p>এখনো কোনো sales হয়নি।</p></div>';
-                return;
-            }
-            const productImages = {};
-            pSnap.forEach(d => { const data = d.data(); productImages[parseInt(data.id)] = data.image || ''; });
-            let html = '';
-            topProducts.forEach((p, idx) => {
-                const rankClass = idx < 3 ? `rank-${idx + 1}` : 'rank-other';
-                const img = extractUrl(productImages[parseInt(p.id)]) || 'https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png';
-                html += `<div class="top-product-row"><div class="top-product-rank ${rankClass}">${idx + 1}</div><img src="${img}" class="top-product-img" onerror="this.src='https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png'"><div class="top-product-info"><div class="top-product-name">${p.name}</div><div class="top-product-meta">Revenue: <strong>৳${p.revenue.toLocaleString()}</strong></div></div><div class="top-product-sales"><div class="count">${p.qty}</div><div class="unit">sold</div></div></div>`;
-            });
-            c.innerHTML = html;
-        }
-
-        function renderWeeklyChart(weeklyData) {
-            const c = document.getElementById('weekly-chart-container');
-            if (!c) return;
-            const maxRevenue = Math.max(...weeklyData.map(d => d.revenue), 1);
-            const todayStr = new Date().toDateString();
-            let html = '<div class="weekly-chart">';
-            weeklyData.forEach(d => {
-                const heightPercent = (d.revenue / maxRevenue) * 100;
-                const barHeight = Math.max(heightPercent, 3);
-                const dayName = d.date.toLocaleDateString('en-GB', { weekday: 'short' });
-                const isToday = d.date.toDateString() === todayStr;
-                const displayRevenue = d.revenue > 0 ? '৳' + (d.revenue >= 1000 ? (d.revenue / 1000).toFixed(1) + 'k' : d.revenue) : '';
-                html += `<div class="weekly-bar-wrap"><div class="weekly-bar-value">${displayRevenue ? displayRevenue : '&nbsp;'}</div><div class="weekly-bar" style="height: ${barHeight}%;"></div><div class="weekly-bar-label ${isToday ? 'today' : ''}">${dayName}</div></div>`;
-            });
-            html += '</div>';
-            const totalWeek = weeklyData.reduce((sum, d) => sum + d.revenue, 0);
-            const totalWeekOrders = weeklyData.reduce((sum, d) => sum + d.orders, 0);
-            const bestDay = weeklyData.reduce((best, d) => d.revenue > best.revenue ? d : best, weeklyData[0]);
-            html += `<div class="weekly-summary"><div>📅 ৭ দিনে মোট: <strong>৳${totalWeek.toLocaleString()}</strong></div><div>🛒 অর্ডার: <strong>${totalWeekOrders}</strong></div>${bestDay && bestDay.revenue > 0 ? `<div>🏆 সেরা দিন: <strong>${bestDay.date.toLocaleDateString('en-GB', { weekday: 'long' })}</strong> (৳${bestDay.revenue.toLocaleString()})</div>` : ''}</div>`;
-            c.innerHTML = html;
-        }
-
-        // ============================================
-        // ADD IMAGE / COLOR
-        // ============================================
         window.addAdditionalImage = (url) => {
             const c = document.getElementById('additional-images');
             if (!c) return;
@@ -565,9 +412,6 @@
             addAdditionalImage();
         };
 
-        // ============================================
-        // ⚡ PRODUCTS — CACHE FIRST
-        // ============================================
         window.loadProducts = async (forceRefresh = false) => {
             const c = document.getElementById('products-container');
             if (!forceRefresh) {
@@ -632,12 +476,8 @@
 
         window.deleteProduct = async (docId, name) => {
             if (!confirm('মুছে ফেলতে চান: "' + name + '"?')) return;
-            try {
-                await deleteDoc(doc(db, 'products', docId));
-                alert('✅ মুছে ফেলা হয়েছে।');
-                loadProducts(true);
-                loadStats();
-            } catch (err) { alert('❌ ' + (err.message || '')); }
+            try { await deleteDoc(doc(db, 'products', docId)); alert('✅ মুছে ফেলা হয়েছে।'); loadProducts(true); loadStats(); }
+            catch (err) { alert('❌ ' + (err.message || '')); }
         };
 
         window.editProduct = (docId) => {
@@ -696,12 +536,7 @@
                 const badge = document.getElementById('p-badge').value;
                 const desc = document.getElementById('p-desc').value.trim();
                 const editId = document.getElementById('edit-id').value;
-                if (!name || !category || !priceRaw || !image || !desc || stockRaw === '') {
-                    showMsg('form-msg', '⚠️ সব ফিল্ড পূরণ করুন।', 'bad');
-                    btn.disabled = false;
-                    btn.innerHTML = orig;
-                    return;
-                }
+                if (!name || !category || !priceRaw || !image || !desc || stockRaw === '') { showMsg('form-msg', '⚠️ সব ফিল্ড পূরণ করুন।', 'bad'); btn.disabled = false; btn.innerHTML = orig; return; }
                 let price;
                 if (priceRaw.toLowerCase().includes('coming')) price = 'Coming Soon';
                 else { const p = parseInt(priceRaw.replace(/[^0-9]/g, '')); price = isNaN(p) ? 'Coming Soon' : p; }
@@ -712,17 +547,10 @@
                     if (sizes.length === 0) { showMsg('form-msg', '⚠️ অন্তত একটি Size সিলেক্ট করুন।', 'bad'); btn.disabled = false; btn.innerHTML = orig; return; }
                 }
                 const colors = [];
-                document.querySelectorAll('#colors .crow').forEach(row => {
-                    const n = row.querySelector('.cname').value.trim();
-                    const i = row.querySelector('.cimg').value.trim();
-                    if (n && i) colors.push({ name: n, image: extractUrl(i) || i });
-                });
+                document.querySelectorAll('#colors .crow').forEach(row => { const n = row.querySelector('.cname').value.trim(); const i = row.querySelector('.cimg').value.trim(); if (n && i) colors.push({ name: n, image: extractUrl(i) || i }); });
                 if (colors.length === 0) { showMsg('form-msg', '⚠️ অন্তত একটি Color যোগ করুন।', 'bad'); btn.disabled = false; btn.innerHTML = orig; return; }
                 const additionalImages = [];
-                document.querySelectorAll('#additional-images .crow-img').forEach(row => {
-                    const urlInput = row.querySelector('.aimg');
-                    if (urlInput) { const cleanUrl = extractUrl(urlInput.value.trim()) || urlInput.value.trim(); if (cleanUrl && cleanUrl.length > 5) additionalImages.push(cleanUrl); }
-                });
+                document.querySelectorAll('#additional-images .crow-img').forEach(row => { const urlInput = row.querySelector('.aimg'); if (urlInput) { const cleanUrl = extractUrl(urlInput.value.trim()) || urlInput.value.trim(); if (cleanUrl && cleanUrl.length > 5) additionalImages.push(cleanUrl); } });
                 const cleanImg = extractUrl(image) || image;
                 const uniqueImages = [...new Set([cleanImg, ...additionalImages])];
                 const data = { name, category, price, stock, image: cleanImg, video: videoUrl || null, badge: badge || null, badgeText: badge ? badge.toUpperCase() : null, sizes, colors, images: uniqueImages, fullDescription: desc, updatedAt: new Date().toISOString() };
@@ -748,9 +576,6 @@
             }
         };
 
-        // ============================================
-        // ⚡ ORDERS — CACHE FIRST
-        // ============================================
         window.loadOrders = async (forceRefresh = false) => {
             const c = document.getElementById('orders-container');
             if (!forceRefresh) {
@@ -785,11 +610,7 @@
             }
         };
 
-        window.filterOrders = (filter) => {
-            orderFilter = filter;
-            document.querySelectorAll('#order-filter button').forEach(b => b.classList.toggle('active', b.getAttribute('data-filter') === filter));
-            renderOrders();
-        };
+        window.filterOrders = (filter) => { orderFilter = filter; document.querySelectorAll('#order-filter button').forEach(b => b.classList.toggle('active', b.getAttribute('data-filter') === filter)); renderOrders(); };
 
         window.setDateFilter = (dateFilter) => {
             orderDateFilter = dateFilter;
@@ -837,18 +658,8 @@
                 if (orderDateFilter === 'today') { fromDate = new Date(); fromDate.setHours(0,0,0,0); toDate = new Date(); toDate.setHours(23,59,59,999); }
                 else if (orderDateFilter === 'week') { fromDate = new Date(); fromDate.setDate(fromDate.getDate() - 6); fromDate.setHours(0,0,0,0); toDate = new Date(); toDate.setHours(23,59,59,999); }
                 else if (orderDateFilter === 'month') { fromDate = new Date(); fromDate.setDate(1); fromDate.setHours(0,0,0,0); toDate = new Date(); toDate.setHours(23,59,59,999); }
-                else if (orderDateFilter === 'custom') {
-                    if (orderDateFrom) { fromDate = new Date(orderDateFrom); fromDate.setHours(0,0,0,0); }
-                    if (orderDateTo) { toDate = new Date(orderDateTo); toDate.setHours(23,59,59,999); }
-                }
-                filtered = filtered.filter(o => {
-                    const dStr = o.date || o.createdAt;
-                    if (!dStr) return false;
-                    const oDate = new Date(dStr);
-                    if (fromDate && oDate < fromDate) return false;
-                    if (toDate && oDate > toDate) return false;
-                    return true;
-                });
+                else if (orderDateFilter === 'custom') { if (orderDateFrom) { fromDate = new Date(orderDateFrom); fromDate.setHours(0,0,0,0); } if (orderDateTo) { toDate = new Date(orderDateTo); toDate.setHours(23,59,59,999); } }
+                filtered = filtered.filter(o => { const dStr = o.date || o.createdAt; if (!dStr) return false; const oDate = new Date(dStr); if (fromDate && oDate < fromDate) return false; if (toDate && oDate > toDate) return false; return true; });
             }
             const countText = document.getElementById('order-count-text');
             if (countText) {
@@ -892,27 +703,16 @@
         window.updateOrderStatus = async (docId, newStatus) => {
             const label = newStatus === 'completed' ? 'Completed' : 'Pending';
             if (!confirm('অর্ডারটি "' + label + '" হিসেবে মার্ক করতে চান?')) return;
-            try {
-                await updateDoc(doc(db, 'orders', docId), { status: newStatus, statusUpdatedAt: new Date().toISOString() });
-                alert('✅ অর্ডার স্ট্যাটাস "' + label + '" আপডেট হয়েছে!');
-                loadOrders(true);
-                loadStats();
-            } catch (err) { alert('❌ ' + (err.message || 'আপডেট করা যায়নি')); }
+            try { await updateDoc(doc(db, 'orders', docId), { status: newStatus, statusUpdatedAt: new Date().toISOString() }); alert('✅ অর্ডার স্ট্যাটাস "' + label + '" আপডেট হয়েছে!'); loadOrders(true); loadStats(); }
+            catch (err) { alert('❌ ' + (err.message || 'আপডেট করা যায়নি')); }
         };
 
         window.deleteOrder = async (docId, orderId) => {
             if (!confirm('অর্ডারটি মুছে ফেলতে চান?\n\n' + orderId)) return;
-            try {
-                await deleteDoc(doc(db, 'orders', docId));
-                alert('✅ অর্ডার মুছে ফেলা হয়েছে।');
-                loadOrders(true);
-                loadStats();
-            } catch (err) { alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি')); }
+            try { await deleteDoc(doc(db, 'orders', docId)); alert('✅ অর্ডার মুছে ফেলা হয়েছে।'); loadOrders(true); loadStats(); }
+            catch (err) { alert('❌ ' + (err.message || 'মুছে ফেলা যায়নি')); }
         };
 
-        // ============================================
-        // PRINT INVOICE
-        // ============================================
         window.printInvoice = function(docId) {
             const order = orders.find(o => o.docId === docId);
             if (!order) { alert('Order পাওয়া যায়নি!'); return; }
@@ -981,15 +781,11 @@
             w.document.close();
         };
 
-        // ============================================
-        // REVIEWS
-        // ============================================
         window.loadReviews = async () => {
             const c = document.getElementById('reviews-container');
             const cached = fastGet(FAST_CACHE.reviews);
             if (cached) { reviews = cached; renderReviews(); console.log('⚡ Reviews from cache'); }
             else c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div>';
-            
             try {
                 const snap = await getDocs(collection(db, 'reviews'));
                 reviews = [];
@@ -997,9 +793,7 @@
                 reviews.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
                 fastSet(FAST_CACHE.reviews, reviews);
                 renderReviews();
-            } catch (err) {
-                if (!cached) c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3><p>' + (err.message || '') + '</p></div>';
-            }
+            } catch (err) { if (!cached) c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3><p>' + (err.message || '') + '</p></div>'; }
         };
 
         function renderStarsRow(rating) {
@@ -1009,17 +803,11 @@
             return html;
         }
 
-        function getProductNameById(pid) {
-            const p = products.find(x => parseInt(x.id) === parseInt(pid));
-            return p ? p.name : ('Product #' + pid);
-        }
+        function getProductNameById(pid) { const p = products.find(x => parseInt(x.id) === parseInt(pid)); return p ? p.name : ('Product #' + pid); }
 
         window.renderReviews = () => {
             const c = document.getElementById('reviews-container');
-            if (reviews.length === 0) {
-                c.innerHTML = '<div class="empty"><i class="fas fa-star"></i><h3>এখনো কোনো Review নেই</h3></div>';
-                return;
-            }
+            if (reviews.length === 0) { c.innerHTML = '<div class="empty"><i class="fas fa-star"></i><h3>এখনো কোনো Review নেই</h3></div>'; return; }
             let totalRating = 0;
             reviews.forEach(r => totalRating += (parseInt(r.rating) || 0));
             const avg = (totalRating / reviews.length).toFixed(1);
@@ -1042,15 +830,11 @@
             catch (err) { alert('❌ ' + (err.message || '')); }
         };
 
-        // ============================================
-        // NEWSLETTER
-        // ============================================
         window.loadNewsletter = async () => {
             const c = document.getElementById('newsletter-container');
             const cached = fastGet(FAST_CACHE.newsletter);
             if (cached) { newsletterList = cached; renderNewsletter(); }
             else c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div>';
-            
             try {
                 const snap = await getDocs(collection(db, 'newsletter'));
                 newsletterList = [];
@@ -1058,9 +842,7 @@
                 newsletterList.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
                 fastSet(FAST_CACHE.newsletter, newsletterList);
                 renderNewsletter();
-            } catch (err) {
-                if (!cached) c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3></div>';
-            }
+            } catch (err) { if (!cached) c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3></div>'; }
         };
 
         window.renderNewsletter = () => {
@@ -1068,15 +850,8 @@
             const totalEl = document.getElementById('news-total-count');
             if (totalEl) totalEl.textContent = newsletterList.length;
             let filtered = newsletterList;
-            if (newsSearchQuery.trim()) {
-                const q = newsSearchQuery.toLowerCase().trim();
-                filtered = newsletterList.filter(n => (n.email || '').toLowerCase().includes(q));
-            }
-            if (filtered.length === 0) {
-                const emptyMsg = newsSearchQuery.trim() ? 'কোনো ইমেইল পাওয়া যায়নি' : 'এখনো কোনো সাবস্ক্রাইবার নেই';
-                c.innerHTML = '<div class="empty"><i class="fas fa-envelope-open-text"></i><h3>' + emptyMsg + '</h3></div>';
-                return;
-            }
+            if (newsSearchQuery.trim()) { const q = newsSearchQuery.toLowerCase().trim(); filtered = newsletterList.filter(n => (n.email || '').toLowerCase().includes(q)); }
+            if (filtered.length === 0) { const emptyMsg = newsSearchQuery.trim() ? 'কোনো ইমেইল পাওয়া যায়নি' : 'এখনো কোনো সাবস্ক্রাইবার নেই'; c.innerHTML = '<div class="empty"><i class="fas fa-envelope-open-text"></i><h3>' + emptyMsg + '</h3></div>'; return; }
             let html = '';
             filtered.forEach((n) => {
                 const email = n.email || '(no email)';
@@ -1099,12 +874,7 @@
         window.exportNewsletterCSV = () => {
             if (newsletterList.length === 0) { alert('⚠️ কোনো ইমেইল নেই।'); return; }
             let csv = 'Email,Date\n';
-            newsletterList.forEach(n => {
-                const email = (n.email || '').replace(/"/g, '""');
-                const dStr = n.date || n.createdAt || '';
-                const niceDate = dStr ? new Date(dStr).toLocaleString('en-GB').replace(/,/g, ' ') : '';
-                csv += `"${email}","${niceDate}"\n`;
-            });
+            newsletterList.forEach(n => { const email = (n.email || '').replace(/"/g, '""'); const dStr = n.date || n.createdAt || ''; const niceDate = dStr ? new Date(dStr).toLocaleString('en-GB').replace(/,/g, ' ') : ''; csv += `"${email}","${niceDate}"\n`; });
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
@@ -1123,15 +893,11 @@
             catch (err) { alert('❌ ' + (err.message || '')); }
         };
 
-        // ============================================
-        // COUPONS
-        // ============================================
         window.loadCoupons = async () => {
             const c = document.getElementById('coupons-container');
             const cached = fastGet(FAST_CACHE.coupons);
             if (cached) { coupons = cached; renderCoupons(); }
             else c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div>';
-            
             try {
                 const snap = await getDocs(collection(db, 'coupons'));
                 coupons = [];
@@ -1139,28 +905,18 @@
                 coupons.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
                 fastSet(FAST_CACHE.coupons, coupons);
                 renderCoupons();
-            } catch (err) {
-                if (!cached) c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3></div>';
-            }
+            } catch (err) { if (!cached) c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3></div>'; }
         };
 
         function getCouponStatus(c) {
             if (!c.active) return 'inactive';
-            if (c.expiry) {
-                const today = new Date(); today.setHours(0, 0, 0, 0);
-                const exp = new Date(c.expiry);
-                if (exp < today) return 'expired';
-            }
+            if (c.expiry) { const today = new Date(); today.setHours(0, 0, 0, 0); const exp = new Date(c.expiry); if (exp < today) return 'expired'; }
             return 'active';
         }
 
         function formatCouponExpiry(expiry) {
             if (!expiry) return '—';
-            try {
-                const d = new Date(expiry);
-                const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-                return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
-            } catch(e) { return expiry; }
+            try { const d = new Date(expiry); const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear(); } catch(e) { return expiry; }
         }
 
         window.renderCoupons = () => {
@@ -1281,16 +1037,12 @@
             catch (err) { alert('❌ ' + (err.message || '')); }
         };
 
-        // ============================================
-        // BANNERS
-        // ============================================
         window.loadBanners = async () => {
             const c = document.getElementById('banners-container');
             if (!c) return;
             const cached = fastGet(FAST_CACHE.banners);
             if (cached) { banners = cached; renderBanners(); }
             else c.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Loading...</p></div>';
-            
             try {
                 const snap = await getDocs(collection(db, 'banners'));
                 banners = [];
@@ -1298,9 +1050,7 @@
                 banners.sort((a, b) => (parseInt(a.order) || 99) - (parseInt(b.order) || 99));
                 fastSet(FAST_CACHE.banners, banners);
                 renderBanners();
-            } catch (err) {
-                if (!cached) c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3></div>';
-            }
+            } catch (err) { if (!cached) c.innerHTML = '<div class="empty"><i class="fas fa-exclamation-triangle"></i><h3>লোড করা যায়নি</h3></div>'; }
         };
 
         window.renderBanners = () => {
@@ -1310,20 +1060,13 @@
             let activeCount = 0;
             banners.forEach(b => { if (b.active !== false) activeCount++; });
             if (countEl) countEl.textContent = activeCount;
-            if (banners.length === 0) {
-                c.innerHTML = '<div class="empty"><i class="fas fa-images"></i><h3>এখনো Banner নেই</h3><button class="btn-p" onclick="openBannerModal()" style="margin-top: 15px;"><i class="fas fa-plus"></i> Add Banner</button></div>';
-                return;
-            }
+            if (banners.length === 0) { c.innerHTML = '<div class="empty"><i class="fas fa-images"></i><h3>এখনো Banner নেই</h3><button class="btn-p" onclick="openBannerModal()" style="margin-top: 15px;"><i class="fas fa-plus"></i> Add Banner</button></div>'; return; }
             let html = '';
             banners.forEach(b => {
                 const img = extractUrl(b.image) || b.image || '';
                 const isActive = b.active !== false;
                 let linkText = '<span style="color: var(--muted);">কোনো link নেই</span>';
-                if (b.link && b.linkType) {
-                    if (b.linkType === 'category') linkText = '📁 ' + b.link.replace('category:', '');
-                    else if (b.linkType === 'tab') linkText = '📄 ' + b.link.replace('tab:', '');
-                    else if (b.linkType === 'external') linkText = '🌐 ' + (b.link.length > 40 ? b.link.substring(0, 40) + '...' : b.link);
-                }
+                if (b.link && b.linkType) { if (b.linkType === 'category') linkText = '📁 ' + b.link.replace('category:', ''); else if (b.linkType === 'tab') linkText = '📄 ' + b.link.replace('tab:', ''); else if (b.linkType === 'external') linkText = '🌐 ' + (b.link.length > 40 ? b.link.substring(0, 40) + '...' : b.link); }
                 html += `<div class="coupon-card ${isActive ? '' : 'inactive'}" style="padding: 15px;"><div style="display: grid; grid-template-columns: 140px 1fr; gap: 15px; align-items: start;"><div style="width: 140px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #000; border: 1px solid var(--border);"><img src="${img}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://i.ibb.co/V8xTN72/file-000000004028820a835dbfabe40a11d2.png'"></div><div style="min-width: 0;"><div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;"><div style="font-family: 'Playfair Display', serif; color: var(--gold); font-size: 15px; font-weight: 700;">${b.title || 'Untitled'}</div><span class="coupon-status ${isActive ? 'active' : 'inactive'}">${isActive ? 'Active' : 'Inactive'}</span></div><div style="font-size: 12px; color: var(--muted); line-height: 1.8; margin-bottom: 10px;"><div><strong style="color: var(--text);">🔢 Order:</strong> ${b.order || 99}</div><div><strong style="color: var(--text);">🎯 Link:</strong> ${linkText}</div></div><div class="coupon-actions"><button class="abtn edit" onclick="editBanner('${b.docId}')"><i class="fas fa-edit"></i> Edit</button><button class="abtn edit" onclick="toggleBannerActive('${b.docId}')"><i class="fas fa-${isActive ? 'pause' : 'play'}"></i> ${isActive ? 'Deactivate' : 'Activate'}</button><button class="abtn del" onclick="deleteBanner('${b.docId}', '${(b.title || 'Banner').replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i> Delete</button></div></div></div></div>`;
             });
             c.innerHTML = html;
@@ -1435,9 +1178,6 @@
             catch (err) { alert('❌ ' + (err.message || '')); }
         };
 
-        // ============================================
-        // PAGES EDITOR
-        // ============================================
         let pagesCache = {};
         let currentEditingPage = 'about';
         const DEFAULT_PAGES = {
@@ -1503,14 +1243,11 @@
             w.document.close();
         };
 
-        // ============================================
-        // SETTINGS
-        // ============================================
         let settingsCache = {};
         const DEFAULT_SETTINGS = {
             storeName: 'Burqa Bazar and Boutiques',
             welcomeText: 'WELCOME TO BURQA BAZAR AND BOUTIQUES ✨',
-            pageTitle: 'Burqa Bazar & Boutiques | Premium Hijab, Burqa & Abaya Collection',
+            pageTitle: 'Burqa Bazar & Boutiques',
             phone: '+880 1832-140613',
             whatsapp: '8801832140613',
             email: 'burqabazaarandboutiques@gmail.com',
@@ -1529,7 +1266,7 @@
                 const snap = await getDoc(doc(db, 'settings', 'store'));
                 if (snap.exists()) { settingsCache = { ...DEFAULT_SETTINGS, ...snap.data() }; fastSet(FAST_CACHE.settings, settingsCache); fillSettingsForm(); }
                 else if (!cached) { settingsCache = { ...DEFAULT_SETTINGS }; fillSettingsForm(); }
-            } catch (err) { console.error('Settings:', err); if (!cached) { settingsCache = { ...DEFAULT_SETTINGS }; fillSettingsForm(); } }
+            } catch (err) { if (!cached) { settingsCache = { ...DEFAULT_SETTINGS }; fillSettingsForm(); } }
         };
 
         function fillSettingsForm() {
@@ -1605,9 +1342,6 @@
             showMsg('settings-msg', 'ℹ️ Default loaded। Save করলে যাবে।', 'ok');
         };
 
-        // ============================================
-        // CONTENT MANAGER
-        // ============================================
         const DEFAULT_CONTENT = { logoUrl: 'https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png', copyrightText: '© 2026 Burqa Bazar and Boutiques. All rights reserved.', contactIcons: [], paymentMethods: [], couriers: [] };
 
         window.loadContentSettings = async function() {
@@ -1618,7 +1352,6 @@
                 renderContactIcons(cached.contactIcons || []);
                 renderPaymentMethods(cached.paymentMethods || []);
                 renderCouriers(cached.couriers || []);
-                console.log('⚡ Content from cache');
             }
             await loadFAQFromFirebase();
             await loadSizeChartsFromFirebase();
@@ -1737,7 +1470,7 @@
                 list.sort((a, b) => (parseInt(a.order) || 99) - (parseInt(b.order) || 99));
                 fastSet(FAST_CACHE.faq, list);
                 renderFAQList(list);
-            } catch (err) { console.error('FAQ:', err); if (!cached) renderFAQList([]); }
+            } catch (err) { if (!cached) renderFAQList([]); }
         };
 
         window.renderFAQList = function(list) {
@@ -1926,9 +1659,6 @@
             showMsg('content-msg', 'ℹ️ Reset। Save করলে যাবে।', 'ok');
         };
 
-        // ============================================
-        // BACKUP / RESTORE / FORCE SYNC
-        // ============================================
         window.backupAllData = async function() {
             if (!confirm('সব Data Backup নিতে চান?')) return;
             const btn = event && event.target ? event.target.closest('button') : null;
@@ -1938,11 +1668,8 @@
                 const collections = ['products', 'orders', 'reviews', 'newsletter', 'coupons', 'banners', 'pages', 'faq', 'sizeCharts', 'homeCollections'];
                 const backup = { version: '1.0', timestamp: new Date().toISOString(), storeName: (settingsCache && settingsCache.storeName) || 'Burqa Bazar', data: {} };
                 for (const col of collections) {
-                    try {
-                        const snap = await getDocs(collection(db, col));
-                        backup.data[col] = [];
-                        snap.forEach(d => backup.data[col].push({ _docId: d.id, ...d.data() }));
-                    } catch (e) { backup.data[col] = []; }
+                    try { const snap = await getDocs(collection(db, col)); backup.data[col] = []; snap.forEach(d => backup.data[col].push({ _docId: d.id, ...d.data() })); }
+                    catch (e) { backup.data[col] = []; }
                 }
                 try { const sSnap = await getDoc(doc(db, 'settings', 'store')); backup.data.settings = sSnap.exists() ? sSnap.data() : {}; } catch (e) { backup.data.settings = {}; }
                 const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
@@ -1978,12 +1705,7 @@
                 for (const col of collections) {
                     if (!backup.data[col] || !Array.isArray(backup.data[col])) continue;
                     for (const item of backup.data[col]) {
-                        try {
-                            const { _docId, ...data } = item;
-                            if (_docId) await setDoc(doc(db, col, _docId), data);
-                            else await addDoc(collection(db, col), data);
-                            total++;
-                        } catch (e) {}
+                        try { const { _docId, ...data } = item; if (_docId) await setDoc(doc(db, col, _docId), data); else await addDoc(collection(db, col), data); total++; } catch (e) {}
                     }
                 }
                 if (backup.data.settings) { try { await setDoc(doc(db, 'settings', 'store'), backup.data.settings, { merge: true }); } catch (e) {} }
@@ -2014,9 +1736,6 @@
             setTimeout(() => location.reload(), 1000);
         };
 
-        // ============================================
-        // ESC KEY
-        // ============================================
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 const cm = document.getElementById('coupon-modal');
@@ -2026,6 +1745,7 @@
             }
         });
     </script>
+
     <style>
         :root {
             --gold: #dfb15b; --bg: #0b0b0d; --card: #16161a; --dark: #121214;
@@ -2281,7 +2001,9 @@
 </head>
 <body>
 
+    <!-- ============================================ -->
     <!-- LOGIN SCREEN -->
+    <!-- ============================================ -->
     <div id="login-screen">
         <div class="login-box">
             <div class="login-logo"><img src="https://i.ibb.co/zW2qGsmk/file-00000000e71881f4ada02fa6792ea317.png" alt="Logo"></div>
@@ -2304,7 +2026,9 @@
         </div>
     </div>
 
+    <!-- ============================================ -->
     <!-- ADMIN PANEL -->
+    <!-- ============================================ -->
     <div id="admin">
         <header class="head">
             <div class="head-left">
@@ -2318,6 +2042,7 @@
         </header>
 
         <div class="wrap">
+            <!-- TABS -->
             <div class="tabs">
                 <button class="tab active" data-tab="dashboard" onclick="switchTab('dashboard')"><i class="fas fa-chart-line"></i> Dashboard</button>
                 <button class="tab" data-tab="products" onclick="switchTab('products')"><i class="fas fa-box"></i> Products</button>
@@ -2632,6 +2357,7 @@
 
                 <div id="content-msg" class="msg"></div>
 
+                <!-- Logo & Branding -->
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                     <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-image"></i> Logo & Branding</h3>
                     <div class="fgroup">
@@ -2645,6 +2371,7 @@
                     </div>
                 </div>
 
+                <!-- Contact Icons -->
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                     <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-icons"></i> Contact Icons</h3>
                     <small style="color: var(--muted); font-size: 11px; display: block; margin-bottom: 15px;">💡 এখানে যত খুশি icon যোগ করতে পারবেন। প্রতিটা icon এ <strong>Link URL</strong> দিলে Website-এ click করলে সেখানে যাবে।</small>
@@ -2652,6 +2379,7 @@
                     <button type="button" class="btn-s" onclick="addContactIcon()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add New Contact Icon</button>
                 </div>
 
+                <!-- Payment Methods -->
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                     <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-credit-card"></i> Payment Methods</h3>
                     <small style="color: var(--muted); font-size: 11px; display: block; margin-bottom: 15px;">💡 Checkout পেজে এই পেমেন্ট মেথডগুলো দেখানো হবে। <strong>Upay, Rocket, SureCash, Bank</strong> — সব সাপোর্টেড।</small>
@@ -2659,6 +2387,7 @@
                     <button type="button" class="btn-s" onclick="addPaymentMethod()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add Payment Method</button>
                 </div>
 
+                <!-- Track Order Couriers -->
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                     <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-truck"></i> Track Order Couriers</h3>
                     <small style="color: var(--muted); font-size: 11px; display: block; margin-bottom: 15px;">💡 Track Order পেজে এই courier গুলো দেখানো হবে।</small>
@@ -2666,6 +2395,7 @@
                     <button type="button" class="btn-s" onclick="addCourier()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add Courier</button>
                 </div>
 
+                <!-- FAQ Manager -->
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                     <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-question-circle"></i> FAQ Manager</h3>
                     <small style="color: var(--muted); font-size: 11px; display: block; margin-bottom: 15px;">Website এর FAQ পেজে এই প্রশ্ন-উত্তরগুলো দেখানো হবে</small>
@@ -2673,6 +2403,7 @@
                     <button type="button" class="btn-s" onclick="addFAQ()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add FAQ</button>
                 </div>
 
+                <!-- Size Chart Manager -->
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                     <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-ruler"></i> Size Chart Manager</h3>
                     <small style="color: var(--muted); font-size: 11px; display: block; margin-bottom: 15px;">Product details পেজে Size Guide এ এই chart গুলো দেখানো হবে</small>
@@ -2699,6 +2430,7 @@
                     </div>
                 </div>
 
+                <!-- Home Collections -->
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                     <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-th-large"></i> Home Collections</h3>
                     <small style="color: var(--muted); font-size: 11px; display: block; margin-bottom: 15px;">Home page এ Hijab/Burqa/Abaya collection cards</small>
@@ -2706,6 +2438,7 @@
                     <button type="button" class="btn-s" onclick="addHomeCollection()" style="margin-top: 10px; width: 100%; justify-content: center;"><i class="fas fa-plus"></i> Add Collection Card</button>
                 </div>
 
+                <!-- Save Button -->
                 <div style="position: sticky; bottom: 20px; background: var(--bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border); display: flex; gap: 10px; flex-wrap: wrap;">
                     <button class="btn-p" id="content-save-btn" onclick="saveContentSettings()" style="flex: 1; min-width: 200px; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save All Content</button>
                     <button class="btn-s" onclick="resetContentToDefault()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-undo"></i> Reset to Default</button>
@@ -2725,6 +2458,7 @@
 
                 <div id="settings-msg" class="msg"></div>
 
+                <!-- Store Info -->
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                     <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-store"></i> Store Information</h3>
                     <div class="fgroup"><label>🏪 Store Name *</label><input type="text" id="s-store-name" placeholder="Burqa Bazar and Boutiques"></div>
@@ -2732,6 +2466,7 @@
                     <div class="fgroup"><label>📄 Website Title (Browser Tab)</label><input type="text" id="s-page-title" placeholder="Burqa Bazar & Boutiques | Premium Hijab, Burqa & Abaya Collection"></div>
                 </div>
 
+                <!-- Contact Info -->
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                     <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-phone"></i> Contact Information</h3>
                     <div class="fgroup"><label>📞 Phone Number</label><input type="text" id="s-phone" placeholder="+880 1832-140613"></div>
@@ -2742,6 +2477,7 @@
                     <div class="fgroup"><label>📍 Store Address</label><textarea id="s-address" rows="2" placeholder="ফেনী সওদাগর পট্টি, সওদাগর টাওয়ার, ২য় তলা, দোকান নং ০৩"></textarea></div>
                 </div>
 
+                <!-- Payment Numbers -->
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                     <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-money-bill-wave"></i> Payment Numbers</h3>
                     <div class="fgroup"><label>💳 bKash Number (Personal)</label><input type="text" id="s-bkash" placeholder="01832140613"></div>
@@ -2751,6 +2487,7 @@
                     <div class="fgroup"><label>💵 SureCash Number (Personal)</label><input type="text" id="s-surecash" placeholder="01832140613"></div>
                 </div>
 
+                <!-- Bank Information -->
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                     <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-university"></i> Bank Information (Optional)</h3>
                     <small style="color: var(--muted); font-size: 11px; display: block; margin-bottom: 15px;">💡 Bank Transfer সাপোর্ট করতে চাইলে এখানে তথ্য দিন</small>
@@ -2760,6 +2497,7 @@
                     <div class="fgroup"><label>🏢 Branch Name</label><input type="text" id="s-bank-branch" placeholder="যেমন: Feni Branch"></div>
                 </div>
 
+                <!-- Delivery Charge -->
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                     <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-truck"></i> Delivery Charges</h3>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
@@ -2769,6 +2507,7 @@
                     <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 5px;">⚠️ শুধু সংখ্যা লিখুন (৳ ছাড়া)</small>
                 </div>
 
+                <!-- Social Media -->
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                     <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-share-alt"></i> Social Media Links (ঐচ্ছিক)</h3>
                     <div class="fgroup"><label><i class="fab fa-facebook-f" style="color: #1877f2;"></i> Facebook Page URL</label><input type="text" id="s-facebook" placeholder="https://facebook.com/yourpage"></div>
@@ -2777,6 +2516,7 @@
                     <div class="fgroup"><label><i class="fab fa-tiktok"></i> TikTok Profile URL</label><input type="text" id="s-tiktok" placeholder="https://tiktok.com/@yourprofile"></div>
                 </div>
 
+                <!-- Backup & Sync Tools -->
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 15px;">
                     <h3 style="color: var(--gold); font-size: 15px; margin-bottom: 15px; font-family: 'Playfair Display', serif;"><i class="fas fa-tools"></i> Backup & Sync Tools</h3>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
@@ -2790,6 +2530,7 @@
                     </div>
                 </div>
 
+                <!-- Save Button -->
                 <div style="position: sticky; bottom: 20px; background: var(--bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border); display: flex; gap: 10px; flex-wrap: wrap;">
                     <button class="btn-p" id="settings-save-btn" onclick="saveSettings()" style="flex: 1; min-width: 200px; justify-content: center; padding: 14px;"><i class="fas fa-save"></i> Save All Settings</button>
                     <button class="btn-s" onclick="resetSettingsToDefault()" style="flex: 1; min-width: 150px; justify-content: center; padding: 14px;"><i class="fas fa-undo"></i> Reset to Default</button>
@@ -2799,7 +2540,9 @@
         </div>
     </div>
 
+    <!-- ============================================ -->
     <!-- COUPON FORM MODAL -->
+    <!-- ============================================ -->
     <div class="coupon-form-modal" id="coupon-modal">
         <div class="coupon-form-box">
             <h3 id="coupon-modal-title"><i class="fas fa-ticket-alt"></i> Add New Coupon</h3>
@@ -2851,7 +2594,9 @@
         </div>
     </div>
 
+    <!-- ============================================ -->
     <!-- BANNER FORM MODAL -->
+    <!-- ============================================ -->
     <div class="coupon-form-modal" id="banner-modal">
         <div class="coupon-form-box">
             <h3 id="banner-modal-title"><i class="fas fa-image"></i> Add New Banner</h3>
@@ -2924,6 +2669,81 @@
             </div>
         </div>
     </div>
+
+    <!-- ============================================ -->
+    <!-- 📱 PWA — SERVICE WORKER REGISTRATION -->
+    <!-- ============================================ -->
+    <script>
+        // Service Worker Register
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js', { scope: './' })
+                    .then(registration => {
+                        console.log('✅ Service Worker registered:', registration.scope);
+                    })
+                    .catch(err => {
+                        console.warn('❌ Service Worker registration failed:', err);
+                    });
+            });
+        }
+
+        // PWA Install Prompt
+        let deferredPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            showInstallButton();
+        });
+
+        function showInstallButton() {
+            if (window.matchMedia('(display-mode: standalone)').matches) return;
+            if (localStorage.getItem('pwa_install_dismissed') === 'true') return;
+            if (document.getElementById('pwa-install-btn')) return;
+
+            const btn = document.createElement('button');
+            btn.id = 'pwa-install-btn';
+            btn.innerHTML = '<i class="fas fa-download"></i> Install App';
+            btn.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                z-index: 9999;
+                padding: 12px 20px;
+                background: linear-gradient(135deg, #dfb15b, #9c7526);
+                color: #0b0b0d;
+                border: none;
+                border-radius: 25px;
+                font-weight: 700;
+                font-size: 14px;
+                cursor: pointer;
+                box-shadow: 0 8px 25px rgba(223,177,91,.5);
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-family: 'Poppins', sans-serif;
+            `;
+
+            btn.onclick = async () => {
+                if (!deferredPrompt) return;
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log('Install outcome:', outcome);
+                deferredPrompt = null;
+                btn.remove();
+            };
+
+            document.body.appendChild(btn);
+            setTimeout(() => { if (btn.parentNode) btn.remove(); }, 30000);
+        }
+
+        // Detect when app is installed
+        window.addEventListener('appinstalled', () => {
+            console.log('🎉 PWA installed!');
+            const btn = document.getElementById('pwa-install-btn');
+            if (btn) btn.remove();
+            localStorage.setItem('pwa_installed', 'true');
+        });
+    </script>
 
 </body>
 </html>
